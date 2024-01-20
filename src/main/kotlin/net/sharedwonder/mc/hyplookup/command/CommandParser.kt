@@ -64,7 +64,7 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
                 TextUtils.serialize("$HYPLOOKUP_MESSAGE_PREFIX${FormattedText.RED}Unknown command: ${args[0]}")
             }
         } catch (exception: CommandException) {
-            TextUtils.serialize(HYPLOOKUP_MESSAGE_PREFIX + FormattedText.RED + exception.message!!)
+            TextUtils.serialize(HYPLOOKUP_MESSAGE_PREFIX + FormattedText.RED + exception.message)
         }
     }
 

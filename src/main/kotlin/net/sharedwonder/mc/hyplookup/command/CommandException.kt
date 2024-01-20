@@ -19,6 +19,9 @@ package net.sharedwonder.mc.hyplookup.command
 import java.io.Serial
 
 class CommandException(message: String) : RuntimeException(message) {
+    override val message: String
+        get() = super.message!!
+
     private companion object {
         @Serial private const val serialVersionUID = 6987225179596297152L
     }

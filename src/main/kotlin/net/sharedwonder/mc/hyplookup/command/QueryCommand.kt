@@ -38,7 +38,7 @@ object QueryCommand : Command {
             throw CommandException("Missing player name")
         }
 
-        val inputName = args[0]
+        val player = args[0].let { if (it == ".") connectionContext.playerUsername else it }
         val game = if (args.size > 1) HypixelGame.getByName(args[1]) else hypLookupContext.detectedGame
         if (game == null) {
             throw CommandException("Unsupported/unknown game")
@@ -46,11 +46,11 @@ object QueryCommand : Command {
         val modifier = if (args.size > 2) args[2] else null
 
         val (name, uuid) = try {
-            MojangAPI.queryPlayerProfile(inputName)
+            MojangAPI.queryPlayerProfile(player)
         } catch (exception: RuntimeException) {
-            LOGGER.warn("Failed to query player profile: $inputName", exception)
-            throw CommandException("Failed to query player profile: $inputName")
-        } ?: throw CommandException("Player not found: $inputName")
+            LOGGER.warn("Failed to query player profile: $player", exception)
+            throw CommandException("Failed to query player profile: $player")
+        } ?: throw CommandException("Player not found: $player")
 
         val data = PlayerDataCaches.queryPlayerData(name, uuid, 5) ?: throw CommandException("Failed to query player data: $name/${UUIDUtils.uuidToString(uuid)}")
         return "${FormattedText.YELLOW}${game.gameName}${FormattedText.RESET} stats of ${FormattedText.GREEN}$name${FormattedText.RESET}:\n" +

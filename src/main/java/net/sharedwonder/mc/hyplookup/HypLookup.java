@@ -28,7 +28,7 @@ import net.sharedwonder.mc.hyplookup.query.HypixelAPI;
 import net.sharedwonder.mc.hyplookup.utils.HypLookupConfig;
 import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
-import net.sharedwonder.mc.ptbridge.addon.AddonEntry;
+import net.sharedwonder.mc.ptbridge.addon.AddonInitializer;
 import net.sharedwonder.mc.ptbridge.config.ConfigManager;
 import net.sharedwonder.mc.ptbridge.utils.GsonInstance;
 import java.io.FileReader;
@@ -40,7 +40,7 @@ import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.C2S_PLAY_PACKET
 import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.S2C_PLAY_PACKET_HANDLERS;
 import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.registerHandler;
 
-public final class HypLookup implements AddonEntry {
+public final class HypLookup implements AddonInitializer {
     @Override
     public void init() {
         registerHandler(C2S_LOGIN_PACKET_HANDLERS, new CLRequestLogin());

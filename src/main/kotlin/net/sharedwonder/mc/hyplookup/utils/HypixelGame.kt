@@ -39,75 +39,75 @@ enum class HypixelGame(val gameName: String) {
                 "${YELLOW}Coins: $GREEN$coins\n\n" +
                 "${RED}Normal Modes:\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$normalModesPlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$normalModesNormalKills/$normalModesNormalDeaths $AQUA(${formatRatio1(normalModesNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$normalModesFinalKills/$normalModesFinalDeaths $AQUA(${formatRatio1(normalModesFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$normalModesTotalKills/$normalModesTotalDeaths $AQUA(${formatRatio1(normalModesTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$normalModesBedsBroken/$normalModesBedsLost $AQUA(${formatRatio1(normalModesBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$normalModesWins/$normalModesLosses $AQUA(${formatRatio1(normalModesWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(normalModesWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$normalModesNormalKills/$normalModesNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(normalModesNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$normalModesFinalKills/$normalModesFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(normalModesFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$normalModesTotalKills/$normalModesTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(normalModesTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$normalModesBedsBroken/$normalModesBedsLost $AQUA(${DECIMAL_FORMAT_1.format(normalModesBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$normalModesWins/$normalModesLosses $AQUA(${DECIMAL_FORMAT_1.format(normalModesWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(normalModesWinRate)}\n\n" +
                 "${RED}Core Modes:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${coreModesWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$coreModesPlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$coreModesNormalKills/$coreModesNormalDeaths $AQUA(${formatRatio1(coreModesNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$coreModesFinalKills/$coreModesFinalDeaths $AQUA(${formatRatio1(coreModesFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$coreModesTotalKills/$coreModesTotalDeaths $AQUA(${formatRatio1(coreModesTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$coreModesBedsBroken/$coreModesBedsLost $AQUA(${formatRatio1(coreModesBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$coreModesWins/$coreModesLosses $AQUA(${formatRatio1(coreModesWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(coreModesWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$coreModesNormalKills/$coreModesNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(coreModesNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$coreModesFinalKills/$coreModesFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(coreModesFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$coreModesTotalKills/$coreModesTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(coreModesTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$coreModesBedsBroken/$coreModesBedsLost $AQUA(${DECIMAL_FORMAT_1.format(coreModesBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$coreModesWins/$coreModesLosses $AQUA(${DECIMAL_FORMAT_1.format(coreModesWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(coreModesWinRate)}\n\n" +
                 "${RED}Solo Mode:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${eightOneModeWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$eightOneModePlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$eightOneModeNormalKills/$eightOneModeNormalDeaths $AQUA(${formatRatio1(eightOneModeNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$eightOneModeFinalKills/$eightOneModeFinalDeaths $AQUA(${formatRatio1(eightOneModeFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$eightOneModeTotalKills/$eightOneModeTotalDeaths $AQUA(${formatRatio1(eightOneModeTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$eightOneModeBedsBroken/$eightOneModeBedsLost $AQUA(${formatRatio1(eightOneModeBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$eightOneModeWins/$eightOneModeLosses $AQUA(${formatRatio1(eightOneModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(eightOneModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$eightOneModeNormalKills/$eightOneModeNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightOneModeNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$eightOneModeFinalKills/$eightOneModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightOneModeFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$eightOneModeTotalKills/$eightOneModeTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightOneModeTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$eightOneModeBedsBroken/$eightOneModeBedsLost $AQUA(${DECIMAL_FORMAT_1.format(eightOneModeBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$eightOneModeWins/$eightOneModeLosses $AQUA(${DECIMAL_FORMAT_1.format(eightOneModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(eightOneModeWinRate)}\n\n" +
                 "${RED}Doubles Mode:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${eightTwoModeWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$eightTwoModePlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$eightTwoModeNormalKills/$eightTwoModeNormalDeaths $AQUA(${formatRatio1(eightTwoModeNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$eightTwoModeFinalKills/$eightTwoModeFinalDeaths $AQUA(${formatRatio1(eightTwoModeFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$eightTwoModeTotalKills/$eightTwoModeTotalDeaths $AQUA(${formatRatio1(eightTwoModeTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$eightTwoModeBedsBroken/$eightTwoModeBedsLost $AQUA(${formatRatio1(eightTwoModeBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$eightTwoModeWins/$eightTwoModeLosses $AQUA(${formatRatio1(eightTwoModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(eightTwoModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$eightTwoModeNormalKills/$eightTwoModeNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightTwoModeNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$eightTwoModeFinalKills/$eightTwoModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightTwoModeFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$eightTwoModeTotalKills/$eightTwoModeTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(eightTwoModeTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$eightTwoModeBedsBroken/$eightTwoModeBedsLost $AQUA(${DECIMAL_FORMAT_1.format(eightTwoModeBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$eightTwoModeWins/$eightTwoModeLosses $AQUA(${DECIMAL_FORMAT_1.format(eightTwoModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(eightTwoModeWinRate)}\n\n" +
                 "${RED}3v3v3v3 Mode:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${fourThreeModeWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$fourThreeModePlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$fourThreeModeNormalKills/$fourThreeModeNormalDeaths $AQUA(${formatRatio1(fourThreeModeNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$fourThreeModeFinalKills/$fourThreeModeFinalDeaths $AQUA(${formatRatio1(fourThreeModeFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$fourThreeModeTotalKills/$fourThreeModeTotalDeaths $AQUA(${formatRatio1(fourThreeModeTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$fourThreeModeBedsBroken/$fourThreeModeBedsLost $AQUA(${formatRatio1(fourThreeModeBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$fourThreeModeWins/$fourThreeModeLosses $AQUA(${formatRatio1(fourThreeModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(fourThreeModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$fourThreeModeNormalKills/$fourThreeModeNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourThreeModeNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$fourThreeModeFinalKills/$fourThreeModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourThreeModeFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$fourThreeModeTotalKills/$fourThreeModeTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourThreeModeTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$fourThreeModeBedsBroken/$fourThreeModeBedsLost $AQUA(${DECIMAL_FORMAT_1.format(fourThreeModeBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$fourThreeModeWins/$fourThreeModeLosses $AQUA(${DECIMAL_FORMAT_1.format(fourThreeModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(fourThreeModeWinRate)}\n\n" +
                 "${RED}4v4v4v4 Mode:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${fourFourModeWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$fourFourModePlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$fourFourModeNormalKills/$fourFourModeNormalDeaths $AQUA(${formatRatio1(fourFourModeNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$fourFourModeFinalKills/$fourFourModeFinalDeaths $AQUA(${formatRatio1(fourFourModeFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$fourFourModeTotalKills/$fourFourModeTotalDeaths $AQUA(${formatRatio1(fourFourModeTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$fourFourModeBedsBroken/$fourFourModeBedsLost $AQUA(${formatRatio1(fourFourModeBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$fourFourModeWins/$fourFourModeLosses $AQUA(${formatRatio1(fourFourModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(fourFourModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$fourFourModeNormalKills/$fourFourModeNormalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourFourModeNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$fourFourModeFinalKills/$fourFourModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourFourModeFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$fourFourModeTotalKills/$fourFourModeTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(fourFourModeTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$fourFourModeBedsBroken/$fourFourModeBedsLost $AQUA(${DECIMAL_FORMAT_1.format(fourFourModeBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$fourFourModeWins/$fourFourModeLosses $AQUA(${DECIMAL_FORMAT_1.format(fourFourModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(fourFourModeWinRate)}\n\n" +
                 "${RED}4v4 Mode:\n" +
                 " $DARK_GRAY- ${YELLOW}Win-streak: $GREEN${twoFourModeWinStreak ?: UNKNOWN}\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$twoFourModePlayed\n" +
-                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$twoFourModeFinalKills/$twoFourModeFinalDeaths $AQUA(${formatRatio1(twoFourModeNkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$twoFourModeFinalKills/$twoFourModeFinalDeaths $AQUA(${formatRatio1(twoFourModeFkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$twoFourModeTotalKills/$twoFourModeTotalDeaths $AQUA(${formatRatio1(twoFourModeTkdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$twoFourModeBedsBroken/$twoFourModeBedsLost $AQUA(${formatRatio1(twoFourModeBblr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$twoFourModeWins/$twoFourModeLosses $AQUA(${formatRatio1(twoFourModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(twoFourModeWinRate)}\n"
+                " $DARK_GRAY- ${YELLOW}Normal Kills/Deaths: $GREEN$twoFourModeFinalKills/$twoFourModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(twoFourModeNkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Final Kills/Deaths: $GREEN$twoFourModeFinalKills/$twoFourModeFinalDeaths $AQUA(${DECIMAL_FORMAT_1.format(twoFourModeFkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Total Kills/Deaths: $GREEN$twoFourModeTotalKills/$twoFourModeTotalDeaths $AQUA(${DECIMAL_FORMAT_1.format(twoFourModeTkdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Beds Broken/Lost: $GREEN$twoFourModeBedsBroken/$twoFourModeBedsLost $AQUA(${DECIMAL_FORMAT_1.format(twoFourModeBblr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$twoFourModeWins/$twoFourModeLosses $AQUA(${DECIMAL_FORMAT_1.format(twoFourModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(twoFourModeWinRate)}\n"
         }
 
         override fun displayText(data: RealPlayerData, originalText: String): Array<String> = data.stats.bedWars.run {
             arrayOf(
                 "$formattedLevel $originalText",
                 coreModesWinStreak?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(normalModesFkdr, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + formatRatio1(normalModesFkdr),
+                getNumberColor(normalModesFkdr, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(normalModesFkdr),
                 getNumberColor(normalModesFinalKills, 1000, 3500, 7500, 10000, 15000, 20000, 30000) + normalModesFinalKills,
-                getNumberColor(normalModesWinRate, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + FormattedText.BOLD + formatRatio2(normalModesWinRate),
+                getNumberColor(normalModesWinRate, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(normalModesWinRate),
                 getNumberColor(normalModesWins, 250, 500, 1000, 2000, 4000, 8000, 10000) + normalModesWins
             )
         }
@@ -120,34 +120,34 @@ enum class HypixelGame(val gameName: String) {
                 "${RED}All Modes:\n" +
                 " $DARK_GRAY- ${YELLOW}Games Played: $GREEN$allModesPlayed\n\n" +
                 "${RED}Main Modes:\n" +
-                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$mainModesKills/$mainModesDeaths $AQUA(${formatRatio1(mainModesKdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$mainModesWins/$mainModesLosses $AQUA(${formatRatio1(mainModesWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(mainModesWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$mainModesKills/$mainModesDeaths $AQUA(${DECIMAL_FORMAT_1.format(mainModesKdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$mainModesWins/$mainModesLosses $AQUA(${DECIMAL_FORMAT_1.format(mainModesWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(mainModesWinRate)}\n\n" +
                 "${RED}Solo Normal Modes:\n" +
-                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$soloNormalModeKills/$soloNormalModeDeaths $AQUA(${formatRatio1(soloNormalModeKdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$soloNormalModeWins/$soloNormalModeLosses $AQUA(${formatRatio1(soloNormalModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(soloNormalModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$soloNormalModeKills/$soloNormalModeDeaths $AQUA(${DECIMAL_FORMAT_1.format(soloNormalModeKdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$soloNormalModeWins/$soloNormalModeLosses $AQUA(${DECIMAL_FORMAT_1.format(soloNormalModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(soloNormalModeWinRate)}\n\n" +
                 "${RED}Solo Insane Mode:\n" +
-                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$soloInsaneModeKills/$soloInsaneModeDeaths $AQUA(${formatRatio1(soloInsaneModeKdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$soloInsaneModeWins/$soloInsaneModeLosses $AQUA(${formatRatio1(soloInsaneModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(soloInsaneModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$soloInsaneModeKills/$soloInsaneModeDeaths $AQUA(${DECIMAL_FORMAT_1.format(soloInsaneModeKdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$soloInsaneModeWins/$soloInsaneModeLosses $AQUA(${DECIMAL_FORMAT_1.format(soloInsaneModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(soloInsaneModeWinRate)}\n\n" +
                 "${RED}Doubles Normal Mode:\n" +
-                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$teamNormalModeKills/$teamNormalModeDeaths $AQUA(${formatRatio1(teamNormalModeKdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$teamNormalModeWins/$teamNormalModeLosses $AQUA(${formatRatio1(teamNormalModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(teamNormalModeWinRate)}\n\n" +
+                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$teamNormalModeKills/$teamNormalModeDeaths $AQUA(${DECIMAL_FORMAT_1.format(teamNormalModeKdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$teamNormalModeWins/$teamNormalModeLosses $AQUA(${DECIMAL_FORMAT_1.format(teamNormalModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(teamNormalModeWinRate)}\n\n" +
                 "${RED}Doubles Insane Mode:\n" +
-                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$teamInsaneModeKills/$teamInsaneModeDeaths $AQUA(${formatRatio1(teamInsaneModeKdr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$teamInsaneModeWins/$teamInsaneModeLosses $AQUA(${formatRatio1(teamInsaneModeWlr)})\n" +
-                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${formatRatio2(teamInsaneModeWinRate)}\n"
+                " $DARK_GRAY- ${YELLOW}Kills/Deaths: $GREEN$teamInsaneModeKills/$teamInsaneModeDeaths $AQUA(${DECIMAL_FORMAT_1.format(teamInsaneModeKdr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Wins/Losses: $GREEN$teamInsaneModeWins/$teamInsaneModeLosses $AQUA(${DECIMAL_FORMAT_1.format(teamInsaneModeWlr)})\n" +
+                " $DARK_GRAY- ${YELLOW}Win Rate: $GREEN${DECIMAL_FORMAT_2.format(teamInsaneModeWinRate)}\n"
         }
 
         override fun displayText(data: RealPlayerData, originalText: String): Array<String> = data.stats.skyWars.run {
             arrayOf(
                 "$formattedLevel $originalText",
                 mainModesWinStreak?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(mainModesKdr, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + formatRatio1(mainModesKdr),
+                getNumberColor(mainModesKdr, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(mainModesKdr),
                 getNumberColor(mainModesKills, 1000, 3500, 7500, 10000, 25000, 30000, 50000) + mainModesKills,
-                getNumberColor(mainModesWinRate, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + FormattedText.BOLD + formatRatio2(mainModesWinRate),
+                getNumberColor(mainModesWinRate, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(mainModesWinRate),
                 getNumberColor(mainModesWins, 100, 500, 1000, 2000, 3000, 6000, 8000) + mainModesWins
             )
         }
@@ -213,9 +213,5 @@ enum class HypixelGame(val gameName: String) {
                 }
             }
         }
-
-        private fun formatRatio1(number: Double): String = if (number.isInfinite()) "Inf" else DECIMAL_FORMAT_1.format(number)
-
-        private fun formatRatio2(number: Double): String = if (number.isInfinite()) "Inf%" else DECIMAL_FORMAT_2.format(number)
     }
 }
