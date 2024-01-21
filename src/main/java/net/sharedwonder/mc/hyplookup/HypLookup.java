@@ -35,6 +35,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.C2S_LOGIN_PACKET_HANDLERS;
 import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.C2S_PLAY_PACKET_HANDLERS;
 import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.S2C_PLAY_PACKET_HANDLERS;
@@ -43,6 +44,13 @@ import static net.sharedwonder.mc.ptbridge.packet.PacketHandlers.registerHandler
 public final class HypLookup implements AddonInitializer {
     @Override
     public void init() {
+        var configFile = ConfigManager.getInstance().getConfigFile("hyplookup.json");
+        try (var reader = new FileReader(configFile)) {
+            config = GsonInstance.getGson().fromJson(reader, HypLookupConfig.class);
+        } catch (IOException exception) {
+            throw new RuntimeException("Failed to read the config file", exception);
+        }
+
         registerHandler(C2S_LOGIN_PACKET_HANDLERS, new CLRequestLogin());
 
         registerHandler(C2S_PLAY_PACKET_HANDLERS, new CPSendChatMessage());
@@ -55,17 +63,19 @@ public final class HypLookup implements AddonInitializer {
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPUpdateTeam());
 
         ConnectionContext.registerExternalContextType(HypLookupContext.class, HypLookupContext::new);
-
-        var configFile = ConfigManager.getInstance().getConfigFile("hyplookup.json");
-        try (var reader = new FileReader(configFile)) {
-            var config = GsonInstance.getGson().fromJson(reader, HypLookupConfig.class);
-            HypixelAPI.init(config.getHypixelApiKey());
-        } catch (IOException exception) {
-            throw new RuntimeException("Failed to read the config file", exception);
-        }
+        HypixelAPI.init();
 
         LOGGER.info("HypLookup initialized");
     }
 
     private static final Logger LOGGER = LogManager.getLogger(HypLookup.class);
+
+    private static HypLookupConfig config;
+
+    public static @NotNull HypLookupConfig config() {
+        if (config == null) {
+            throw new IllegalStateException("HypLookup is not initialized");
+        }
+        return config;
+    }
 }

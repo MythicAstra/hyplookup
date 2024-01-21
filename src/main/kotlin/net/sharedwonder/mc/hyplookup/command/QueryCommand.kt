@@ -34,11 +34,7 @@ object QueryCommand : Command {
     private val LOGGER = LogManager.getLogger(QueryCommand::class.java)
 
     override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String {
-        if (args.isEmpty()) {
-            throw CommandException("Missing player name")
-        }
-
-        val player = args[0].let { if (it == ".") connectionContext.playerUsername else it }
+        val player = args.getOrElse(0) { connectionContext.playerUsername }.let { if (it == ".") connectionContext.playerUsername else it }
         val game = if (args.size > 1) HypixelGame.getByName(args[1]) else hypLookupContext.detectedGame
         if (game == null) {
             throw CommandException("Unsupported/unknown game")

@@ -16,6 +16,7 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
+import net.sharedwonder.mc.hyplookup.HypLookup
 import net.sharedwonder.mc.ptbridge.utils.GSON
 import net.sharedwonder.mc.ptbridge.utils.HTTPRequestUtils
 import java.io.IOException
@@ -23,34 +24,39 @@ import java.util.UUID
 import com.google.gson.JsonObject
 
 object HypixelAPI {
-    private const val HYPIXEL_API_BASE_URL = "https://api.hypixel.net"
+    private var baseUrl: String = "https://api.hypixel.net/v2"
 
-    private var isInitialized = false
+    private var key: String? = null
 
-    private lateinit var apiKey: String
+    private var userAgent: String? = null
 
     @JvmStatic
-    fun init(apiKey: String) {
-        check(!isInitialized) { "Already initialized" }
-        isInitialized = true
-        this.apiKey = apiKey
+    fun init() {
+        HypLookup.config().hypixelApiBaseUrl?.let { baseUrl = it }
+        key = HypLookup.config().hypixelApiKey
+        userAgent = HypLookup.config().hypixelApiUserAgent
     }
 
     @JvmStatic
     @Throws(IOException::class)
     fun queryPlayerData(uuid: UUID): HypixelPlayerData {
-        check(isInitialized) { "Not initialized" }
-
-        val json = (HTTPRequestUtils.request("$HYPIXEL_API_BASE_URL/v2/player?uuid=$uuid") {
+        val json = (HTTPRequestUtils.request("$baseUrl/player?uuid=$uuid") {
             connectTimeout = 5000
             readTimeout = 5000
-            setRequestProperty("API-Key", apiKey)
+            if (key != null) {
+                setRequestProperty("API-Key", key)
+            }
+            if (userAgent != null) {
+                setRequestProperty("User-Agent", userAgent)
+            }
         }.onErrorResponse {
             throw buildException("Failed to access Hypixel API")
         }.onExceptionThrown {
             throw exception
-        }.response).let { GSON.fromJson(it.contentAsString, JsonObject::class.java).get("player") }
+        }.response).let {
+            GSON.fromJson(it.contentAsString, JsonObject::class.java)["player"]
+        }
 
-        return if (json.isJsonNull) NicknamePlayer else GSON.fromJson(json, RealPlayerData::class.java)
+        return if (json.isJsonNull) NicknamePlayer else RealPlayerData.build(json.asJsonObject)
     }
 }

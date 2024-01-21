@@ -135,7 +135,7 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
             command.expressions.forEach {
                 EXPRESSION_TO_COMMAND.compute(it) { key, value ->
                     if (value != null) {
-                        throw RuntimeException("The expression '$key' is also used by the command: ${value.javaClass.name}")
+                        throw RuntimeException("The expression '$key' is also used by the command: ${value.javaClass.typeName}")
                     } else command
                 }
             }

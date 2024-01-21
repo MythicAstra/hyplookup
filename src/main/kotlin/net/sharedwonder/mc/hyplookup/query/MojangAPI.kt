@@ -23,15 +23,13 @@ import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
 import com.google.gson.JsonObject
 
 object MojangAPI {
-    private const val MOJANG_API_BASE_URL = "https://api.mojang.com"
-
     fun queryPlayerProfile(name: String): PlayerProfile? {
-        val json = GSON.fromJson(HTTPRequestUtils.request("$MOJANG_API_BASE_URL/users/profiles/minecraft/$name", "GET")
+        val json = GSON.fromJson(HTTPRequestUtils.request("https://api.mojang.com/users/profiles/minecraft/$name", "GET")
             .onErrorResponse {
                 return null
             }.onExceptionThrown {
                 throw buildException("Failed to query UUID for $name")
             }.response.contentAsString, JsonObject::class.java)
-        return PlayerProfile(json.get("name").asString, UUIDUtils.stringToUuid(json.get("id").asString))
+        return PlayerProfile(json["name"].asString, UUIDUtils.stringToUuid(json["id"].asString))
     }
 }

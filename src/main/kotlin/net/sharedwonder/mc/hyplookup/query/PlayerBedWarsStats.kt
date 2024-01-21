@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("DIVISION_BY_ZERO")
-
 package net.sharedwonder.mc.hyplookup.query
 
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.AQUA
@@ -34,356 +32,279 @@ import net.sharedwonder.mc.ptbridge.utils.FormattedText.LIGHT_PURPLE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.RED
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
-import kotlin.LazyThreadSafetyMode.PUBLICATION
 import kotlin.math.floor
-import com.google.gson.annotations.SerializedName
+import com.google.gson.JsonObject
 
-class PlayerBedWarsStats {
-    @SerializedName("Experience")
-    val experience: Int = 0
+class PlayerBedWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
+    val experience: Int get() = get("experience") as Int
 
-    val level: Int by lazy(PUBLICATION) { fullLevel.toInt() }
+    val level: Double get() = get("level") as Double
 
-    val fullLevel: Double by lazy(PUBLICATION) { calculateLevel(experience) }
+    val `level-rounded`: Int get() = get("level-rounded") as Int
 
-    val formattedLevel: String by lazy(PUBLICATION) { formatLevel(level, includeBrackets = true, includeOrnament = true) }
+    val `level-formatted`: String get() = get("level-formatted") as String
 
-    val formattedLevelWithoutOrnament: String by lazy(PUBLICATION) { formatLevel(level, includeBrackets = true, includeOrnament = false) }
+    val `level-formatted-without-brackets`: String get() = get("level-formatted-without-brackets") as String
 
-    val formattedLevelWithoutBrackets: String by lazy(PUBLICATION) { formatLevel(level, includeBrackets = false, includeOrnament = true) }
+    val `level-formatted-without-ornament`: String get() = get("level-formatted-without-ornament") as String
 
-    val formattedLevelSimple: String by lazy(PUBLICATION) { formatLevel(level, includeBrackets = false, includeOrnament = false) }
+    val `level-formatted-simple`: String get() = get("level-formatted-simple") as String
 
-    val coins: Int = 0
+    val coins: Int get() = get("coins") as Int
 
-    // All modes
+    val `solo-mode win-streak`: Int? get() = get("solo-mode win-streak") as Int?
 
-    @SerializedName("games_played_bedwars_1")
-    val allModePlayed: Int = 0
+    val `solo-mode games-played`: Int get() = get("solo-mode games-played") as Int
 
-    // Normal modes
+    val `solo-mode wins`: Int get() = get("solo-mode wins") as Int
 
-    @SerializedName("games_played_bedwars")
-    val normalModesPlayed: Int = 0
+    val `solo-mode losses`: Int get() = get("solo-mode losses") as Int
 
-    @SerializedName("wins_bedwars")
-    val normalModesWins: Int = 0
+    val `solo-mode wlr`: Double get() = get("solo-mode wlr") as Double
 
-    @SerializedName("losses_bedwars")
-    val normalModesLosses: Int = 0
+    val `solo-mode win-rate`: Double get() = get("solo-mode win-rate") as Double
 
-    val normalModesWlr: Double by lazy(PUBLICATION) { normalModesWins.toDouble() / normalModesLosses }
+    val `solo-mode normal-kills`: Int get() = get("solo-mode normal-kills") as Int
 
-    val normalModesWinRate: Double by lazy(PUBLICATION) { normalModesWins.toDouble() / normalModesPlayed }
+    val `solo-mode normal-deaths`: Int get() = get("solo-mode normal-deaths") as Int
 
-    @SerializedName("kills_bedwars")
-    val normalModesNormalKills: Int = 0
+    val `solo-mode normal-kdr`: Double get() = get("solo-mode normal-kdr") as Double
 
-    @SerializedName("deaths_bedwars")
-    val normalModesNormalDeaths: Int = 0
+    val `solo-mode final-kills`: Int get() = get("solo-mode final-kills") as Int
 
-    val normalModesNkdr: Double by lazy(PUBLICATION) { normalModesNormalKills.toDouble() / normalModesNormalDeaths }
+    val `solo-mode final-deaths`: Int get() = get("solo-mode final-deaths") as Int
 
-    @SerializedName("final_kills_bedwars")
-    val normalModesFinalKills: Int = 0
+    val `solo-mode final-kdr`: Double get() = get("solo-mode final-kdr") as Double
 
-    @SerializedName("final_deaths_bedwars")
-    val normalModesFinalDeaths: Int = 0
+    val `solo-mode total-kills`: Int get() = get("solo-mode total-kills") as Int
 
-    val normalModesFkdr: Double by lazy(PUBLICATION) { normalModesFinalKills.toDouble() / normalModesFinalDeaths }
+    val `solo-mode total-deaths`: Int get() = get("solo-mode total-deaths") as Int
 
-    @SerializedName("beds_broken_bedwars")
-    val normalModesBedsBroken: Int = 0
+    val `solo-mode total-kdr`: Double get() = get("solo-mode total-kdr") as Double
 
-    @SerializedName("beds_lost_bedwars")
-    val normalModesBedsLost: Int = 0
+    val `solo-mode beds-broken`: Int get() = get("solo-mode beds-broken") as Int
 
-    val normalModesBblr: Double by lazy(PUBLICATION) { normalModesBedsBroken.toDouble() / normalModesBedsLost }
+    val `solo-mode beds-lost`: Int get() = get("solo-mode beds-lost") as Int
 
-    val normalModesTotalKills: Int by lazy(PUBLICATION) { normalModesNormalKills + normalModesFinalKills }
+    val `solo-mode bblr`: Double get() = get("solo-mode bblr") as Double
 
-    val normalModesTotalDeaths: Int by lazy(PUBLICATION) { normalModesNormalDeaths + normalModesFinalDeaths }
+    val `doubles-mode win-streak`: Int? get() = get("doubles-mode win-streak") as Int?
 
-    val normalModesTkdr: Double by lazy(PUBLICATION) { normalModesTotalKills.toDouble() / normalModesTotalDeaths }
+    val `doubles-mode games-played`: Int get() = get("doubles-mode games-played") as Int
 
-    // Core modes
+    val `doubles-mode wins`: Int get() = get("doubles-mode wins") as Int
 
-    @SerializedName("winstreak")
-    val coreModesWinStreak: Int? = null
+    val `doubles-mode losses`: Int get() = get("doubles-mode losses") as Int
 
-    val coreModesPlayed: Int by lazy(PUBLICATION) { eightOneModePlayed + eightOneModePlayed + fourThreeModePlayed + fourFourModePlayed }
+    val `doubles-mode wlr`: Double get() = get("doubles-mode wlr") as Double
 
-    val coreModesWins: Int by lazy(PUBLICATION) { eightOneModeWins + eightOneModeWins + fourThreeModeWins + fourFourModeWins }
+    val `doubles-mode win-rate`: Double get() = get("doubles-mode win-rate") as Double
 
-    val coreModesLosses: Int by lazy(PUBLICATION) { eightOneModeLosses + eightOneModeLosses + fourThreeModeLosses + fourFourModeLosses }
+    val `doubles-mode normal-kills`: Int get() = get("doubles-mode normal-kills") as Int
 
-    val coreModesWlr: Double by lazy(PUBLICATION) { coreModesWins.toDouble() / coreModesLosses }
+    val `doubles-mode normal-deaths`: Int get() = get("doubles-mode normal-deaths") as Int
 
-    val coreModesWinRate: Double by lazy(PUBLICATION) { coreModesWins.toDouble() / coreModesPlayed }
+    val `doubles-mode normal-kdr`: Double get() = get("doubles-mode normal-kdr") as Double
 
-    val coreModesNormalKills: Int by lazy(PUBLICATION) { eightOneModeNormalKills + eightOneModeNormalKills + fourThreeModeNormalKills + fourFourModeNormalKills }
+    val `doubles-mode final-kills`: Int get() = get("doubles-mode final-kills") as Int
 
-    val coreModesNormalDeaths: Int by lazy(PUBLICATION) { eightOneModeNormalDeaths + eightOneModeNormalDeaths + fourThreeModeNormalDeaths + fourFourModeNormalDeaths }
+    val `doubles-mode final-deaths`: Int get() = get("doubles-mode final-deaths") as Int
 
-    val coreModesNkdr: Double by lazy(PUBLICATION) { coreModesNormalKills.toDouble() / coreModesNormalDeaths }
+    val `doubles-mode final-kdr`: Double get() = get("doubles-mode final-kdr") as Double
 
-    val coreModesFinalKills: Int by lazy(PUBLICATION) { eightOneModeFinalKills + eightOneModeFinalKills + fourThreeModeFinalKills + fourFourModeFinalKills }
+    val `doubles-mode total-kills`: Int get() = get("doubles-mode total-kills") as Int
 
-    val coreModesFinalDeaths: Int by lazy(PUBLICATION) { eightOneModeFinalDeaths + eightOneModeFinalDeaths + fourThreeModeFinalDeaths + fourFourModeFinalDeaths }
+    val `doubles-mode total-deaths`: Int get() = get("doubles-mode total-deaths") as Int
 
-    val coreModesFkdr: Double by lazy(PUBLICATION) { coreModesFinalKills.toDouble() / coreModesFinalDeaths }
+    val `doubles-mode total-kdr`: Double get() = get("doubles-mode total-kdr") as Double
 
-    val coreModesTotalKills: Int by lazy(PUBLICATION) { coreModesNormalKills + coreModesFinalKills }
+    val `doubles-mode beds-broken`: Int get() = get("doubles-mode beds-broken") as Int
 
-    val coreModesTotalDeaths: Int by lazy(PUBLICATION) { coreModesNormalDeaths + coreModesFinalDeaths }
+    val `doubles-mode beds-lost`: Int get() = get("doubles-mode beds-lost") as Int
 
-    val coreModesTkdr: Double by lazy(PUBLICATION) { coreModesTotalKills.toDouble() / coreModesTotalDeaths }
+    val `doubles-mode bblr`: Double get() = get("doubles-mode bblr") as Double
 
-    val coreModesBedsBroken: Int by lazy(PUBLICATION) { eightOneModeBedsBroken + eightOneModeBedsBroken + fourThreeModeBedsBroken + fourFourModeBedsBroken }
+    val `3v3v3v3-mode win-streak`: Int? get() = get("3v3v3v3-mode win-streak") as Int?
 
-    val coreModesBedsLost: Int by lazy(PUBLICATION) { eightOneModeBedsLost + eightOneModeBedsLost + fourThreeModeBedsLost + fourFourModeBedsLost }
+    val `3v3v3v3-mode games-played`: Int get() = get("3v3v3v3-mode games-played") as Int
 
-    val coreModesBblr: Double by lazy(PUBLICATION) { coreModesBedsBroken.toDouble() / coreModesBedsLost }
+    val `3v3v3v3-mode wins`: Int get() = get("3v3v3v3-mode wins") as Int
 
-    // Solo mode
+    val `3v3v3v3-mode losses`: Int get() = get("3v3v3v3-mode losses") as Int
 
-    @SerializedName("eight_one_winstreak")
-    val eightOneModeWinStreak: Int? = null
+    val `3v3v3v3-mode wlr`: Double get() = get("3v3v3v3-mode wlr") as Double
 
-    @SerializedName("eight_one_games_played_bedwars")
-    val eightOneModePlayed: Int = 0
+    val `3v3v3v3-mode win-rate`: Double get() = get("3v3v3v3-mode win-rate") as Double
 
-    @SerializedName("eight_one_wins_bedwars")
-    val eightOneModeWins: Int = 0
+    val `3v3v3v3-mode normal-kills`: Int get() = get("3v3v3v3-mode normal-kills") as Int
 
-    @SerializedName("eight_one_losses_bedwars")
-    val eightOneModeLosses: Int = 0
+    val `3v3v3v3-mode normal-deaths`: Int get() = get("3v3v3v3-mode normal-deaths") as Int
 
-    val eightOneModeWlr: Double by lazy(PUBLICATION) { eightOneModeWins.toDouble() / eightOneModeLosses }
+    val `3v3v3v3-mode normal-kdr`: Double get() = get("3v3v3v3-mode normal-kdr") as Double
 
-    val eightOneModeWinRate: Double by lazy(PUBLICATION) { eightOneModeWins.toDouble() / eightOneModePlayed }
+    val `3v3v3v3-mode final-kills`: Int get() = get("3v3v3v3-mode final-kills") as Int
 
-    @SerializedName("eight_one_kills_bedwars")
-    val eightOneModeNormalKills: Int = 0
+    val `3v3v3v3-mode final-deaths`: Int get() = get("3v3v3v3-mode final-deaths") as Int
 
-    @SerializedName("eight_one_deaths_bedwars")
-    val eightOneModeNormalDeaths: Int = 0
+    val `3v3v3v3-mode final-kdr`: Double get() = get("3v3v3v3-mode final-kdr") as Double
 
-    val eightOneModeNkdr: Double by lazy(PUBLICATION) { eightOneModeNormalKills.toDouble() / eightOneModeNormalDeaths }
+    val `3v3v3v3-mode total-kills`: Int get() = get("3v3v3v3-mode total-kills") as Int
 
-    @SerializedName("eight_one_final_kills_bedwars")
-    val eightOneModeFinalKills: Int = 0
+    val `3v3v3v3-mode total-deaths`: Int get() = get("3v3v3v3-mode total-deaths") as Int
 
-    @SerializedName("eight_one_final_deaths_bedwars")
-    val eightOneModeFinalDeaths: Int = 0
+    val `3v3v3v3-mode total-kdr`: Double get() = get("3v3v3v3-mode total-kdr") as Double
 
-    val eightOneModeFkdr: Double by lazy(PUBLICATION) { eightOneModeFinalKills.toDouble() / eightOneModeFinalDeaths }
+    val `3v3v3v3-mode beds-broken`: Int get() = get("3v3v3v3-mode beds-broken") as Int
 
-    val eightOneModeTotalKills: Int by lazy(PUBLICATION) { eightOneModeNormalKills + eightOneModeFinalKills }
+    val `3v3v3v3-mode beds-lost`: Int get() = get("3v3v3v3-mode beds-lost") as Int
 
-    val eightOneModeTotalDeaths: Int by lazy(PUBLICATION) { eightOneModeNormalDeaths + eightOneModeFinalDeaths }
+    val `3v3v3v3-mode bblr`: Double get() = get("3v3v3v3-mode bblr") as Double
 
-    val eightOneModeTkdr: Double by lazy(PUBLICATION) { eightOneModeTotalKills.toDouble() / eightOneModeTotalDeaths }
+    val `4v4v4v4-mode win-streak`: Int? get() = get("4v4v4v4-mode win-streak") as Int?
 
-    @SerializedName("eight_one_beds_broken_bedwars")
-    val eightOneModeBedsBroken: Int = 0
+    val `4v4v4v4-mode games-played`: Int get() = get("4v4v4v4-mode games-played") as Int
 
-    @SerializedName("eight_one_beds_lost_bedwars")
-    val eightOneModeBedsLost: Int = 0
+    val `4v4v4v4-mode wins`: Int get() = get("4v4v4v4-mode wins") as Int
 
-    val eightOneModeBblr: Double by lazy(PUBLICATION) { eightOneModeBedsBroken.toDouble() / eightOneModeBedsLost }
+    val `4v4v4v4-mode losses`: Int get() = get("4v4v4v4-mode losses") as Int
 
-    // Doubles mode
+    val `4v4v4v4-mode wlr`: Double get() = get("4v4v4v4-mode wlr") as Double
 
-    @SerializedName("eight_two_winstreak")
-    val eightTwoModeWinStreak: Int? = null
+    val `4v4v4v4-mode win-rate`: Double get() = get("4v4v4v4-mode win-rate") as Double
 
-    @SerializedName("eight_two_games_played_bedwars")
-    val eightTwoModePlayed: Int = 0
+    val `4v4v4v4-mode normal-kills`: Int get() = get("4v4v4v4-mode normal-kills") as Int
 
-    @SerializedName("eight_two_wins_bedwars")
-    val eightTwoModeWins: Int = 0
+    val `4v4v4v4-mode normal-deaths`: Int get() = get("4v4v4v4-mode normal-deaths") as Int
 
-    @SerializedName("eight_two_losses_bedwars")
-    val eightTwoModeLosses: Int = 0
+    val `4v4v4v4-mode normal-kdr`: Double get() = get("4v4v4v4-mode normal-kdr") as Double
 
-    val eightTwoModeWlr: Double by lazy(PUBLICATION) { eightTwoModeWins.toDouble() / eightTwoModeLosses }
+    val `4v4v4v4-mode final-kills`: Int get() = get("4v4v4v4-mode final-kills") as Int
 
-    val eightTwoModeWinRate: Double by lazy(PUBLICATION) { eightTwoModeWins.toDouble() / eightTwoModePlayed }
+    val `4v4v4v4-mode final-deaths`: Int get() = get("4v4v4v4-mode final-deaths") as Int
 
-    @SerializedName("eight_two_kills_bedwars")
-    val eightTwoModeNormalKills: Int = 0
+    val `4v4v4v4-mode final-kdr`: Double get() = get("4v4v4v4-mode final-kdr") as Double
 
-    @SerializedName("eight_two_deaths_bedwars")
-    val eightTwoModeNormalDeaths: Int = 0
+    val `4v4v4v4-mode total-kills`: Int get() = get("4v4v4v4-mode total-kills") as Int
 
-    val eightTwoModeNkdr: Double by lazy(PUBLICATION) { eightTwoModeNormalKills.toDouble() / eightTwoModeNormalDeaths }
+    val `4v4v4v4-mode total-deaths`: Int get() = get("4v4v4v4-mode total-deaths") as Int
 
-    @SerializedName("eight_two_final_kills_bedwars")
-    val eightTwoModeFinalKills: Int = 0
+    val `4v4v4v4-mode total-kdr`: Double get() = get("4v4v4v4-mode total-kdr") as Double
 
-    @SerializedName("eight_two_final_deaths_bedwars")
-    val eightTwoModeFinalDeaths: Int = 0
+    val `4v4v4v4-mode beds-broken`: Int get() = get("4v4v4v4-mode beds-broken") as Int
 
-    val eightTwoModeFkdr: Double by lazy(PUBLICATION) { eightTwoModeFinalKills.toDouble() / eightTwoModeFinalDeaths }
+    val `4v4v4v4-mode beds-lost`: Int get() = get("4v4v4v4-mode beds-lost") as Int
 
-    val eightTwoModeTotalKills: Int by lazy(PUBLICATION) { eightTwoModeNormalKills + eightTwoModeFinalKills }
+    val `4v4v4v4-mode bblr`: Double get() = get("4v4v4v4-mode bblr") as Double
 
-    val eightTwoModeTotalDeaths: Int by lazy(PUBLICATION) { eightTwoModeNormalDeaths + eightTwoModeFinalDeaths }
+    val `4v4-mode win-streak`: Int? get() = get("4v4-mode win-streak") as Int?
 
-    val eightTwoModeTkdr: Double by lazy(PUBLICATION) { eightTwoModeTotalKills.toDouble() / eightTwoModeTotalDeaths }
+    val `4v4-mode games-played`: Int get() = get("4v4-mode games-played") as Int
 
-    @SerializedName("eight_two_beds_broken_bedwars")
-    val eightTwoModeBedsBroken: Int = 0
+    val `4v4-mode wins`: Int get() = get("4v4-mode wins") as Int
 
-    @SerializedName("eight_two_beds_lost_bedwars")
-    val eightTwoModeBedsLost: Int = 0
+    val `4v4-mode losses`: Int get() = get("4v4-mode losses") as Int
 
-    val eightTwoModeBblr: Double by lazy(PUBLICATION) { eightTwoModeBedsBroken.toDouble() / eightTwoModeBedsLost }
+    val `4v4-mode wlr`: Double get() = get("4v4-mode wlr") as Double
 
-    // 3v3v3v3 mode
+    val `4v4-mode win-rate`: Double get() = get("4v4-mode win-rate") as Double
 
-    @SerializedName("four_three_winstreak")
-    val fourThreeModeWinStreak: Int? = null
+    val `4v4-mode normal-kills`: Int get() = get("4v4-mode normal-kills") as Int
 
-    @SerializedName("four_three_games_played_bedwars")
-    val fourThreeModePlayed: Int = 0
+    val `4v4-mode normal-deaths`: Int get() = get("4v4-mode normal-deaths") as Int
 
-    @SerializedName("four_three_wins_bedwars")
-    val fourThreeModeWins: Int = 0
+    val `4v4-mode normal-kdr`: Double get() = get("4v4-mode normal-kdr") as Double
 
-    @SerializedName("four_three_losses_bedwars")
-    val fourThreeModeLosses: Int = 0
+    val `4v4-mode final-kills`: Int get() = get("4v4-mode final-kills") as Int
 
-    val fourThreeModeWlr: Double by lazy(PUBLICATION) { fourThreeModeWins.toDouble() / fourThreeModeLosses }
+    val `4v4-mode final-deaths`: Int get() = get("4v4-mode final-deaths") as Int
 
-    val fourThreeModeWinRate: Double by lazy(PUBLICATION) { fourThreeModeWins.toDouble() / fourThreeModePlayed }
+    val `4v4-mode final-kdr`: Double get() = get("4v4-mode final-kdr") as Double
 
-    @SerializedName("four_three_kills_bedwars")
-    val fourThreeModeNormalKills: Int = 0
+    val `4v4-mode total-kills`: Int get() = get("4v4-mode total-kills") as Int
 
-    @SerializedName("four_three_deaths_bedwars")
-    val fourThreeModeNormalDeaths: Int = 0
+    val `4v4-mode total-deaths`: Int get() = get("4v4-mode total-deaths") as Int
 
-    val fourThreeModeNkdr: Double by lazy(PUBLICATION) { fourThreeModeNormalKills.toDouble() / fourThreeModeNormalDeaths }
+    val `4v4-mode total-kdr`: Double get() = get("4v4-mode total-kdr") as Double
 
-    @SerializedName("four_three_final_kills_bedwars")
-    val fourThreeModeFinalKills: Int = 0
+    val `4v4-mode beds-broken`: Int get() = get("4v4-mode beds-broken") as Int
 
-    @SerializedName("four_three_final_deaths_bedwars")
-    val fourThreeModeFinalDeaths: Int = 0
+    val `4v4-mode beds-lost`: Int get() = get("4v4-mode beds-lost") as Int
 
-    val fourThreeModeFkdr: Double by lazy(PUBLICATION) { fourThreeModeFinalKills.toDouble() / fourThreeModeFinalDeaths }
+    val `4v4-mode bblr`: Double get() = get("4v4-mode bblr") as Double
 
-    val fourThreeModeTotalKills: Int by lazy(PUBLICATION) { fourThreeModeNormalKills + fourThreeModeFinalKills }
+    val `core-modes win-streak`: Int? get() = get("core-modes win-streak") as Int?
 
-    val fourThreeModeTotalDeaths: Int by lazy(PUBLICATION) { fourThreeModeNormalDeaths + fourThreeModeFinalDeaths }
+    val `core-modes games-played`: Int get() = get("core-modes games-played") as Int
 
-    val fourThreeModeTkdr: Double by lazy(PUBLICATION) { fourThreeModeTotalKills.toDouble() / fourThreeModeTotalDeaths }
+    val `core-modes wins`: Int get() = get("core-modes wins") as Int
 
-    @SerializedName("four_three_beds_broken_bedwars")
-    val fourThreeModeBedsBroken: Int = 0
+    val `core-modes losses`: Int get() = get("core-modes losses") as Int
 
-    @SerializedName("four_three_beds_lost_bedwars")
-    val fourThreeModeBedsLost: Int = 0
+    val `core-modes wlr`: Double get() = get("core-modes wlr") as Double
 
-    val fourThreeModeBblr: Double by lazy(PUBLICATION) { fourThreeModeBedsBroken.toDouble() / fourThreeModeBedsLost }
+    val `core-modes win-rate`: Double get() = get("core-modes win-rate") as Double
 
-    // 4v4v4v4 mode
+    val `core-modes normal-kills`: Int get() = get("core-modes normal-kills") as Int
 
-    @SerializedName("four_four_winstreak")
-    val fourFourModeWinStreak: Int? = null
+    val `core-modes normal-deaths`: Int get() = get("core-modes normal-deaths") as Int
 
-    @SerializedName("four_four_games_played_bedwars")
-    val fourFourModePlayed: Int = 0
+    val `core-modes normal-kdr`: Double get() = get("core-modes normal-kdr") as Double
 
-    @SerializedName("four_four_wins_bedwars")
-    val fourFourModeWins: Int = 0
+    val `core-modes final-kills`: Int get() = get("core-modes final-kills") as Int
 
-    @SerializedName("four_four_losses_bedwars")
-    val fourFourModeLosses: Int = 0
+    val `core-modes final-deaths`: Int get() = get("core-modes final-deaths") as Int
 
-    val fourFourModeWlr: Double by lazy(PUBLICATION) { fourFourModeWins.toDouble() / fourFourModeLosses }
+    val `core-modes final-kdr`: Double get() = get("core-modes final-kdr") as Double
 
-    val fourFourModeWinRate: Double by lazy(PUBLICATION) { fourFourModeWins.toDouble() / fourFourModePlayed }
+    val `core-modes total-kills`: Int get() = get("core-modes total-kills") as Int
 
-    @SerializedName("four_four_kills_bedwars")
-    val fourFourModeNormalKills: Int = 0
+    val `core-modes total-deaths`: Int get() = get("core-modes total-deaths") as Int
 
-    @SerializedName("four_four_deaths_bedwars")
-    val fourFourModeNormalDeaths: Int = 0
+    val `core-modes total-kdr`: Double get() = get("core-modes total-kdr") as Double
 
-    val fourFourModeNkdr: Double by lazy(PUBLICATION) { fourFourModeNormalKills.toDouble() / fourFourModeNormalDeaths }
+    val `core-modes beds-broken`: Int get() = get("core-modes beds-broken") as Int
 
-    @SerializedName("four_four_final_kills_bedwars")
-    val fourFourModeFinalKills: Int = 0
+    val `core-modes beds-lost`: Int get() = get("core-modes beds-lost") as Int
 
-    @SerializedName("four_four_final_deaths_bedwars")
-    val fourFourModeFinalDeaths: Int = 0
+    val `core-modes bblr`: Double get() = get("core-modes bblr") as Double
 
-    val fourFourModeFkdr: Double by lazy(PUBLICATION) { fourFourModeFinalKills.toDouble() / fourFourModeFinalDeaths }
+    val `normal-modes games-played`: Int get() = get("normal-modes games-played") as Int
 
-    val fourFourModeTotalKills: Int by lazy(PUBLICATION) { fourFourModeNormalKills + fourFourModeFinalKills }
+    val `normal-modes wins`: Int get() = get("normal-modes wins") as Int
 
-    val fourFourModeTotalDeaths: Int by lazy(PUBLICATION) { fourFourModeNormalDeaths + fourFourModeFinalDeaths }
+    val `normal-modes losses`: Int get() = get("normal-modes losses") as Int
 
-    val fourFourModeTkdr: Double by lazy(PUBLICATION) { fourFourModeTotalKills.toDouble() / fourFourModeTotalDeaths }
+    val `normal-modes wlr`: Double get() = get("normal-modes wlr") as Double
 
-    @SerializedName("four_four_beds_broken_bedwars")
-    val fourFourModeBedsBroken: Int = 0
+    val `normal-modes win-rate`: Double get() = get("normal-modes win-rate") as Double
 
-    @SerializedName("four_four_beds_lost_bedwars")
-    val fourFourModeBedsLost: Int = 0
+    val `normal-modes normal-kills`: Int get() = get("normal-modes normal-kills") as Int
 
-    val fourFourModeBblr: Double by lazy(PUBLICATION) { fourFourModeBedsBroken.toDouble() / fourFourModeBedsLost }
+    val `normal-modes normal-deaths`: Int get() = get("normal-modes normal-deaths") as Int
 
-    @SerializedName("two_four_winstreak")
-    val twoFourModeWinStreak: Int? = null
+    val `normal-modes normal-kdr`: Double get() = get("normal-modes normal-kdr") as Double
 
-    @SerializedName("two_four_games_played_bedwars")
-    val twoFourModePlayed: Int = 0
+    val `normal-modes final-kills`: Int get() = get("normal-modes final-kills") as Int
 
-    @SerializedName("two_four_wins_bedwars")
-    val twoFourModeWins: Int = 0
+    val `normal-modes final-deaths`: Int get() = get("normal-modes final-deaths") as Int
 
-    @SerializedName("two_four_losses_bedwars")
-    val twoFourModeLosses: Int = 0
+    val `normal-modes final-kdr`: Double get() = get("normal-modes final-kdr") as Double
 
-    val twoFourModeWlr: Double by lazy(PUBLICATION) { twoFourModeWins.toDouble() / twoFourModeLosses }
+    val `normal-modes total-kills`: Int get() = get("normal-modes total-kills") as Int
 
-    val twoFourModeWinRate: Double by lazy(PUBLICATION) { twoFourModeWins.toDouble() / twoFourModePlayed }
+    val `normal-modes total-deaths`: Int get() = get("normal-modes total-deaths") as Int
 
-    @SerializedName("two_four_kills_bedwars")
-    val twoFourModeNormalKills: Int = 0
+    val `normal-modes total-kdr`: Double get() = get("normal-modes total-kdr") as Double
 
-    @SerializedName("two_four_deaths_bedwars")
-    val twoFourModeNormalDeaths: Int = 0
+    val `normal-modes beds-broken`: Int get() = get("normal-modes beds-broken") as Int
 
-    val twoFourModeNkdr: Double by lazy(PUBLICATION) { twoFourModeNormalKills.toDouble() / twoFourModeNormalDeaths }
+    val `normal-modes beds-lost`: Int get() = get("normal-modes beds-lost") as Int
 
-    @SerializedName("two_four_final_kills_bedwars")
-    val twoFourModeFinalKills: Int = 0
+    val `normal-modes bblr`: Double get() = get("normal-modes bblr") as Double
 
-    @SerializedName("two_four_final_deaths_bedwars")
-    val twoFourModeFinalDeaths: Int = 0
+    val `all-modes games-played`: Int get() = get("all-modes games-played") as Int
 
-    val twoFourModeFkdr: Double by lazy(PUBLICATION) { twoFourModeFinalKills.toDouble() / twoFourModeFinalDeaths }
-
-    val twoFourModeTotalKills: Int by lazy(PUBLICATION) { twoFourModeNormalKills + twoFourModeFinalKills }
-
-    val twoFourModeTotalDeaths: Int by lazy(PUBLICATION) { twoFourModeNormalDeaths + twoFourModeFinalDeaths }
-
-    val twoFourModeTkdr: Double by lazy(PUBLICATION) { twoFourModeTotalKills.toDouble() / twoFourModeTotalDeaths }
-
-    @SerializedName("two_four_beds_broken_bedwars")
-    val twoFourModeBedsBroken: Int = 0
-
-    @SerializedName("two_four_beds_lost_bedwars")
-    val twoFourModeBedsLost: Int = 0
-
-    val twoFourModeBblr: Double by lazy(PUBLICATION) { twoFourModeBedsBroken.toDouble() / twoFourModeBedsLost }
-
-    private companion object {
+    companion object {
         private const val LEVEL_ORNAMENT_1 = "✫"
 
         private const val LEVEL_ORNAMENT_2 = "✪"
@@ -391,6 +312,298 @@ class PlayerBedWarsStats {
         private const val LEVEL_ORNAMENT_3 = "⚝"
 
         private const val LEVEL_ORNAMENT_4 = "✥"
+
+        fun buildFromJson(json: JsonObject?): PlayerBedWarsStats {
+            val getIntOrNull = if (json != null) { key: String -> json[key]?.asInt } else { _ -> null }
+            val getIntOrZero = if (json != null) { key: String -> json[key]?.asInt ?: 0 } else { _ -> 0 }
+
+            val experience = getIntOrZero("Experience")
+            val level = calculateLevel(experience)
+            val `level-rounded` = calculateLevel(experience).toInt()
+            val `level-formatted` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = true)
+            val `level-formatted-without-brackets` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = true)
+            val `level-formatted-without-ornament` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = false)
+            val `level-formatted-simple` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = false)
+            val coins = getIntOrZero("coins")
+
+            val `solo-mode win-streak` = getIntOrNull("eight_one_winstreak")
+            val `solo-mode games-played` = getIntOrZero("eight_one_games_played_bedwars")
+            val `solo-mode wins` = getIntOrZero("eight_one_wins_bedwars")
+            val `solo-mode losses` = getIntOrZero("eight_one_losses_bedwars")
+            val `solo-mode wlr` = `solo-mode wins`.toDouble() / `solo-mode losses`
+            val `solo-mode win-rate` = `solo-mode wins`.toDouble() / `solo-mode games-played`
+            val `solo-mode normal-kills` = getIntOrZero("eight_one_kills_bedwars")
+            val `solo-mode normal-deaths` = getIntOrZero("eight_one_deaths_bedwars")
+            val `solo-mode normal-kdr` = `solo-mode normal-kills`.toDouble() / `solo-mode normal-deaths`
+            val `solo-mode final-kills` = getIntOrZero("eight_one_final_kills_bedwars")
+            val `solo-mode final-deaths` = getIntOrZero("eight_one_final_deaths_bedwars")
+            val `solo-mode final-kdr` = `solo-mode final-kills`.toDouble() / `solo-mode final-deaths`
+            val `solo-mode total-kills` = `solo-mode normal-kills` + `solo-mode final-kills`
+            val `solo-mode total-deaths` = `solo-mode normal-deaths` + `solo-mode final-deaths`
+            val `solo-mode total-kdr` = `solo-mode total-kills`.toDouble() / `solo-mode total-deaths`
+            val `solo-mode beds-broken` = getIntOrZero("eight_one_beds_broken_bedwars")
+            val `solo-mode beds-lost` = getIntOrZero("eight_one_beds_lost_bedwars")
+            val `solo-mode bblr` = `solo-mode beds-broken`.toDouble() / `solo-mode beds-lost`
+
+            val `doubles-mode win-streak` = getIntOrNull("eight_two_winstreak")
+            val `doubles-mode games-played` = getIntOrZero("eight_two_games_played_bedwars")
+            val `doubles-mode wins` = getIntOrZero("eight_two_wins_bedwars")
+            val `doubles-mode losses` = getIntOrZero("eight_two_losses_bedwars")
+            val `doubles-mode wlr` = `doubles-mode wins`.toDouble() / `doubles-mode losses`
+            val `doubles-mode win-rate` = `doubles-mode wins`.toDouble() / `doubles-mode games-played`
+            val `doubles-mode normal-kills` = getIntOrZero("eight_two_kills_bedwars")
+            val `doubles-mode normal-deaths` = getIntOrZero("eight_two_deaths_bedwars")
+            val `doubles-mode normal-kdr` = `doubles-mode normal-kills`.toDouble() / `doubles-mode normal-deaths`
+            val `doubles-mode final-kills` = getIntOrZero("eight_two_final_kills_bedwars")
+            val `doubles-mode final-deaths` = getIntOrZero("eight_two_final_deaths_bedwars")
+            val `doubles-mode final-kdr` = `doubles-mode final-kills`.toDouble() / `doubles-mode final-deaths`
+            val `doubles-mode total-kills` = `doubles-mode normal-kills` + `doubles-mode final-kills`
+            val `doubles-mode total-deaths` = `doubles-mode normal-deaths` + `doubles-mode final-deaths`
+            val `doubles-mode total-kdr` = `doubles-mode total-kills`.toDouble() / `doubles-mode total-deaths`
+            val `doubles-mode beds-broken` = getIntOrZero("eight_two_beds_broken_bedwars")
+            val `doubles-mode beds-lost` = getIntOrZero("eight_two_beds_lost_bedwars")
+            val `doubles-mode bblr` = `doubles-mode beds-broken`.toDouble() / `doubles-mode beds-lost`
+
+            val `3v3v3v3-mode win-streak` = getIntOrNull("four_three_winstreak")
+            val `3v3v3v3-mode games-played` = getIntOrZero("four_three_games_played_bedwars")
+            val `3v3v3v3-mode wins` = getIntOrZero("four_three_wins_bedwars")
+            val `3v3v3v3-mode losses` = getIntOrZero("four_three_losses_bedwars")
+            val `3v3v3v3-mode wlr` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode losses`
+            val `3v3v3v3-mode win-rate` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode games-played`
+            val `3v3v3v3-mode normal-kills` = getIntOrZero("four_three_kills_bedwars")
+            val `3v3v3v3-mode normal-deaths` = getIntOrZero("four_three_deaths_bedwars")
+            val `3v3v3v3-mode normal-kdr` = `3v3v3v3-mode normal-kills`.toDouble() / `3v3v3v3-mode normal-deaths`
+            val `3v3v3v3-mode final-kills` = getIntOrZero("four_three_final_kills_bedwars")
+            val `3v3v3v3-mode final-deaths` = getIntOrZero("four_three_final_deaths_bedwars")
+            val `3v3v3v3-mode final-kdr` = `3v3v3v3-mode final-kills`.toDouble() / `3v3v3v3-mode final-deaths`
+            val `3v3v3v3-mode total-kills` = `3v3v3v3-mode normal-kills` + `3v3v3v3-mode final-kills`
+            val `3v3v3v3-mode total-deaths` = `3v3v3v3-mode normal-deaths` + `3v3v3v3-mode final-deaths`
+            val `3v3v3v3-mode total-kdr` = `3v3v3v3-mode total-kills`.toDouble() / `3v3v3v3-mode total-deaths`
+            val `3v3v3v3-mode beds-broken` = getIntOrZero("four_three_beds_broken_bedwars")
+            val `3v3v3v3-mode beds-lost` = getIntOrZero("four_three_beds_lost_bedwars")
+            val `3v3v3v3-mode bblr` = `3v3v3v3-mode beds-broken`.toDouble() / `3v3v3v3-mode beds-lost`
+
+            val `4v4v4v4-mode win-streak` = getIntOrNull("four_four_winstreak")
+            val `4v4v4v4-mode games-played` = getIntOrZero("four_four_games_played_bedwars")
+            val `4v4v4v4-mode wins` = getIntOrZero("four_four_wins_bedwars")
+            val `4v4v4v4-mode losses` = getIntOrZero("four_four_losses_bedwars")
+            val `4v4v4v4-mode wlr` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode losses`
+            val `4v4v4v4-mode win-rate` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode games-played`
+            val `4v4v4v4-mode normal-kills` = getIntOrZero("four_four_kills_bedwars")
+            val `4v4v4v4-mode normal-deaths` = getIntOrZero("four_four_deaths_bedwars")
+            val `4v4v4v4-mode normal-kdr` = `4v4v4v4-mode normal-kills`.toDouble() / `4v4v4v4-mode normal-deaths`
+            val `4v4v4v4-mode final-kills` = getIntOrZero("four_four_final_kills_bedwars")
+            val `4v4v4v4-mode final-deaths` = getIntOrZero("four_four_final_deaths_bedwars")
+            val `4v4v4v4-mode final-kdr` = `4v4v4v4-mode final-kills`.toDouble() / `4v4v4v4-mode final-deaths`
+            val `4v4v4v4-mode total-kills` = `4v4v4v4-mode normal-kills` + `4v4v4v4-mode final-kills`
+            val `4v4v4v4-mode total-deaths` = `4v4v4v4-mode normal-deaths` + `4v4v4v4-mode final-deaths`
+            val `4v4v4v4-mode total-kdr` = `4v4v4v4-mode total-kills`.toDouble() / `4v4v4v4-mode total-deaths`
+            val `4v4v4v4-mode beds-broken` = getIntOrZero("four_four_beds_broken_bedwars")
+            val `4v4v4v4-mode beds-lost` = getIntOrZero("four_four_beds_lost_bedwars")
+            val `4v4v4v4-mode bblr` = `4v4v4v4-mode beds-broken`.toDouble() / `4v4v4v4-mode beds-lost`
+
+            val `4v4-mode win-streak` = getIntOrNull("two_four_winstreak")
+            val `4v4-mode games-played` = getIntOrZero("two_four_games_played_bedwars")
+            val `4v4-mode wins` = getIntOrZero("two_four_wins_bedwars")
+            val `4v4-mode losses` = getIntOrZero("two_four_losses_bedwars")
+            val `4v4-mode wlr` = `4v4-mode wins`.toDouble() / `4v4-mode losses`
+            val `4v4-mode win-rate` = `4v4-mode wins`.toDouble() / `4v4-mode games-played`
+            val `4v4-mode normal-kills` = getIntOrZero("two_four_kills_bedwars")
+            val `4v4-mode normal-deaths` = getIntOrZero("two_four_deaths_bedwars")
+            val `4v4-mode normal-kdr` = `4v4-mode normal-kills`.toDouble() / `4v4-mode normal-deaths`
+            val `4v4-mode final-kills` = getIntOrZero("two_four_final_kills_bedwars")
+            val `4v4-mode final-deaths` = getIntOrZero("two_four_final_deaths_bedwars")
+            val `4v4-mode final-kdr` = `4v4-mode final-kills`.toDouble() / `4v4-mode final-deaths`
+            val `4v4-mode total-kills` = `4v4-mode normal-kills` + `4v4-mode final-kills`
+            val `4v4-mode total-deaths` = `4v4-mode normal-deaths` + `4v4-mode final-deaths`
+            val `4v4-mode total-kdr` = `4v4-mode total-kills`.toDouble() / `4v4-mode total-deaths`
+            val `4v4-mode beds-broken` = getIntOrZero("two_four_beds_broken_bedwars")
+            val `4v4-mode beds-lost` = getIntOrZero("two_four_beds_lost_bedwars")
+            val `4v4-mode bblr` = `4v4-mode beds-broken`.toDouble() / `4v4-mode beds-lost`
+
+            val `core-modes win-streak` = getIntOrNull("winstreak")
+            val `core-modes games-played` = `solo-mode games-played` + `doubles-mode games-played` + `3v3v3v3-mode games-played` + `4v4v4v4-mode games-played`
+            val `core-modes wins` = `solo-mode wins` + `doubles-mode wins` + `3v3v3v3-mode wins` + `4v4v4v4-mode wins`
+            val `core-modes losses` = `solo-mode losses` + `doubles-mode losses` + `3v3v3v3-mode losses` + `4v4v4v4-mode losses`
+            val `core-modes wlr` = `core-modes wins`.toDouble() / `core-modes losses`
+            val `core-modes win-rate` = `core-modes wins`.toDouble() / `core-modes games-played`
+            val `core-modes normal-kills` = `solo-mode normal-kills` + `doubles-mode normal-kills` + `3v3v3v3-mode normal-kills` + `4v4v4v4-mode normal-kills`
+            val `core-modes normal-deaths` = `solo-mode normal-deaths` + `doubles-mode normal-deaths` + `3v3v3v3-mode normal-deaths` + `4v4v4v4-mode normal-deaths`
+            val `core-modes normal-kdr` = `core-modes normal-kills`.toDouble() / `core-modes normal-deaths`
+            val `core-modes final-kills` = `solo-mode final-kills` + `doubles-mode final-kills` + `3v3v3v3-mode final-kills` + `4v4v4v4-mode final-kills`
+            val `core-modes final-deaths` = `solo-mode final-deaths` + `doubles-mode final-deaths` + `3v3v3v3-mode final-deaths` + `4v4v4v4-mode final-deaths`
+            val `core-modes final-kdr` = `core-modes final-kills`.toDouble() / `core-modes final-deaths`
+            val `core-modes total-kills` = `core-modes normal-kills` + `core-modes final-kills`
+            val `core-modes total-deaths` = `core-modes normal-deaths` + `core-modes final-deaths`
+            val `core-modes total-kdr` = `core-modes total-kills`.toDouble() / `core-modes total-deaths`
+            val `core-modes beds-broken` = `solo-mode beds-broken` + `doubles-mode beds-broken` + `3v3v3v3-mode beds-broken` + `4v4v4v4-mode beds-broken`
+            val `core-modes beds-lost` = `solo-mode beds-lost` + `doubles-mode beds-lost` + `3v3v3v3-mode beds-lost` + `4v4v4v4-mode beds-lost`
+            val `core-modes bblr` = `core-modes beds-broken`.toDouble() / `core-modes beds-lost`
+
+            val `normal-modes games-played` = getIntOrZero("games_played_bedwars")
+            val `normal-modes wins` = getIntOrZero("wins_bedwars")
+            val `normal-modes losses` = getIntOrZero("losses_bedwars")
+            val `normal-modes wlr` = `normal-modes wins`.toDouble() / `normal-modes losses`
+            val `normal-modes win-rate` = `normal-modes wins`.toDouble() / `normal-modes games-played`
+            val `normal-modes normal-kills` = getIntOrZero("kills_bedwars")
+            val `normal-modes normal-deaths` = getIntOrZero("deaths_bedwars")
+            val `normal-modes normal-kdr` = `normal-modes normal-kills`.toDouble() / `normal-modes normal-deaths`
+            val `normal-modes final-kills` = getIntOrZero("final_kills_bedwars")
+            val `normal-modes final-deaths` = getIntOrZero("final_deaths_bedwars")
+            val `normal-modes final-kdr` = `normal-modes final-kills`.toDouble() / `normal-modes final-deaths`
+            val `normal-modes total-kills` = `normal-modes normal-kills` + `normal-modes final-kills`
+            val `normal-modes total-deaths` = `normal-modes normal-deaths` + `normal-modes final-deaths`
+            val `normal-modes total-kdr` = `normal-modes total-kills`.toDouble() / `normal-modes total-deaths`
+            val `normal-modes beds-broken` = getIntOrZero("beds_broken_bedwars")
+            val `normal-modes beds-lost` = getIntOrZero("beds_lost_bedwars")
+            val `normal-modes bblr` = `normal-modes beds-broken`.toDouble() / `normal-modes beds-lost`
+
+            val `all-modes games-played` = getIntOrZero("games_played_bedwars_1")
+
+            return PlayerBedWarsStats(mapOf(
+                "experience" to experience,
+                "level" to level,
+                "level-formatted" to `level-formatted`,
+                "level-formatted-without-brackets" to `level-formatted-without-brackets`,
+                "level-formatted-without-ornament" to `level-formatted-without-ornament`,
+                "level-formatted-simple" to `level-formatted-simple`,
+                "coins" to coins,
+
+                "solo-mode win-streak" to `solo-mode win-streak`,
+                "solo-mode games-played" to `solo-mode games-played`,
+                "solo-mode wins" to `solo-mode wins`,
+                "solo-mode losses" to `solo-mode losses`,
+                "solo-mode wlr" to `solo-mode wlr`,
+                "solo-mode win-rate" to `solo-mode win-rate`,
+                "solo-mode normal-kills" to `solo-mode normal-kills`,
+                "solo-mode normal-deaths" to `solo-mode normal-deaths`,
+                "solo-mode normal-kdr" to `solo-mode normal-kdr`,
+                "solo-mode final-kills" to `solo-mode final-kills`,
+                "solo-mode final-deaths" to `solo-mode final-deaths`,
+                "solo-mode final-kdr" to `solo-mode final-kdr`,
+                "solo-mode total-kills" to `solo-mode total-kills`,
+                "solo-mode total-deaths" to `solo-mode total-deaths`,
+                "solo-mode total-kdr" to `solo-mode total-kdr`,
+                "solo-mode beds-broken" to `solo-mode beds-broken`,
+                "solo-mode beds-lost" to `solo-mode beds-lost`,
+                "solo-mode bblr" to `solo-mode bblr`,
+
+                "doubles-mode win-streak" to `doubles-mode win-streak`,
+                "doubles-mode games-played" to `doubles-mode games-played`,
+                "doubles-mode wins" to `doubles-mode wins`,
+                "doubles-mode losses" to `doubles-mode losses`,
+                "doubles-mode wlr" to `doubles-mode wlr`,
+                "doubles-mode win-rate" to `doubles-mode win-rate`,
+                "doubles-mode normal-kills" to `doubles-mode normal-kills`,
+                "doubles-mode normal-deaths" to `doubles-mode normal-deaths`,
+                "doubles-mode normal-kdr" to `doubles-mode normal-kdr`,
+                "doubles-mode final-kills" to `doubles-mode final-kills`,
+                "doubles-mode final-deaths" to `doubles-mode final-deaths`,
+                "doubles-mode final-kdr" to `doubles-mode final-kdr`,
+                "doubles-mode total-kills" to `doubles-mode total-kills`,
+                "doubles-mode total-deaths" to `doubles-mode total-deaths`,
+                "doubles-mode total-kdr" to `doubles-mode total-kdr`,
+                "doubles-mode beds-broken" to `doubles-mode beds-broken`,
+                "doubles-mode beds-lost" to `doubles-mode beds-lost`,
+                "doubles-mode bblr" to `doubles-mode bblr`,
+
+                "3v3v3v3-mode win-streak" to `3v3v3v3-mode win-streak`,
+                "3v3v3v3-mode games-played" to `3v3v3v3-mode games-played`,
+                "3v3v3v3-mode wins" to `3v3v3v3-mode wins`,
+                "3v3v3v3-mode losses" to `3v3v3v3-mode losses`,
+                "3v3v3v3-mode wlr" to `3v3v3v3-mode wlr`,
+                "3v3v3v3-mode win-rate" to `3v3v3v3-mode win-rate`,
+                "3v3v3v3-mode normal-kills" to `3v3v3v3-mode normal-kills`,
+                "3v3v3v3-mode normal-deaths" to `3v3v3v3-mode normal-deaths`,
+                "3v3v3v3-mode normal-kdr" to `3v3v3v3-mode normal-kdr`,
+                "3v3v3v3-mode final-kills" to `3v3v3v3-mode final-kills`,
+                "3v3v3v3-mode final-deaths" to `3v3v3v3-mode final-deaths`,
+                "3v3v3v3-mode final-kdr" to `3v3v3v3-mode final-kdr`,
+                "3v3v3v3-mode total-kills" to `3v3v3v3-mode total-kills`,
+                "3v3v3v3-mode total-deaths" to `3v3v3v3-mode total-deaths`,
+                "3v3v3v3-mode total-kdr" to `3v3v3v3-mode total-kdr`,
+                "3v3v3v3-mode beds-broken" to `3v3v3v3-mode beds-broken`,
+                "3v3v3v3-mode beds-lost" to `3v3v3v3-mode beds-lost`,
+                "3v3v3v3-mode bblr" to `3v3v3v3-mode bblr`,
+
+                "4v4v4v4-mode win-streak" to `4v4v4v4-mode win-streak`,
+                "4v4v4v4-mode games-played" to `4v4v4v4-mode games-played`,
+                "4v4v4v4-mode wins" to `4v4v4v4-mode wins`,
+                "4v4v4v4-mode losses" to `4v4v4v4-mode losses`,
+                "4v4v4v4-mode wlr" to `4v4v4v4-mode wlr`,
+                "4v4v4v4-mode win-rate" to `4v4v4v4-mode win-rate`,
+                "4v4v4v4-mode normal-kills" to `4v4v4v4-mode normal-kills`,
+                "4v4v4v4-mode normal-deaths" to `4v4v4v4-mode normal-deaths`,
+                "4v4v4v4-mode normal-kdr" to `4v4v4v4-mode normal-kdr`,
+                "4v4v4v4-mode final-kills" to `4v4v4v4-mode final-kills`,
+                "4v4v4v4-mode final-deaths" to `4v4v4v4-mode final-deaths`,
+                "4v4v4v4-mode final-kdr" to `4v4v4v4-mode final-kdr`,
+                "4v4v4v4-mode total-kills" to `4v4v4v4-mode total-kills`,
+                "4v4v4v4-mode total-deaths" to `4v4v4v4-mode total-deaths`,
+                "4v4v4v4-mode total-kdr" to `4v4v4v4-mode total-kdr`,
+                "4v4v4v4-mode beds-broken" to `4v4v4v4-mode beds-broken`,
+                "4v4v4v4-mode beds-lost" to `4v4v4v4-mode beds-lost`,
+                "4v4v4v4-mode bblr" to `4v4v4v4-mode bblr`,
+
+                "4v4-mode win-streak" to `4v4-mode win-streak`,
+                "4v4-mode games-played" to `4v4-mode games-played`,
+                "4v4-mode wins" to `4v4-mode wins`,
+                "4v4-mode losses" to `4v4-mode losses`,
+                "4v4-mode wlr" to `4v4-mode wlr`,
+                "4v4-mode win-rate" to `4v4-mode win-rate`,
+                "4v4-mode normal-kills" to `4v4-mode normal-kills`,
+                "4v4-mode normal-deaths" to `4v4-mode normal-deaths`,
+                "4v4-mode normal-kdr" to `4v4-mode normal-kdr`,
+                "4v4-mode final-kills" to `4v4-mode final-kills`,
+                "4v4-mode final-deaths" to `4v4-mode final-deaths`,
+                "4v4-mode final-kdr" to `4v4-mode final-kdr`,
+                "4v4-mode total-kills" to `4v4-mode total-kills`,
+                "4v4-mode total-deaths" to `4v4-mode total-deaths`,
+                "4v4-mode total-kdr" to `4v4-mode total-kdr`,
+                "4v4-mode beds-broken" to `4v4-mode beds-broken`,
+                "4v4-mode beds-lost" to `4v4-mode beds-lost`,
+                "4v4-mode bblr" to `4v4-mode bblr`,
+
+                "core-modes win-streak" to `core-modes win-streak`,
+                "core-modes games-played" to `core-modes games-played`,
+                "core-modes wins" to `core-modes wins`,
+                "core-modes losses" to `core-modes losses`,
+                "core-modes wlr" to `core-modes wlr`,
+                "core-modes win-rate" to `core-modes win-rate`,
+                "core-modes normal-kills" to `core-modes normal-kills`,
+                "core-modes normal-deaths" to `core-modes normal-deaths`,
+                "core-modes normal-kdr" to `core-modes normal-kdr`,
+                "core-modes final-kills" to `core-modes final-kills`,
+                "core-modes final-deaths" to `core-modes final-deaths`,
+                "core-modes final-kdr" to `core-modes final-kdr`,
+                "core-modes total-kills" to `core-modes total-kills`,
+                "core-modes total-deaths" to `core-modes total-deaths`,
+                "core-modes total-kdr" to `core-modes total-kdr`,
+                "core-modes beds-broken" to `core-modes beds-broken`,
+                "core-modes beds-lost" to `core-modes beds-lost`,
+                "core-modes bblr" to `core-modes bblr`,
+
+                "normal-modes games-played" to `normal-modes games-played`,
+                "normal-modes wins" to `normal-modes wins`,
+                "normal-modes losses" to `normal-modes losses`,
+                "normal-modes wlr" to `normal-modes wlr`,
+                "normal-modes win-rate" to `normal-modes win-rate`,
+                "normal-modes normal-kills" to `normal-modes normal-kills`,
+                "normal-modes normal-deaths" to `normal-modes normal-deaths`,
+                "normal-modes normal-kdr" to `normal-modes normal-kdr`,
+                "normal-modes final-kills" to `normal-modes final-kills`,
+                "normal-modes final-deaths" to `normal-modes final-deaths`,
+                "normal-modes final-kdr" to `normal-modes final-kdr`,
+                "normal-modes total-kills" to `normal-modes total-kills`,
+                "normal-modes total-deaths" to `normal-modes total-deaths`,
+                "normal-modes total-kdr" to `normal-modes total-kdr`,
+                "normal-modes beds-broken" to `normal-modes beds-broken`,
+                "normal-modes beds-lost" to `normal-modes beds-lost`,
+                "normal-modes bblr" to `normal-modes bblr`,
+
+                "all-modes games-played" to `all-modes games-played`
+            ))
+        }
 
         private fun calculateLevel(experience: Int): Double {
             val x = 100 * floor(experience.toDouble() / 487000)

@@ -23,7 +23,8 @@ import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
 import net.sharedwonder.mc.ptbridge.utils.GsonInstance;
-import com.google.gson.JsonObject;
+import java.util.List;
+import java.util.Map;
 import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,22 +35,23 @@ public final class SPUpdateChatMessage implements S2CPacketHandler {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
         var hypLookupContext = connectionContext.getExternalContext(HypLookupContext.class);
         var message = PacketUtils.readUtf8String(in);
-        var deserialized = GsonInstance.getGson().fromJson(message, JsonObject.class);
+        var deserialized = (Map<String, Object>) GsonInstance.getGson().fromJson(message, Map.class);
         if (hypLookupContext.getDetectedGame() == null) {
             return HandledFlag.PASSED;
         }
 
-        if (deserialized.has("extra")) {
-            var extra = deserialized.get("extra").getAsJsonArray();
+        if (deserialized.containsKey("extra")) {
+            var extra = (List<Map<String, Object>>) deserialized.get("extra");
             var flag = false;
             if (extra.size() > 4) {
-                var string = extra.get(4).getAsJsonObject().get("text").getAsString();
+                var string = (String) extra.get(4).get("text");
                 flag = string.startsWith(" has joined") || string.startsWith("加入了游戏");
             } else if (extra.size() > 1) {
-                var string = extra.get(1).getAsJsonObject().get("text").getAsString();
+                var string = (String) extra.get(1).get("text");
                 flag = string.startsWith("reconnected") || string.startsWith("重新连接");
             }
 

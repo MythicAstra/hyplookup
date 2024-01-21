@@ -16,12 +16,16 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
-import com.google.gson.annotations.SerializedName
+import com.google.gson.JsonObject
 
-class PlayerStats {
-    @SerializedName("Bedwars")
-    val bedWars: PlayerBedWarsStats = PlayerBedWarsStats()
-
-    @SerializedName("SkyWars")
-    val skyWars: PlayerSkyWarsStats = PlayerSkyWarsStats()
+class PlayerStats(
+    val bedWars: PlayerBedWarsStats,
+    val skyWars: PlayerSkyWarsStats
+) {
+    companion object {
+        fun buildFromJson(json: JsonObject?): PlayerStats = PlayerStats(
+            PlayerBedWarsStats.buildFromJson(json?.get("Bedwars")?.asJsonObject),
+            PlayerSkyWarsStats.buildFromJson(json?.get("SkyWars")?.asJsonObject)
+        )
+    }
 }

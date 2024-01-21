@@ -153,7 +153,7 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
                     }
                 }
             } catch (exception: Throwable) {
-                LOGGER.error("Error while updating player list", exception)
+                LOGGER.error("An error occurred while updating player list", exception)
             } finally {
                 updatingThread = null
             }

@@ -19,6 +19,12 @@ package net.sharedwonder.mc.hyplookup.utils
 import com.google.gson.annotations.SerializedName
 
 class HypLookupConfig(
+    @SerializedName("hypixel-api-base-url")
+    val hypixelApiBaseUrl: String?,
+
     @SerializedName("hypixel-api-key")
-    val hypixelApiKey: String
+    val hypixelApiKey: String?,
+
+    @SerializedName("hypixel-api-user-agent")
+    val hypixelApiUserAgent: String?
 )

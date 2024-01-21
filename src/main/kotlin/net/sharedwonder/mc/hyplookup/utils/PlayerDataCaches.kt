@@ -30,13 +30,11 @@ object PlayerDataCaches {
 
     private val LOGGER = LogManager.getLogger(PlayerDataCaches::class.java)
 
-    private val playerDataCaches: MutableMap<UUID, HypixelPlayerData> = LinkedHashMap()
-
     private val queryStatsThreads = ConcurrentHashMap<String, Thread>()
 
-    private val lock = Any()
+    private val caches = LinkedHashMap<UUID, HypixelPlayerData>()
 
-    fun getCachedPlayerData(playerUuid: UUID): HypixelPlayerData? = synchronized(lock) { playerDataCaches[playerUuid] }
+    fun getCachedPlayerData(playerUuid: UUID): HypixelPlayerData? = synchronized(this) { caches[playerUuid] }
 
     fun queryPlayerData(playerName: String, playerUuid: UUID, attempts: Int): HypixelPlayerData? {
         for (counter in 0..<attempts) {
@@ -55,8 +53,8 @@ object PlayerDataCaches {
     }
 
     fun queryPlayerDataInThread(playerName: String, playerUuid: UUID) {
-        synchronized(lock) {
-            if (playerDataCaches.containsKey(playerUuid)) {
+        synchronized(this) {
+            if (caches.containsKey(playerUuid)) {
                 return
             }
         }
@@ -104,20 +102,20 @@ object PlayerDataCaches {
     }
 
     fun clearCaches() {
-        synchronized(lock) {
-            playerDataCaches.clear()
+        synchronized(this) {
+            caches.clear()
         }
     }
 
     private fun addToCache(playerUuid: UUID, data: HypixelPlayerData) {
-        synchronized(lock) {
-            if (playerDataCaches.size >= DEFAULT_CACHE_SIZE_LIMIT) {
-                playerDataCaches.iterator().apply {
+        synchronized(this) {
+            if (caches.size >= DEFAULT_CACHE_SIZE_LIMIT) {
+                caches.iterator().apply {
                     next()
                     remove()
                 }
             }
-            playerDataCaches[playerUuid] = data
+            caches[playerUuid] = data
         }
     }
 
@@ -135,7 +133,7 @@ object PlayerDataCaches {
 
     private fun logError(playerName: String, playerUuid: UUID, exception: Throwable) {
         if (LOGGER.isErrorEnabled) {
-            LOGGER.error("Error while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
+            LOGGER.error("An error occurred while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
         }
     }
 }
