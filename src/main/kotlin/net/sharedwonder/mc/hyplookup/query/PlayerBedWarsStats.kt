@@ -314,8 +314,8 @@ class PlayerBedWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by del
         private const val LEVEL_ORNAMENT_4 = "✥"
 
         fun buildFromJson(json: JsonObject?): PlayerBedWarsStats {
-            val getIntOrNull = if (json != null) { key: String -> json[key]?.asInt } else { _ -> null }
-            val getIntOrZero = if (json != null) { key: String -> json[key]?.asInt ?: 0 } else { _ -> 0 }
+            fun getIntOrNull(key: String) = json?.get(key)?.asInt
+            fun getIntOrZero(key: String) = json?.get(key)?.asInt ?: 0
 
             val experience = getIntOrZero("Experience")
             val level = calculateLevel(experience)

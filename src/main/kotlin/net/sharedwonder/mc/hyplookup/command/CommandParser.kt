@@ -32,16 +32,16 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
             input.startsWith(COMMAND_EXPR_1, ignoreCase = true) &&
                 (input.length == COMMAND_EXPR_1.length || input[COMMAND_EXPR_1.length] == ' ') -> {
                 isMatched = true
-                commandLine = if (input.length > COMMAND_EXPR_1.length + 1) input.substring(COMMAND_EXPR_1.length + 1) else ""
+                commandLine = if (input.length > COMMAND_EXPR_1.length + 1) input.drop(COMMAND_EXPR_1.length + 1) else ""
             }
             input.startsWith(COMMAND_EXPR_2, ignoreCase = true) &&
                 (input.length == COMMAND_EXPR_2.length || input[COMMAND_EXPR_2.length] == ' ') -> {
                 isMatched = true
-                commandLine = if (input.length > COMMAND_EXPR_2.length + 1) input.substring(COMMAND_EXPR_2.length + 1) else ""
+                commandLine = if (input.length > COMMAND_EXPR_2.length + 1) input.drop(COMMAND_EXPR_2.length + 1) else ""
             }
             input.startsWith(COMMAND_EXPR_3, ignoreCase = true) -> {
                 isMatched = true
-                commandLine = if (input.length > COMMAND_EXPR_3.length) input.substring(COMMAND_EXPR_3.length) else ""
+                commandLine = if (input.length > COMMAND_EXPR_3.length) input.drop(COMMAND_EXPR_3.length) else ""
             }
             else -> {
                 isMatched = false

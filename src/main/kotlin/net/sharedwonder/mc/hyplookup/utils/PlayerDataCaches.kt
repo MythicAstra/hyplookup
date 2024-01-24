@@ -120,20 +120,14 @@ object PlayerDataCaches {
     }
 
     private fun logTimeout(playerName: String, playerUuid: UUID) {
-        if (LOGGER.isWarnEnabled) {
-            LOGGER.warn("Timeout when getting Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}")
-        }
+        LOGGER.warn("Timeout when getting Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}")
     }
 
     private fun logIoException(playerName: String, playerUuid: UUID, exception: IOException) {
-        if (LOGGER.isWarnEnabled) {
-            LOGGER.warn("An IO exception thrown while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
-        }
+        LOGGER.warn("An IO exception thrown while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
     }
 
     private fun logError(playerName: String, playerUuid: UUID, exception: Throwable) {
-        if (LOGGER.isErrorEnabled) {
-            LOGGER.error("An error occurred while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
-        }
+        LOGGER.error("An error occurred while querying Hypixel player data: $playerName/${UUIDUtils.uuidToString(playerUuid)}", exception)
     }
 }

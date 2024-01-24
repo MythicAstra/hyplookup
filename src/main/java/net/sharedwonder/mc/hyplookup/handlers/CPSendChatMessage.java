@@ -42,7 +42,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
         if (message.charAt(0) == COMMAND_PREFIX) {
             var parser = new CommandParser(connectionContext, message);
             if (parser.isMatched()) {
-                LOGGER.info("{} issued a HypLookup command: {}", connectionContext.getPlayerUsername(), message);
+                LOGGER.info("{} issued a HypLookup command: " + connectionContext.getPlayerUsername(), message);
                 new Thread(() -> {
                     try {
                         var response = parser.run();
@@ -60,7 +60,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
 
                         connectionContext.sendToClient(packet);
                     } catch (Throwable exception) {
-                        LOGGER.error("An error occurred while processing user command (issued by {}): {}", connectionContext.getPlayerUsername(), message, exception);
+                        LOGGER.error("An error occurred while processing user command (issued by " + connectionContext.getPlayerUsername() + "): " + message, exception);
                     }
                 }, "HYPL-RunCommand-" + count++).start();
 

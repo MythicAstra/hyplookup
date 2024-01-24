@@ -16,10 +16,10 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
+import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
 import com.google.gson.JsonObject
 
-class PlayerSkyWarsStats(val delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
+class PlayerSkyWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
     val experience: Int get() = get("experience") as Int
 
     val `level-rounded`: Int get() = get("level-rounded") as Int
@@ -154,16 +154,16 @@ class PlayerSkyWarsStats(val delegate: Map<String, Any?>) : Map<String, Any?> by
 
     companion object {
         fun buildFromJson(json: JsonObject?): PlayerSkyWarsStats {
-            val getStringOrNull = if (json != null) { key: String -> json[key]?.asString } else { _ -> null }
-            val getIntOrNull = if (json != null) { key: String -> json[key]?.asInt } else { _ -> null }
-            val getIntOrZero = if (json != null) { key: String -> json[key]?.asInt ?: 0 } else { _ -> 0 }
+            fun getStringOrNull(key: String) = json?.get(key)?.asString
+            fun getIntOrNull(key: String) = json?.get(key)?.asInt
+            fun getIntOrZero(key: String) = json?.get(key)?.asInt ?: 0
 
             val experience = getIntOrZero("skywars_experience")
-            val `level-formatted-without-brackets` = getStringOrNull("levelFormatted") ?: "${FormattedText.WHITE}1⋆"
-            val `level-formatted` = getStringOrNull("levelFormattedWithBrackets")
+            val `level-formatted-without-brackets` = getStringOrNull("levelFormatted") ?: "${WHITE}1⋆"
+            val `level-formatted` = getStringOrNull("levelFormattedWithBrackets")?.dropLast(1)
                 ?: (`level-formatted-without-brackets`.take(2) + '[' + `level-formatted-without-brackets`.drop(2) + ']')
-            val `level-formatted-without-ornament` = `level-formatted-without-brackets`.take(`level-formatted`.length - 2) + ']'
-            val `level-formatted-simple` = `level-formatted-without-brackets`.take(`level-formatted-without-brackets`.lastIndex)
+            val `level-formatted-without-ornament` = `level-formatted`.dropLast(2) + `level-formatted`.take(2) + ']'
+            val `level-formatted-simple` = `level-formatted-without-brackets`.dropLast(1)
             val `level-rounded` = `level-formatted-simple`.drop(2).toInt()
             val coins = getIntOrZero("coins")
             val souls = getIntOrZero("souls")
