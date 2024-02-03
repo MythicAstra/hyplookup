@@ -17,12 +17,11 @@
 package net.sharedwonder.mc.hyplookup.query
 
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
+import net.sharedwonder.mc.ptbridge.utils.TextUtils
 import com.google.gson.JsonObject
 
 class PlayerSkyWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
     val experience: Int get() = get("experience") as Int
-
-    val `level-rounded`: Int get() = get("level-rounded") as Int
 
     val `level-formatted`: String get() = get("level-formatted") as String
 
@@ -163,8 +162,9 @@ class PlayerSkyWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by del
             val `level-formatted` = getStringOrNull("levelFormattedWithBrackets")?.dropLast(1)
                 ?: (`level-formatted-without-brackets`.take(2) + '[' + `level-formatted-without-brackets`.drop(2) + ']')
             val `level-formatted-without-ornament` = `level-formatted`.dropLast(2) + `level-formatted`.take(2) + ']'
-            val `level-formatted-simple` = `level-formatted-without-brackets`.dropLast(1)
-            val `level-rounded` = `level-formatted-simple`.drop(2).toInt()
+            val `level-formatted-simple` = `level-formatted-without-brackets`
+                .dropLast(if (`level-formatted-without-brackets`.dropLast(2).matches(TextUtils.FORMATTING_REGEX)) 3 else 1)
+                .let { if (it.dropLast(2).matches(TextUtils.FORMATTING_REGEX)) it.dropLast(2) else it }
             val coins = getIntOrZero("coins")
             val souls = getIntOrZero("souls")
 
@@ -235,7 +235,6 @@ class PlayerSkyWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by del
 
             return PlayerSkyWarsStats(mapOf(
                 "experience" to experience,
-                "level-rounded" to `level-rounded`,
                 "level-formatted" to `level-formatted`,
                 "level-formatted-without-brackets" to `level-formatted-without-brackets`,
                 "level-formatted-without-ornament" to `level-formatted-without-ornament`,
