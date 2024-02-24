@@ -41,20 +41,18 @@ object HypixelAPI {
     @Throws(IOException::class)
     fun queryPlayerData(uuid: UUID): HypixelPlayerData {
         val json = (HTTPRequestUtils.request("$baseUrl/player?uuid=$uuid") {
-            connectTimeout = 5000
-            readTimeout = 5000
             if (key != null) {
                 setRequestProperty("API-Key", key)
             }
             if (userAgent != null) {
                 setRequestProperty("User-Agent", userAgent)
             }
-        }.onErrorResponse {
+        }.ifErrorResponse {
             throw buildException("Failed to access Hypixel API")
-        }.onExceptionThrown {
+        }.ifInterruptedByException {
             throw exception
         }.response).let {
-            GSON.fromJson(it.contentAsString, JsonObject::class.java)["player"]
+            GSON.fromJson(it.contentAsUtf8String, JsonObject::class.java)["player"]
         }
 
         return if (json.isJsonNull) NicknamePlayer else RealPlayerData.build(json.asJsonObject)

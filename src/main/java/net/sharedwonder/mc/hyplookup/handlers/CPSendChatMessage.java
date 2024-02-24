@@ -39,7 +39,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
     public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
         var message = PacketUtils.readUtf8String(in);
 
-        if (message.charAt(0) == COMMAND_PREFIX) {
+        if (message.charAt(0) == Constants.COMMAND_PREFIX) {
             var parser = new CommandParser(connectionContext, message);
             if (parser.isMatched()) {
                 LOGGER.info("{} issued a HypLookup command: " + connectionContext.getPlayerUsername(), message);
@@ -56,7 +56,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
                         PacketUtils.writeVarint(packet, size);
                         PacketUtils.writeVarint(packet, Constants.PID_SP_UPDATE_CHAT_MESSAGE);
                         PacketUtils.writeByteArray(packet, bytes);
-                        packet.writeByte(CHAT_MESSAGE_ID);
+                        packet.writeByte(Constants.CHAT_MESSAGE_ID);
 
                         connectionContext.sendToClient(packet);
                     } catch (Throwable exception) {
@@ -70,10 +70,6 @@ public final class CPSendChatMessage implements C2SPacketHandler {
 
         return HandledFlag.PASSED;
     }
-
-    private static final int CHAT_MESSAGE_ID = 1;
-
-    private static final char COMMAND_PREFIX = '/';
 
     private static final Logger LOGGER = LogManager.getLogger(CPSendChatMessage.class);
 

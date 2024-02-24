@@ -35,274 +35,274 @@ import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
 import kotlin.math.floor
 import com.google.gson.JsonObject
 
-class PlayerBedWarsStats(delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
-    val experience: Int get() = get("experience") as Int
+class PlayerBedWarsStats(val delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
+    val experience: Int by delegate
 
-    val level: Double get() = get("level") as Double
+    val level: Double by delegate
 
-    val `level-rounded`: Int get() = get("level-rounded") as Int
+    val `level-rounded`: Int by delegate
 
-    val `level-formatted`: String get() = get("level-formatted") as String
+    val `level-formatted`: String by delegate
 
-    val `level-formatted-without-brackets`: String get() = get("level-formatted-without-brackets") as String
+    val `level-formatted-without-brackets`: String by delegate
 
-    val `level-formatted-without-ornament`: String get() = get("level-formatted-without-ornament") as String
+    val `level-formatted-without-ornament`: String by delegate
 
-    val `level-formatted-simple`: String get() = get("level-formatted-simple") as String
+    val `level-formatted-simple`: String by delegate
 
-    val coins: Int get() = get("coins") as Int
+    val coins: Int by delegate
 
-    val `solo-mode win-streak`: Int? get() = get("solo-mode win-streak") as Int?
+    val `solo-mode win-streak`: Int? by delegate
 
-    val `solo-mode games-played`: Int get() = get("solo-mode games-played") as Int
+    val `solo-mode games-played`: Int by delegate
 
-    val `solo-mode wins`: Int get() = get("solo-mode wins") as Int
+    val `solo-mode wins`: Int by delegate
 
-    val `solo-mode losses`: Int get() = get("solo-mode losses") as Int
+    val `solo-mode losses`: Int by delegate
 
-    val `solo-mode wlr`: Double get() = get("solo-mode wlr") as Double
+    val `solo-mode wlr`: Double by delegate
 
-    val `solo-mode win-rate`: Double get() = get("solo-mode win-rate") as Double
+    val `solo-mode win-rate`: Double by delegate
 
-    val `solo-mode normal-kills`: Int get() = get("solo-mode normal-kills") as Int
+    val `solo-mode normal-kills`: Int by delegate
 
-    val `solo-mode normal-deaths`: Int get() = get("solo-mode normal-deaths") as Int
+    val `solo-mode normal-deaths`: Int by delegate
 
-    val `solo-mode normal-kdr`: Double get() = get("solo-mode normal-kdr") as Double
+    val `solo-mode normal-kdr`: Double by delegate
 
-    val `solo-mode final-kills`: Int get() = get("solo-mode final-kills") as Int
+    val `solo-mode final-kills`: Int by delegate
 
-    val `solo-mode final-deaths`: Int get() = get("solo-mode final-deaths") as Int
+    val `solo-mode final-deaths`: Int by delegate
 
-    val `solo-mode final-kdr`: Double get() = get("solo-mode final-kdr") as Double
+    val `solo-mode final-kdr`: Double by delegate
 
-    val `solo-mode total-kills`: Int get() = get("solo-mode total-kills") as Int
+    val `solo-mode total-kills`: Int by delegate
 
-    val `solo-mode total-deaths`: Int get() = get("solo-mode total-deaths") as Int
+    val `solo-mode total-deaths`: Int by delegate
 
-    val `solo-mode total-kdr`: Double get() = get("solo-mode total-kdr") as Double
+    val `solo-mode total-kdr`: Double by delegate
 
-    val `solo-mode beds-broken`: Int get() = get("solo-mode beds-broken") as Int
+    val `solo-mode beds-broken`: Int by delegate
 
-    val `solo-mode beds-lost`: Int get() = get("solo-mode beds-lost") as Int
+    val `solo-mode beds-lost`: Int by delegate
 
-    val `solo-mode bblr`: Double get() = get("solo-mode bblr") as Double
+    val `solo-mode bblr`: Double by delegate
 
-    val `doubles-mode win-streak`: Int? get() = get("doubles-mode win-streak") as Int?
+    val `doubles-mode win-streak`: Int? by delegate
 
-    val `doubles-mode games-played`: Int get() = get("doubles-mode games-played") as Int
+    val `doubles-mode games-played`: Int by delegate
 
-    val `doubles-mode wins`: Int get() = get("doubles-mode wins") as Int
+    val `doubles-mode wins`: Int by delegate
 
-    val `doubles-mode losses`: Int get() = get("doubles-mode losses") as Int
+    val `doubles-mode losses`: Int by delegate
 
-    val `doubles-mode wlr`: Double get() = get("doubles-mode wlr") as Double
+    val `doubles-mode wlr`: Double by delegate
 
-    val `doubles-mode win-rate`: Double get() = get("doubles-mode win-rate") as Double
+    val `doubles-mode win-rate`: Double by delegate
 
-    val `doubles-mode normal-kills`: Int get() = get("doubles-mode normal-kills") as Int
+    val `doubles-mode normal-kills`: Int by delegate
 
-    val `doubles-mode normal-deaths`: Int get() = get("doubles-mode normal-deaths") as Int
+    val `doubles-mode normal-deaths`: Int by delegate
 
-    val `doubles-mode normal-kdr`: Double get() = get("doubles-mode normal-kdr") as Double
+    val `doubles-mode normal-kdr`: Double by delegate
 
-    val `doubles-mode final-kills`: Int get() = get("doubles-mode final-kills") as Int
+    val `doubles-mode final-kills`: Int by delegate
 
-    val `doubles-mode final-deaths`: Int get() = get("doubles-mode final-deaths") as Int
+    val `doubles-mode final-deaths`: Int by delegate
 
-    val `doubles-mode final-kdr`: Double get() = get("doubles-mode final-kdr") as Double
+    val `doubles-mode final-kdr`: Double by delegate
 
-    val `doubles-mode total-kills`: Int get() = get("doubles-mode total-kills") as Int
+    val `doubles-mode total-kills`: Int by delegate
 
-    val `doubles-mode total-deaths`: Int get() = get("doubles-mode total-deaths") as Int
+    val `doubles-mode total-deaths`: Int by delegate
 
-    val `doubles-mode total-kdr`: Double get() = get("doubles-mode total-kdr") as Double
+    val `doubles-mode total-kdr`: Double by delegate
 
-    val `doubles-mode beds-broken`: Int get() = get("doubles-mode beds-broken") as Int
+    val `doubles-mode beds-broken`: Int by delegate
 
-    val `doubles-mode beds-lost`: Int get() = get("doubles-mode beds-lost") as Int
+    val `doubles-mode beds-lost`: Int by delegate
 
-    val `doubles-mode bblr`: Double get() = get("doubles-mode bblr") as Double
+    val `doubles-mode bblr`: Double by delegate
 
-    val `3v3v3v3-mode win-streak`: Int? get() = get("3v3v3v3-mode win-streak") as Int?
+    val `3v3v3v3-mode win-streak`: Int? by delegate
 
-    val `3v3v3v3-mode games-played`: Int get() = get("3v3v3v3-mode games-played") as Int
+    val `3v3v3v3-mode games-played`: Int by delegate
 
-    val `3v3v3v3-mode wins`: Int get() = get("3v3v3v3-mode wins") as Int
+    val `3v3v3v3-mode wins`: Int by delegate
 
-    val `3v3v3v3-mode losses`: Int get() = get("3v3v3v3-mode losses") as Int
+    val `3v3v3v3-mode losses`: Int by delegate
 
-    val `3v3v3v3-mode wlr`: Double get() = get("3v3v3v3-mode wlr") as Double
+    val `3v3v3v3-mode wlr`: Double by delegate
 
-    val `3v3v3v3-mode win-rate`: Double get() = get("3v3v3v3-mode win-rate") as Double
+    val `3v3v3v3-mode win-rate`: Double by delegate
 
-    val `3v3v3v3-mode normal-kills`: Int get() = get("3v3v3v3-mode normal-kills") as Int
+    val `3v3v3v3-mode normal-kills`: Int by delegate
 
-    val `3v3v3v3-mode normal-deaths`: Int get() = get("3v3v3v3-mode normal-deaths") as Int
+    val `3v3v3v3-mode normal-deaths`: Int by delegate
 
-    val `3v3v3v3-mode normal-kdr`: Double get() = get("3v3v3v3-mode normal-kdr") as Double
+    val `3v3v3v3-mode normal-kdr`: Double by delegate
 
-    val `3v3v3v3-mode final-kills`: Int get() = get("3v3v3v3-mode final-kills") as Int
+    val `3v3v3v3-mode final-kills`: Int by delegate
 
-    val `3v3v3v3-mode final-deaths`: Int get() = get("3v3v3v3-mode final-deaths") as Int
+    val `3v3v3v3-mode final-deaths`: Int by delegate
 
-    val `3v3v3v3-mode final-kdr`: Double get() = get("3v3v3v3-mode final-kdr") as Double
+    val `3v3v3v3-mode final-kdr`: Double by delegate
 
-    val `3v3v3v3-mode total-kills`: Int get() = get("3v3v3v3-mode total-kills") as Int
+    val `3v3v3v3-mode total-kills`: Int by delegate
 
-    val `3v3v3v3-mode total-deaths`: Int get() = get("3v3v3v3-mode total-deaths") as Int
+    val `3v3v3v3-mode total-deaths`: Int by delegate
 
-    val `3v3v3v3-mode total-kdr`: Double get() = get("3v3v3v3-mode total-kdr") as Double
+    val `3v3v3v3-mode total-kdr`: Double by delegate
 
-    val `3v3v3v3-mode beds-broken`: Int get() = get("3v3v3v3-mode beds-broken") as Int
+    val `3v3v3v3-mode beds-broken`: Int by delegate
 
-    val `3v3v3v3-mode beds-lost`: Int get() = get("3v3v3v3-mode beds-lost") as Int
+    val `3v3v3v3-mode beds-lost`: Int by delegate
 
-    val `3v3v3v3-mode bblr`: Double get() = get("3v3v3v3-mode bblr") as Double
+    val `3v3v3v3-mode bblr`: Double by delegate
 
-    val `4v4v4v4-mode win-streak`: Int? get() = get("4v4v4v4-mode win-streak") as Int?
+    val `4v4v4v4-mode win-streak`: Int? by delegate
 
-    val `4v4v4v4-mode games-played`: Int get() = get("4v4v4v4-mode games-played") as Int
+    val `4v4v4v4-mode games-played`: Int by delegate
 
-    val `4v4v4v4-mode wins`: Int get() = get("4v4v4v4-mode wins") as Int
+    val `4v4v4v4-mode wins`: Int by delegate
 
-    val `4v4v4v4-mode losses`: Int get() = get("4v4v4v4-mode losses") as Int
+    val `4v4v4v4-mode losses`: Int by delegate
 
-    val `4v4v4v4-mode wlr`: Double get() = get("4v4v4v4-mode wlr") as Double
+    val `4v4v4v4-mode wlr`: Double by delegate
 
-    val `4v4v4v4-mode win-rate`: Double get() = get("4v4v4v4-mode win-rate") as Double
+    val `4v4v4v4-mode win-rate`: Double by delegate
 
-    val `4v4v4v4-mode normal-kills`: Int get() = get("4v4v4v4-mode normal-kills") as Int
+    val `4v4v4v4-mode normal-kills`: Int by delegate
 
-    val `4v4v4v4-mode normal-deaths`: Int get() = get("4v4v4v4-mode normal-deaths") as Int
+    val `4v4v4v4-mode normal-deaths`: Int by delegate
 
-    val `4v4v4v4-mode normal-kdr`: Double get() = get("4v4v4v4-mode normal-kdr") as Double
+    val `4v4v4v4-mode normal-kdr`: Double by delegate
 
-    val `4v4v4v4-mode final-kills`: Int get() = get("4v4v4v4-mode final-kills") as Int
+    val `4v4v4v4-mode final-kills`: Int by delegate
 
-    val `4v4v4v4-mode final-deaths`: Int get() = get("4v4v4v4-mode final-deaths") as Int
+    val `4v4v4v4-mode final-deaths`: Int by delegate
 
-    val `4v4v4v4-mode final-kdr`: Double get() = get("4v4v4v4-mode final-kdr") as Double
+    val `4v4v4v4-mode final-kdr`: Double by delegate
 
-    val `4v4v4v4-mode total-kills`: Int get() = get("4v4v4v4-mode total-kills") as Int
+    val `4v4v4v4-mode total-kills`: Int by delegate
 
-    val `4v4v4v4-mode total-deaths`: Int get() = get("4v4v4v4-mode total-deaths") as Int
+    val `4v4v4v4-mode total-deaths`: Int by delegate
 
-    val `4v4v4v4-mode total-kdr`: Double get() = get("4v4v4v4-mode total-kdr") as Double
+    val `4v4v4v4-mode total-kdr`: Double by delegate
 
-    val `4v4v4v4-mode beds-broken`: Int get() = get("4v4v4v4-mode beds-broken") as Int
+    val `4v4v4v4-mode beds-broken`: Int by delegate
 
-    val `4v4v4v4-mode beds-lost`: Int get() = get("4v4v4v4-mode beds-lost") as Int
+    val `4v4v4v4-mode beds-lost`: Int by delegate
 
-    val `4v4v4v4-mode bblr`: Double get() = get("4v4v4v4-mode bblr") as Double
+    val `4v4v4v4-mode bblr`: Double by delegate
 
-    val `4v4-mode win-streak`: Int? get() = get("4v4-mode win-streak") as Int?
+    val `4v4-mode win-streak`: Int? by delegate
 
-    val `4v4-mode games-played`: Int get() = get("4v4-mode games-played") as Int
+    val `4v4-mode games-played`: Int by delegate
 
-    val `4v4-mode wins`: Int get() = get("4v4-mode wins") as Int
+    val `4v4-mode wins`: Int by delegate
 
-    val `4v4-mode losses`: Int get() = get("4v4-mode losses") as Int
+    val `4v4-mode losses`: Int by delegate
 
-    val `4v4-mode wlr`: Double get() = get("4v4-mode wlr") as Double
+    val `4v4-mode wlr`: Double by delegate
 
-    val `4v4-mode win-rate`: Double get() = get("4v4-mode win-rate") as Double
+    val `4v4-mode win-rate`: Double by delegate
 
-    val `4v4-mode normal-kills`: Int get() = get("4v4-mode normal-kills") as Int
+    val `4v4-mode normal-kills`: Int by delegate
 
-    val `4v4-mode normal-deaths`: Int get() = get("4v4-mode normal-deaths") as Int
+    val `4v4-mode normal-deaths`: Int by delegate
 
-    val `4v4-mode normal-kdr`: Double get() = get("4v4-mode normal-kdr") as Double
+    val `4v4-mode normal-kdr`: Double by delegate
 
-    val `4v4-mode final-kills`: Int get() = get("4v4-mode final-kills") as Int
+    val `4v4-mode final-kills`: Int by delegate
 
-    val `4v4-mode final-deaths`: Int get() = get("4v4-mode final-deaths") as Int
+    val `4v4-mode final-deaths`: Int by delegate
 
-    val `4v4-mode final-kdr`: Double get() = get("4v4-mode final-kdr") as Double
+    val `4v4-mode final-kdr`: Double by delegate
 
-    val `4v4-mode total-kills`: Int get() = get("4v4-mode total-kills") as Int
+    val `4v4-mode total-kills`: Int by delegate
 
-    val `4v4-mode total-deaths`: Int get() = get("4v4-mode total-deaths") as Int
+    val `4v4-mode total-deaths`: Int by delegate
 
-    val `4v4-mode total-kdr`: Double get() = get("4v4-mode total-kdr") as Double
+    val `4v4-mode total-kdr`: Double by delegate
 
-    val `4v4-mode beds-broken`: Int get() = get("4v4-mode beds-broken") as Int
+    val `4v4-mode beds-broken`: Int by delegate
 
-    val `4v4-mode beds-lost`: Int get() = get("4v4-mode beds-lost") as Int
+    val `4v4-mode beds-lost`: Int by delegate
 
-    val `4v4-mode bblr`: Double get() = get("4v4-mode bblr") as Double
+    val `4v4-mode bblr`: Double by delegate
 
-    val `core-modes win-streak`: Int? get() = get("core-modes win-streak") as Int?
+    val `core-modes win-streak`: Int? by delegate
 
-    val `core-modes games-played`: Int get() = get("core-modes games-played") as Int
+    val `core-modes games-played`: Int by delegate
 
-    val `core-modes wins`: Int get() = get("core-modes wins") as Int
+    val `core-modes wins`: Int by delegate
 
-    val `core-modes losses`: Int get() = get("core-modes losses") as Int
+    val `core-modes losses`: Int by delegate
 
-    val `core-modes wlr`: Double get() = get("core-modes wlr") as Double
+    val `core-modes wlr`: Double by delegate
 
-    val `core-modes win-rate`: Double get() = get("core-modes win-rate") as Double
+    val `core-modes win-rate`: Double by delegate
 
-    val `core-modes normal-kills`: Int get() = get("core-modes normal-kills") as Int
+    val `core-modes normal-kills`: Int by delegate
 
-    val `core-modes normal-deaths`: Int get() = get("core-modes normal-deaths") as Int
+    val `core-modes normal-deaths`: Int by delegate
 
-    val `core-modes normal-kdr`: Double get() = get("core-modes normal-kdr") as Double
+    val `core-modes normal-kdr`: Double by delegate
 
-    val `core-modes final-kills`: Int get() = get("core-modes final-kills") as Int
+    val `core-modes final-kills`: Int by delegate
 
-    val `core-modes final-deaths`: Int get() = get("core-modes final-deaths") as Int
+    val `core-modes final-deaths`: Int by delegate
 
-    val `core-modes final-kdr`: Double get() = get("core-modes final-kdr") as Double
+    val `core-modes final-kdr`: Double by delegate
 
-    val `core-modes total-kills`: Int get() = get("core-modes total-kills") as Int
+    val `core-modes total-kills`: Int by delegate
 
-    val `core-modes total-deaths`: Int get() = get("core-modes total-deaths") as Int
+    val `core-modes total-deaths`: Int by delegate
 
-    val `core-modes total-kdr`: Double get() = get("core-modes total-kdr") as Double
+    val `core-modes total-kdr`: Double by delegate
 
-    val `core-modes beds-broken`: Int get() = get("core-modes beds-broken") as Int
+    val `core-modes beds-broken`: Int by delegate
 
-    val `core-modes beds-lost`: Int get() = get("core-modes beds-lost") as Int
+    val `core-modes beds-lost`: Int by delegate
 
-    val `core-modes bblr`: Double get() = get("core-modes bblr") as Double
+    val `core-modes bblr`: Double by delegate
 
-    val `normal-modes games-played`: Int get() = get("normal-modes games-played") as Int
+    val `normal-modes games-played`: Int by delegate
 
-    val `normal-modes wins`: Int get() = get("normal-modes wins") as Int
+    val `normal-modes wins`: Int by delegate
 
-    val `normal-modes losses`: Int get() = get("normal-modes losses") as Int
+    val `normal-modes losses`: Int by delegate
 
-    val `normal-modes wlr`: Double get() = get("normal-modes wlr") as Double
+    val `normal-modes wlr`: Double by delegate
 
-    val `normal-modes win-rate`: Double get() = get("normal-modes win-rate") as Double
+    val `normal-modes win-rate`: Double by delegate
 
-    val `normal-modes normal-kills`: Int get() = get("normal-modes normal-kills") as Int
+    val `normal-modes normal-kills`: Int by delegate
 
-    val `normal-modes normal-deaths`: Int get() = get("normal-modes normal-deaths") as Int
+    val `normal-modes normal-deaths`: Int by delegate
 
-    val `normal-modes normal-kdr`: Double get() = get("normal-modes normal-kdr") as Double
+    val `normal-modes normal-kdr`: Double by delegate
 
-    val `normal-modes final-kills`: Int get() = get("normal-modes final-kills") as Int
+    val `normal-modes final-kills`: Int by delegate
 
-    val `normal-modes final-deaths`: Int get() = get("normal-modes final-deaths") as Int
+    val `normal-modes final-deaths`: Int by delegate
 
-    val `normal-modes final-kdr`: Double get() = get("normal-modes final-kdr") as Double
+    val `normal-modes final-kdr`: Double by delegate
 
-    val `normal-modes total-kills`: Int get() = get("normal-modes total-kills") as Int
+    val `normal-modes total-kills`: Int by delegate
 
-    val `normal-modes total-deaths`: Int get() = get("normal-modes total-deaths") as Int
+    val `normal-modes total-deaths`: Int by delegate
 
-    val `normal-modes total-kdr`: Double get() = get("normal-modes total-kdr") as Double
+    val `normal-modes total-kdr`: Double by delegate
 
-    val `normal-modes beds-broken`: Int get() = get("normal-modes beds-broken") as Int
+    val `normal-modes beds-broken`: Int by delegate
 
-    val `normal-modes beds-lost`: Int get() = get("normal-modes beds-lost") as Int
+    val `normal-modes beds-lost`: Int by delegate
 
-    val `normal-modes bblr`: Double get() = get("normal-modes bblr") as Double
+    val `normal-modes bblr`: Double by delegate
 
-    val `all-modes games-played`: Int get() = get("all-modes games-played") as Int
+    val `all-modes games-played`: Int by delegate
 
     companion object {
         private const val LEVEL_ORNAMENT_1 = "✫"

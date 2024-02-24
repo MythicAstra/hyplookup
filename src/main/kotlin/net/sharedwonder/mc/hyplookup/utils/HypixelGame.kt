@@ -37,7 +37,7 @@ enum class HypixelGame(val gameName: String) {
     BED_WARS("Bed Wars") {
         override fun queryStatsMessage(data: RealPlayerData, modifier: String?): String = data.stats.bedWars.run {
             line("Level", `level-formatted-without-brackets`) +
-                line("Coins", coins) +
+                line("Tokens", coins) +
                 when (modifier) {
                     "solo", "1s" -> group("Solo Mode") +
                         entry("Win-streak", `solo-mode win-streak` ?: "?") +

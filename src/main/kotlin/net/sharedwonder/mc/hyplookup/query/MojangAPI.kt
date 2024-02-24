@@ -25,11 +25,11 @@ import com.google.gson.JsonObject
 object MojangAPI {
     fun queryPlayerProfile(name: String): PlayerProfile? {
         val json = GSON.fromJson(HTTPRequestUtils.request("https://api.mojang.com/users/profiles/minecraft/$name", "GET")
-            .onErrorResponse {
+            .ifErrorResponse {
                 return null
-            }.onExceptionThrown {
+            }.ifInterruptedByException {
                 throw buildException("Failed to query UUID for $name")
-            }.response.contentAsString, JsonObject::class.java)
+            }.response.contentAsUtf8String, JsonObject::class.java)
         return PlayerProfile(json["name"].asString, UUIDUtils.stringToUuid(json["id"].asString))
     }
 }
