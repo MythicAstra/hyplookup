@@ -32,9 +32,9 @@ object HypixelAPI {
 
     @JvmStatic
     fun init() {
-        HypLookup.config().hypixelApiBaseUrl?.let { baseUrl = it }
-        key = HypLookup.config().hypixelApiKey
-        userAgent = HypLookup.config().hypixelApiUserAgent
+        HypLookup.getConfig().hypixelApiBaseUrl?.let { baseUrl = it }
+        key = HypLookup.getConfig().hypixelApiKey
+        userAgent = HypLookup.getConfig().hypixelApiUserAgent
     }
 
     @JvmStatic

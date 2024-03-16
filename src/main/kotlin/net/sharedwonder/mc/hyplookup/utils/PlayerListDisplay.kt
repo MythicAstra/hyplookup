@@ -22,6 +22,7 @@ import net.sharedwonder.mc.hyplookup.query.RealPlayerData
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils
 import net.sharedwonder.mc.ptbridge.utils.FormattedText
 import net.sharedwonder.mc.ptbridge.utils.TextUtils
+import kotlin.concurrent.thread
 import java.util.LinkedList
 import java.util.UUID
 import io.netty.buffer.Unpooled
@@ -57,7 +58,7 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
 
         stopUpdating()
         val initQueue = players.mapTo(LinkedList()) { it.key to it.value }
-        updatingThread = Thread({
+        updatingThread = thread(name = "HYPL-UpdatePlayerListDisplay") {
             try {
                 var queue = initQueue
                 val passed = ArrayList<UUID>(queue.size)
@@ -65,32 +66,32 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
 
                 while (queue.isNotEmpty()) {
                     if (Thread.currentThread().isInterrupted) {
-                        return@Thread
+                        return@thread
                     }
 
                     val waiting = LinkedList<Pair<String, UUID>>()
                     var hasNew = false
 
                     if (Thread.currentThread().isInterrupted) {
-                        return@Thread
+                        return@thread
                     }
 
                     while (queue.isNotEmpty()) {
                         val (playerName, playerUuid) = queue.poll()
 
                         if (Thread.currentThread().isInterrupted) {
-                            return@Thread
+                            return@thread
                         }
 
                         val displayText: Array<String>?
                         try {
                             displayText = getDisplayText(playerName, playerUuid)
                         } catch (exception: IllegalStateException) {
-                            return@Thread
+                            return@thread
                         }
 
                         if (Thread.currentThread().isInterrupted) {
-                            return@Thread
+                            return@thread
                         }
 
                         if (displayText == null) {
@@ -102,12 +103,12 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
                         hasNew = true
 
                         if (Thread.currentThread().isInterrupted) {
-                            return@Thread
+                            return@thread
                         }
                     }
 
                     if (Thread.currentThread().isInterrupted) {
-                        return@Thread
+                        return@thread
                     }
 
                     queue = waiting
@@ -119,14 +120,14 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
 
                         if (Thread.currentThread().isInterrupted) {
                             chunk.release()
-                            return@Thread
+                            return@thread
                         }
 
                         val alignedTexts = TextUtils.alignTextTable(table, "${FormattedText.DARK_GRAY} | ")
                         for ((uuid, text) in passed zip alignedTexts) {
                             if (Thread.currentThread().isInterrupted) {
                                 chunk.release()
-                                return@Thread
+                                return@thread
                             }
                             PacketUtils.writeUuid(chunk, uuid)
                             chunk.writeBoolean(true)
@@ -135,7 +136,7 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
 
                         if (Thread.currentThread().isInterrupted) {
                             chunk.release()
-                            return@Thread
+                            return@thread
                         }
 
                         val size = chunk.readableBytes() + 1
@@ -146,7 +147,7 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
                         chunk.release()
 
                         if (Thread.currentThread().isInterrupted) {
-                            return@Thread
+                            return@thread
                         }
 
                         hypLookupContext.connectionContext.sendToClient(packet)
@@ -157,7 +158,7 @@ class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {
             } finally {
                 updatingThread = null
             }
-        }, "HYPL-UpdatePlayerListDisplay").apply { start() }
+        }
     }
 
     fun fullUpdate() {

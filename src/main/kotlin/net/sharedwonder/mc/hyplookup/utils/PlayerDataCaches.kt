@@ -19,6 +19,7 @@ package net.sharedwonder.mc.hyplookup.utils
 import net.sharedwonder.mc.hyplookup.query.HypixelAPI
 import net.sharedwonder.mc.hyplookup.query.HypixelPlayerData
 import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
+import kotlin.concurrent.thread
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.UUID
@@ -60,26 +61,26 @@ object PlayerDataCaches {
         }
 
         queryStatsThreads.computeIfAbsent(playerName) {
-            Thread({
+            thread(name = "HYPL-QueryPlayerData-${queryStatsThreads.size}") {
                 while (true) {
                     if (Thread.currentThread().isInterrupted) {
-                        return@Thread
+                        return@thread
                     }
                     try {
                         addToCache(playerUuid, HypixelAPI.queryPlayerData(playerUuid))
-                        return@Thread
+                        return@thread
                     } catch (exception: SocketTimeoutException) {
                         logTimeout(playerName, playerUuid)
                     } catch (exception: IOException) {
                         logIoException(playerName, playerUuid, exception)
                     } catch (exception: Throwable) {
                         logError(playerName, playerUuid, exception)
-                        return@Thread
+                        return@thread
                     } finally {
                         queryStatsThreads.remove(playerName)
                     }
                 }
-            }, "HYPL-QueryPlayerData-${queryStatsThreads.size}").apply { start() }
+            }
         }
     }
 

@@ -89,7 +89,7 @@ enum class HypixelGame(val gameName: String) {
                         entry("Total Kills/Deaths", "$`4v4-mode total-kills`/$`4v4-mode total-deaths` $AQUA(${DECIMAL_FORMAT_1.format(`4v4-mode total-kdr`)})") +
                         entry("Beds Broken/Lost", "$`4v4-mode beds-broken`/$`4v4-mode beds-lost` $AQUA(${DECIMAL_FORMAT_1.format(`4v4-mode bblr`)})")
 
-                    "core" -> group("Core Modes") +
+                    null, "core" -> group("Core Modes") +
                         entry("Win-streak", `core-modes win-streak` ?: "?") +
                         entry("Games Played", `core-modes games-played`) +
                         entry("Wins/Losses", "$`core-modes wins`/$`core-modes losses` $AQUA(${DECIMAL_FORMAT_1.format(`core-modes wlr`)})") +
@@ -99,7 +99,7 @@ enum class HypixelGame(val gameName: String) {
                         entry("Total Kills/Deaths", "$`core-modes total-kills`/$`core-modes total-deaths` $AQUA(${DECIMAL_FORMAT_1.format(`core-modes total-kdr`)})") +
                         entry("Beds Broken/Lost", "$`core-modes beds-broken`/$`core-modes beds-lost` $AQUA(${DECIMAL_FORMAT_1.format(`core-modes bblr`)})")
 
-                    null, "normal" -> group("Normal Modes") +
+                    "normal" -> group("Normal Modes") +
                         entry("Games Played", `normal-modes games-played`) +
                         entry("Wins/Losses", "$`normal-modes wins`/$`normal-modes losses` $AQUA(${DECIMAL_FORMAT_1.format(`normal-modes wlr`)})") +
                         entry("Win Rate", DECIMAL_FORMAT_2.format(`normal-modes win-rate`)) +
@@ -120,10 +120,10 @@ enum class HypixelGame(val gameName: String) {
             arrayOf(
                 "$`level-formatted` $originalText",
                 `core-modes win-streak`?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(`normal-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(`normal-modes final-kdr`),
-                getNumberColor(`normal-modes final-kills`, 1000, 3500, 7500, 10000, 15000, 20000, 30000) + `normal-modes final-kills`,
-                getNumberColor(`normal-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(`normal-modes win-rate`),
-                getNumberColor(`normal-modes wins`, 250, 500, 1000, 2000, 4000, 8000, 10000) + `normal-modes wins`
+                getNumberColor(`core-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(`core-modes final-kdr`),
+                getNumberColor(`core-modes final-kills`, 1000, 3500, 7500, 10000, 15000, 20000, 30000) + `core-modes final-kills`,
+                getNumberColor(`core-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(`core-modes win-rate`),
+                getNumberColor(`core-modes wins`, 250, 500, 1000, 2000, 4000, 8000, 10000) + `core-modes wins`
             )
         }
     },
@@ -232,7 +232,7 @@ enum class HypixelGame(val gameName: String) {
         private fun entry(description: String, value: Any) = " $DARK_GRAY- $YELLOW$description: $GREEN$value\n"
 
         private fun getNumberColor(number: Number, t1: Number, t2: Number, t3: Number, t4: Number, t5: Number, t6: Number, t7: Number): String {
-            if (number.javaClass == java.lang.Float::class.java || number.javaClass == java.lang.Double::class.java) {
+            if (number is Float || number is Double) {
                 val doubleNumber = number.toDouble()
                 return when {
                     doubleNumber.isNaN() -> DARK_RED

@@ -55,10 +55,10 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
 
         return try {
             val args = splitCommandLine(commandLine)
-            val command = if (commandLine != "") EXPRESSION_TO_COMMAND[args[0]] else HelpCommand
+            val command = if (commandLine.isNotBlank()) EXPRESSION_TO_COMMAND[args[0]] else HelpCommand
             if (command != null) {
                 val hypLookupContext = connectionContext.getExternalContext(HypLookupContext::class.java)
-                val responseText = command.run(connectionContext, hypLookupContext, args.subList(1, args.size)) ?: return null
+                val responseText = command.run(connectionContext, hypLookupContext, args.drop(1)) ?: return null
                 TextUtils.serialize(HYPLOOKUP_MESSAGE_PREFIX + responseText)
             } else {
                 TextUtils.serialize("$HYPLOOKUP_MESSAGE_PREFIX${FormattedText.RED}Unknown command: ${args[0]}")

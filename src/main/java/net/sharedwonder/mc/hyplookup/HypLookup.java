@@ -72,7 +72,7 @@ public final class HypLookup implements AddonInitializer {
 
     private static HypLookupConfig config;
 
-    public static @NotNull HypLookupConfig config() {
+    public static @NotNull HypLookupConfig getConfig() {
         if (config == null) {
             throw new IllegalStateException("HypLookup is not initialized");
         }

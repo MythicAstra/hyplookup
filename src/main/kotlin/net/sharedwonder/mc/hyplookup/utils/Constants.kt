@@ -34,8 +34,8 @@ const val PID_SP_DISPLAY_SCOREBOARD: Int = 0x3d
 
 const val PID_SP_UPDATE_TEAM: Int = 0x3e
 
-const val COMMAND_PREFIX = '/'
+const val COMMAND_PREFIX: Char = '/'
 
-const val CHAT_MESSAGE_ID = 1
+const val CHAT_MESSAGE_ID: Int = 1
 
 const val HYPLOOKUP_MESSAGE_PREFIX: String = "${FormattedText.BLUE}[HypLookup]${FormattedText.RESET} "
