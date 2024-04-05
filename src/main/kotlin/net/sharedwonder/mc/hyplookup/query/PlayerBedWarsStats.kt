@@ -33,278 +33,425 @@ import net.sharedwonder.mc.ptbridge.utils.FormattedText.RED
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
 import kotlin.math.floor
-import com.google.gson.JsonObject
 
-class PlayerBedWarsStats(val delegate: Map<String, Any?>) : Map<String, Any?> by delegate {
-    val experience: Int by delegate
+class PlayerBedWarsStats(map: Map<String, Any>?) {
+    val experience: Int
 
-    val level: Double by delegate
+    val level: Double
 
-    val `level-rounded`: Int by delegate
+    val `level-rounded`: Int
 
-    val `level-formatted`: String by delegate
+    val `level-formatted`: String
 
-    val `level-formatted-without-brackets`: String by delegate
+    val `level-formatted-without-brackets`: String
 
-    val `level-formatted-without-ornament`: String by delegate
+    val `level-formatted-without-ornament`: String
 
-    val `level-formatted-simple`: String by delegate
+    val `level-formatted-simple`: String
 
-    val coins: Int by delegate
+    val coins: Int
 
-    val `solo-mode win-streak`: Int? by delegate
+    val `solo-mode win-streak`: Int?
 
-    val `solo-mode games-played`: Int by delegate
+    val `solo-mode games-played`: Int
 
-    val `solo-mode wins`: Int by delegate
+    val `solo-mode wins`: Int
 
-    val `solo-mode losses`: Int by delegate
+    val `solo-mode losses`: Int
 
-    val `solo-mode wlr`: Double by delegate
+    val `solo-mode wlr`: Double
 
-    val `solo-mode win-rate`: Double by delegate
+    val `solo-mode win-rate`: Double
 
-    val `solo-mode normal-kills`: Int by delegate
+    val `solo-mode normal-kills`: Int
 
-    val `solo-mode normal-deaths`: Int by delegate
+    val `solo-mode normal-deaths`: Int
 
-    val `solo-mode normal-kdr`: Double by delegate
+    val `solo-mode normal-kdr`: Double
 
-    val `solo-mode final-kills`: Int by delegate
+    val `solo-mode final-kills`: Int
 
-    val `solo-mode final-deaths`: Int by delegate
+    val `solo-mode final-deaths`: Int
 
-    val `solo-mode final-kdr`: Double by delegate
+    val `solo-mode final-kdr`: Double
 
-    val `solo-mode total-kills`: Int by delegate
+    val `solo-mode total-kills`: Int
 
-    val `solo-mode total-deaths`: Int by delegate
+    val `solo-mode total-deaths`: Int
 
-    val `solo-mode total-kdr`: Double by delegate
+    val `solo-mode total-kdr`: Double
 
-    val `solo-mode beds-broken`: Int by delegate
+    val `solo-mode beds-broken`: Int
 
-    val `solo-mode beds-lost`: Int by delegate
+    val `solo-mode beds-lost`: Int
 
-    val `solo-mode bblr`: Double by delegate
+    val `solo-mode bblr`: Double
 
-    val `doubles-mode win-streak`: Int? by delegate
+    val `doubles-mode win-streak`: Int?
 
-    val `doubles-mode games-played`: Int by delegate
+    val `doubles-mode games-played`: Int
 
-    val `doubles-mode wins`: Int by delegate
+    val `doubles-mode wins`: Int
 
-    val `doubles-mode losses`: Int by delegate
+    val `doubles-mode losses`: Int
 
-    val `doubles-mode wlr`: Double by delegate
+    val `doubles-mode wlr`: Double
 
-    val `doubles-mode win-rate`: Double by delegate
+    val `doubles-mode win-rate`: Double
 
-    val `doubles-mode normal-kills`: Int by delegate
+    val `doubles-mode normal-kills`: Int
 
-    val `doubles-mode normal-deaths`: Int by delegate
+    val `doubles-mode normal-deaths`: Int
 
-    val `doubles-mode normal-kdr`: Double by delegate
+    val `doubles-mode normal-kdr`: Double
 
-    val `doubles-mode final-kills`: Int by delegate
+    val `doubles-mode final-kills`: Int
 
-    val `doubles-mode final-deaths`: Int by delegate
+    val `doubles-mode final-deaths`: Int
 
-    val `doubles-mode final-kdr`: Double by delegate
+    val `doubles-mode final-kdr`: Double
 
-    val `doubles-mode total-kills`: Int by delegate
+    val `doubles-mode total-kills`: Int
 
-    val `doubles-mode total-deaths`: Int by delegate
+    val `doubles-mode total-deaths`: Int
 
-    val `doubles-mode total-kdr`: Double by delegate
+    val `doubles-mode total-kdr`: Double
 
-    val `doubles-mode beds-broken`: Int by delegate
+    val `doubles-mode beds-broken`: Int
 
-    val `doubles-mode beds-lost`: Int by delegate
+    val `doubles-mode beds-lost`: Int
 
-    val `doubles-mode bblr`: Double by delegate
+    val `doubles-mode bblr`: Double
 
-    val `3v3v3v3-mode win-streak`: Int? by delegate
+    val `3v3v3v3-mode win-streak`: Int?
 
-    val `3v3v3v3-mode games-played`: Int by delegate
+    val `3v3v3v3-mode games-played`: Int
 
-    val `3v3v3v3-mode wins`: Int by delegate
+    val `3v3v3v3-mode wins`: Int
 
-    val `3v3v3v3-mode losses`: Int by delegate
+    val `3v3v3v3-mode losses`: Int
 
-    val `3v3v3v3-mode wlr`: Double by delegate
+    val `3v3v3v3-mode wlr`: Double
 
-    val `3v3v3v3-mode win-rate`: Double by delegate
+    val `3v3v3v3-mode win-rate`: Double
 
-    val `3v3v3v3-mode normal-kills`: Int by delegate
+    val `3v3v3v3-mode normal-kills`: Int
 
-    val `3v3v3v3-mode normal-deaths`: Int by delegate
+    val `3v3v3v3-mode normal-deaths`: Int
 
-    val `3v3v3v3-mode normal-kdr`: Double by delegate
+    val `3v3v3v3-mode normal-kdr`: Double
 
-    val `3v3v3v3-mode final-kills`: Int by delegate
+    val `3v3v3v3-mode final-kills`: Int
 
-    val `3v3v3v3-mode final-deaths`: Int by delegate
+    val `3v3v3v3-mode final-deaths`: Int
 
-    val `3v3v3v3-mode final-kdr`: Double by delegate
+    val `3v3v3v3-mode final-kdr`: Double
 
-    val `3v3v3v3-mode total-kills`: Int by delegate
+    val `3v3v3v3-mode total-kills`: Int
 
-    val `3v3v3v3-mode total-deaths`: Int by delegate
+    val `3v3v3v3-mode total-deaths`: Int
 
-    val `3v3v3v3-mode total-kdr`: Double by delegate
+    val `3v3v3v3-mode total-kdr`: Double
 
-    val `3v3v3v3-mode beds-broken`: Int by delegate
+    val `3v3v3v3-mode beds-broken`: Int
 
-    val `3v3v3v3-mode beds-lost`: Int by delegate
+    val `3v3v3v3-mode beds-lost`: Int
 
-    val `3v3v3v3-mode bblr`: Double by delegate
+    val `3v3v3v3-mode bblr`: Double
 
-    val `4v4v4v4-mode win-streak`: Int? by delegate
+    val `4v4v4v4-mode win-streak`: Int?
 
-    val `4v4v4v4-mode games-played`: Int by delegate
+    val `4v4v4v4-mode games-played`: Int
 
-    val `4v4v4v4-mode wins`: Int by delegate
+    val `4v4v4v4-mode wins`: Int
 
-    val `4v4v4v4-mode losses`: Int by delegate
+    val `4v4v4v4-mode losses`: Int
 
-    val `4v4v4v4-mode wlr`: Double by delegate
+    val `4v4v4v4-mode wlr`: Double
 
-    val `4v4v4v4-mode win-rate`: Double by delegate
+    val `4v4v4v4-mode win-rate`: Double
 
-    val `4v4v4v4-mode normal-kills`: Int by delegate
+    val `4v4v4v4-mode normal-kills`: Int
 
-    val `4v4v4v4-mode normal-deaths`: Int by delegate
+    val `4v4v4v4-mode normal-deaths`: Int
 
-    val `4v4v4v4-mode normal-kdr`: Double by delegate
+    val `4v4v4v4-mode normal-kdr`: Double
 
-    val `4v4v4v4-mode final-kills`: Int by delegate
+    val `4v4v4v4-mode final-kills`: Int
 
-    val `4v4v4v4-mode final-deaths`: Int by delegate
+    val `4v4v4v4-mode final-deaths`: Int
 
-    val `4v4v4v4-mode final-kdr`: Double by delegate
+    val `4v4v4v4-mode final-kdr`: Double
 
-    val `4v4v4v4-mode total-kills`: Int by delegate
+    val `4v4v4v4-mode total-kills`: Int
 
-    val `4v4v4v4-mode total-deaths`: Int by delegate
+    val `4v4v4v4-mode total-deaths`: Int
 
-    val `4v4v4v4-mode total-kdr`: Double by delegate
+    val `4v4v4v4-mode total-kdr`: Double
 
-    val `4v4v4v4-mode beds-broken`: Int by delegate
+    val `4v4v4v4-mode beds-broken`: Int
 
-    val `4v4v4v4-mode beds-lost`: Int by delegate
+    val `4v4v4v4-mode beds-lost`: Int
 
-    val `4v4v4v4-mode bblr`: Double by delegate
+    val `4v4v4v4-mode bblr`: Double
 
-    val `4v4-mode win-streak`: Int? by delegate
+    val `4v4-mode win-streak`: Int?
 
-    val `4v4-mode games-played`: Int by delegate
+    val `4v4-mode games-played`: Int
 
-    val `4v4-mode wins`: Int by delegate
+    val `4v4-mode wins`: Int
 
-    val `4v4-mode losses`: Int by delegate
+    val `4v4-mode losses`: Int
 
-    val `4v4-mode wlr`: Double by delegate
+    val `4v4-mode wlr`: Double
 
-    val `4v4-mode win-rate`: Double by delegate
+    val `4v4-mode win-rate`: Double
 
-    val `4v4-mode normal-kills`: Int by delegate
+    val `4v4-mode normal-kills`: Int
 
-    val `4v4-mode normal-deaths`: Int by delegate
+    val `4v4-mode normal-deaths`: Int
 
-    val `4v4-mode normal-kdr`: Double by delegate
+    val `4v4-mode normal-kdr`: Double
 
-    val `4v4-mode final-kills`: Int by delegate
+    val `4v4-mode final-kills`: Int
 
-    val `4v4-mode final-deaths`: Int by delegate
+    val `4v4-mode final-deaths`: Int
 
-    val `4v4-mode final-kdr`: Double by delegate
+    val `4v4-mode final-kdr`: Double
 
-    val `4v4-mode total-kills`: Int by delegate
+    val `4v4-mode total-kills`: Int
 
-    val `4v4-mode total-deaths`: Int by delegate
+    val `4v4-mode total-deaths`: Int
 
-    val `4v4-mode total-kdr`: Double by delegate
+    val `4v4-mode total-kdr`: Double
 
-    val `4v4-mode beds-broken`: Int by delegate
+    val `4v4-mode beds-broken`: Int
 
-    val `4v4-mode beds-lost`: Int by delegate
+    val `4v4-mode beds-lost`: Int
 
-    val `4v4-mode bblr`: Double by delegate
+    val `4v4-mode bblr`: Double
 
-    val `core-modes win-streak`: Int? by delegate
+    val `core-modes win-streak`: Int?
 
-    val `core-modes games-played`: Int by delegate
+    val `core-modes games-played`: Int
 
-    val `core-modes wins`: Int by delegate
+    val `core-modes wins`: Int
 
-    val `core-modes losses`: Int by delegate
+    val `core-modes losses`: Int
 
-    val `core-modes wlr`: Double by delegate
+    val `core-modes wlr`: Double
 
-    val `core-modes win-rate`: Double by delegate
+    val `core-modes win-rate`: Double
 
-    val `core-modes normal-kills`: Int by delegate
+    val `core-modes normal-kills`: Int
 
-    val `core-modes normal-deaths`: Int by delegate
+    val `core-modes normal-deaths`: Int
 
-    val `core-modes normal-kdr`: Double by delegate
+    val `core-modes normal-kdr`: Double
 
-    val `core-modes final-kills`: Int by delegate
+    val `core-modes final-kills`: Int
 
-    val `core-modes final-deaths`: Int by delegate
+    val `core-modes final-deaths`: Int
 
-    val `core-modes final-kdr`: Double by delegate
+    val `core-modes final-kdr`: Double
 
-    val `core-modes total-kills`: Int by delegate
+    val `core-modes total-kills`: Int
 
-    val `core-modes total-deaths`: Int by delegate
+    val `core-modes total-deaths`: Int
 
-    val `core-modes total-kdr`: Double by delegate
+    val `core-modes total-kdr`: Double
 
-    val `core-modes beds-broken`: Int by delegate
+    val `core-modes beds-broken`: Int
 
-    val `core-modes beds-lost`: Int by delegate
+    val `core-modes beds-lost`: Int
 
-    val `core-modes bblr`: Double by delegate
+    val `core-modes bblr`: Double
 
-    val `normal-modes games-played`: Int by delegate
+    val `normal-modes games-played`: Int
 
-    val `normal-modes wins`: Int by delegate
+    val `normal-modes wins`: Int
 
-    val `normal-modes losses`: Int by delegate
+    val `normal-modes losses`: Int
 
-    val `normal-modes wlr`: Double by delegate
+    val `normal-modes wlr`: Double
 
-    val `normal-modes win-rate`: Double by delegate
+    val `normal-modes win-rate`: Double
 
-    val `normal-modes normal-kills`: Int by delegate
+    val `normal-modes normal-kills`: Int
 
-    val `normal-modes normal-deaths`: Int by delegate
+    val `normal-modes normal-deaths`: Int
 
-    val `normal-modes normal-kdr`: Double by delegate
+    val `normal-modes normal-kdr`: Double
 
-    val `normal-modes final-kills`: Int by delegate
+    val `normal-modes final-kills`: Int
 
-    val `normal-modes final-deaths`: Int by delegate
+    val `normal-modes final-deaths`: Int
 
-    val `normal-modes final-kdr`: Double by delegate
+    val `normal-modes final-kdr`: Double
 
-    val `normal-modes total-kills`: Int by delegate
+    val `normal-modes total-kills`: Int
 
-    val `normal-modes total-deaths`: Int by delegate
+    val `normal-modes total-deaths`: Int
 
-    val `normal-modes total-kdr`: Double by delegate
+    val `normal-modes total-kdr`: Double
 
-    val `normal-modes beds-broken`: Int by delegate
+    val `normal-modes beds-broken`: Int
 
-    val `normal-modes beds-lost`: Int by delegate
+    val `normal-modes beds-lost`: Int
 
-    val `normal-modes bblr`: Double by delegate
+    val `normal-modes bblr`: Double
 
-    val `all-modes games-played`: Int by delegate
+    val `all-modes games-played`: Int
 
-    companion object {
+    init {
+        fun getIntOrNull(key: String) = (map?.get(key) as Number?)?.toInt()
+        fun getIntOrZero(key: String) = (map?.get(key) as Number?)?.toInt() ?: 0
+
+        experience = getIntOrZero("Experience")
+        level = calculateLevel(experience)
+        `level-rounded` = calculateLevel(experience).toInt()
+        `level-formatted` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = true)
+        `level-formatted-without-brackets` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = true)
+        `level-formatted-without-ornament` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = false)
+        `level-formatted-simple` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = false)
+        coins = getIntOrZero("coins")
+
+        `solo-mode win-streak` = getIntOrNull("eight_one_winstreak")
+        `solo-mode games-played` = getIntOrZero("eight_one_games_played_bedwars")
+        `solo-mode wins` = getIntOrZero("eight_one_wins_bedwars")
+        `solo-mode losses` = getIntOrZero("eight_one_losses_bedwars")
+        `solo-mode wlr` = `solo-mode wins`.toDouble() / `solo-mode losses`
+        `solo-mode win-rate` = `solo-mode wins`.toDouble() / `solo-mode games-played`
+        `solo-mode normal-kills` = getIntOrZero("eight_one_kills_bedwars")
+        `solo-mode normal-deaths` = getIntOrZero("eight_one_deaths_bedwars")
+        `solo-mode normal-kdr` = `solo-mode normal-kills`.toDouble() / `solo-mode normal-deaths`
+        `solo-mode final-kills` = getIntOrZero("eight_one_final_kills_bedwars")
+        `solo-mode final-deaths` = getIntOrZero("eight_one_final_deaths_bedwars")
+        `solo-mode final-kdr` = `solo-mode final-kills`.toDouble() / `solo-mode final-deaths`
+        `solo-mode total-kills` = `solo-mode normal-kills` + `solo-mode final-kills`
+        `solo-mode total-deaths` = `solo-mode normal-deaths` + `solo-mode final-deaths`
+        `solo-mode total-kdr` = `solo-mode total-kills`.toDouble() / `solo-mode total-deaths`
+        `solo-mode beds-broken` = getIntOrZero("eight_one_beds_broken_bedwars")
+        `solo-mode beds-lost` = getIntOrZero("eight_one_beds_lost_bedwars")
+        `solo-mode bblr` = `solo-mode beds-broken`.toDouble() / `solo-mode beds-lost`
+
+        `doubles-mode win-streak` = getIntOrNull("eight_two_winstreak")
+        `doubles-mode games-played` = getIntOrZero("eight_two_games_played_bedwars")
+        `doubles-mode wins` = getIntOrZero("eight_two_wins_bedwars")
+        `doubles-mode losses` = getIntOrZero("eight_two_losses_bedwars")
+        `doubles-mode wlr` = `doubles-mode wins`.toDouble() / `doubles-mode losses`
+        `doubles-mode win-rate` = `doubles-mode wins`.toDouble() / `doubles-mode games-played`
+        `doubles-mode normal-kills` = getIntOrZero("eight_two_kills_bedwars")
+        `doubles-mode normal-deaths` = getIntOrZero("eight_two_deaths_bedwars")
+        `doubles-mode normal-kdr` = `doubles-mode normal-kills`.toDouble() / `doubles-mode normal-deaths`
+        `doubles-mode final-kills` = getIntOrZero("eight_two_final_kills_bedwars")
+        `doubles-mode final-deaths` = getIntOrZero("eight_two_final_deaths_bedwars")
+        `doubles-mode final-kdr` = `doubles-mode final-kills`.toDouble() / `doubles-mode final-deaths`
+        `doubles-mode total-kills` = `doubles-mode normal-kills` + `doubles-mode final-kills`
+        `doubles-mode total-deaths` = `doubles-mode normal-deaths` + `doubles-mode final-deaths`
+        `doubles-mode total-kdr` = `doubles-mode total-kills`.toDouble() / `doubles-mode total-deaths`
+        `doubles-mode beds-broken` = getIntOrZero("eight_two_beds_broken_bedwars")
+        `doubles-mode beds-lost` = getIntOrZero("eight_two_beds_lost_bedwars")
+        `doubles-mode bblr` = `doubles-mode beds-broken`.toDouble() / `doubles-mode beds-lost`
+
+        `3v3v3v3-mode win-streak` = getIntOrNull("four_three_winstreak")
+        `3v3v3v3-mode games-played` = getIntOrZero("four_three_games_played_bedwars")
+        `3v3v3v3-mode wins` = getIntOrZero("four_three_wins_bedwars")
+        `3v3v3v3-mode losses` = getIntOrZero("four_three_losses_bedwars")
+        `3v3v3v3-mode wlr` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode losses`
+        `3v3v3v3-mode win-rate` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode games-played`
+        `3v3v3v3-mode normal-kills` = getIntOrZero("four_three_kills_bedwars")
+        `3v3v3v3-mode normal-deaths` = getIntOrZero("four_three_deaths_bedwars")
+        `3v3v3v3-mode normal-kdr` = `3v3v3v3-mode normal-kills`.toDouble() / `3v3v3v3-mode normal-deaths`
+        `3v3v3v3-mode final-kills` = getIntOrZero("four_three_final_kills_bedwars")
+        `3v3v3v3-mode final-deaths` = getIntOrZero("four_three_final_deaths_bedwars")
+        `3v3v3v3-mode final-kdr` = `3v3v3v3-mode final-kills`.toDouble() / `3v3v3v3-mode final-deaths`
+        `3v3v3v3-mode total-kills` = `3v3v3v3-mode normal-kills` + `3v3v3v3-mode final-kills`
+        `3v3v3v3-mode total-deaths` = `3v3v3v3-mode normal-deaths` + `3v3v3v3-mode final-deaths`
+        `3v3v3v3-mode total-kdr` = `3v3v3v3-mode total-kills`.toDouble() / `3v3v3v3-mode total-deaths`
+        `3v3v3v3-mode beds-broken` = getIntOrZero("four_three_beds_broken_bedwars")
+        `3v3v3v3-mode beds-lost` = getIntOrZero("four_three_beds_lost_bedwars")
+        `3v3v3v3-mode bblr` = `3v3v3v3-mode beds-broken`.toDouble() / `3v3v3v3-mode beds-lost`
+
+        `4v4v4v4-mode win-streak` = getIntOrNull("four_four_winstreak")
+        `4v4v4v4-mode games-played` = getIntOrZero("four_four_games_played_bedwars")
+        `4v4v4v4-mode wins` = getIntOrZero("four_four_wins_bedwars")
+        `4v4v4v4-mode losses` = getIntOrZero("four_four_losses_bedwars")
+        `4v4v4v4-mode wlr` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode losses`
+        `4v4v4v4-mode win-rate` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode games-played`
+        `4v4v4v4-mode normal-kills` = getIntOrZero("four_four_kills_bedwars")
+        `4v4v4v4-mode normal-deaths` = getIntOrZero("four_four_deaths_bedwars")
+        `4v4v4v4-mode normal-kdr` = `4v4v4v4-mode normal-kills`.toDouble() / `4v4v4v4-mode normal-deaths`
+        `4v4v4v4-mode final-kills` = getIntOrZero("four_four_final_kills_bedwars")
+        `4v4v4v4-mode final-deaths` = getIntOrZero("four_four_final_deaths_bedwars")
+        `4v4v4v4-mode final-kdr` = `4v4v4v4-mode final-kills`.toDouble() / `4v4v4v4-mode final-deaths`
+        `4v4v4v4-mode total-kills` = `4v4v4v4-mode normal-kills` + `4v4v4v4-mode final-kills`
+        `4v4v4v4-mode total-deaths` = `4v4v4v4-mode normal-deaths` + `4v4v4v4-mode final-deaths`
+        `4v4v4v4-mode total-kdr` = `4v4v4v4-mode total-kills`.toDouble() / `4v4v4v4-mode total-deaths`
+        `4v4v4v4-mode beds-broken` = getIntOrZero("four_four_beds_broken_bedwars")
+        `4v4v4v4-mode beds-lost` = getIntOrZero("four_four_beds_lost_bedwars")
+        `4v4v4v4-mode bblr` = `4v4v4v4-mode beds-broken`.toDouble() / `4v4v4v4-mode beds-lost`
+
+        `4v4-mode win-streak` = getIntOrNull("two_four_winstreak")
+        `4v4-mode games-played` = getIntOrZero("two_four_games_played_bedwars")
+        `4v4-mode wins` = getIntOrZero("two_four_wins_bedwars")
+        `4v4-mode losses` = getIntOrZero("two_four_losses_bedwars")
+        `4v4-mode wlr` = `4v4-mode wins`.toDouble() / `4v4-mode losses`
+        `4v4-mode win-rate` = `4v4-mode wins`.toDouble() / `4v4-mode games-played`
+        `4v4-mode normal-kills` = getIntOrZero("two_four_kills_bedwars")
+        `4v4-mode normal-deaths` = getIntOrZero("two_four_deaths_bedwars")
+        `4v4-mode normal-kdr` = `4v4-mode normal-kills`.toDouble() / `4v4-mode normal-deaths`
+        `4v4-mode final-kills` = getIntOrZero("two_four_final_kills_bedwars")
+        `4v4-mode final-deaths` = getIntOrZero("two_four_final_deaths_bedwars")
+        `4v4-mode final-kdr` = `4v4-mode final-kills`.toDouble() / `4v4-mode final-deaths`
+        `4v4-mode total-kills` = `4v4-mode normal-kills` + `4v4-mode final-kills`
+        `4v4-mode total-deaths` = `4v4-mode normal-deaths` + `4v4-mode final-deaths`
+        `4v4-mode total-kdr` = `4v4-mode total-kills`.toDouble() / `4v4-mode total-deaths`
+        `4v4-mode beds-broken` = getIntOrZero("two_four_beds_broken_bedwars")
+        `4v4-mode beds-lost` = getIntOrZero("two_four_beds_lost_bedwars")
+        `4v4-mode bblr` = `4v4-mode beds-broken`.toDouble() / `4v4-mode beds-lost`
+
+        `core-modes win-streak` = getIntOrNull("winstreak")
+        `core-modes games-played` = `solo-mode games-played` + `doubles-mode games-played` + `3v3v3v3-mode games-played` + `4v4v4v4-mode games-played`
+        `core-modes wins` = `solo-mode wins` + `doubles-mode wins` + `3v3v3v3-mode wins` + `4v4v4v4-mode wins`
+        `core-modes losses` = `solo-mode losses` + `doubles-mode losses` + `3v3v3v3-mode losses` + `4v4v4v4-mode losses`
+        `core-modes wlr` = `core-modes wins`.toDouble() / `core-modes losses`
+        `core-modes win-rate` = `core-modes wins`.toDouble() / `core-modes games-played`
+        `core-modes normal-kills` = `solo-mode normal-kills` + `doubles-mode normal-kills` + `3v3v3v3-mode normal-kills` + `4v4v4v4-mode normal-kills`
+        `core-modes normal-deaths` = `solo-mode normal-deaths` + `doubles-mode normal-deaths` + `3v3v3v3-mode normal-deaths` + `4v4v4v4-mode normal-deaths`
+        `core-modes normal-kdr` = `core-modes normal-kills`.toDouble() / `core-modes normal-deaths`
+        `core-modes final-kills` = `solo-mode final-kills` + `doubles-mode final-kills` + `3v3v3v3-mode final-kills` + `4v4v4v4-mode final-kills`
+        `core-modes final-deaths` = `solo-mode final-deaths` + `doubles-mode final-deaths` + `3v3v3v3-mode final-deaths` + `4v4v4v4-mode final-deaths`
+        `core-modes final-kdr` = `core-modes final-kills`.toDouble() / `core-modes final-deaths`
+        `core-modes total-kills` = `core-modes normal-kills` + `core-modes final-kills`
+        `core-modes total-deaths` = `core-modes normal-deaths` + `core-modes final-deaths`
+        `core-modes total-kdr` = `core-modes total-kills`.toDouble() / `core-modes total-deaths`
+        `core-modes beds-broken` = `solo-mode beds-broken` + `doubles-mode beds-broken` + `3v3v3v3-mode beds-broken` + `4v4v4v4-mode beds-broken`
+        `core-modes beds-lost` = `solo-mode beds-lost` + `doubles-mode beds-lost` + `3v3v3v3-mode beds-lost` + `4v4v4v4-mode beds-lost`
+        `core-modes bblr` = `core-modes beds-broken`.toDouble() / `core-modes beds-lost`
+
+        `normal-modes games-played` = getIntOrZero("games_played_bedwars")
+        `normal-modes wins` = getIntOrZero("wins_bedwars")
+        `normal-modes losses` = getIntOrZero("losses_bedwars")
+        `normal-modes wlr` = `normal-modes wins`.toDouble() / `normal-modes losses`
+        `normal-modes win-rate` = `normal-modes wins`.toDouble() / `normal-modes games-played`
+        `normal-modes normal-kills` = getIntOrZero("kills_bedwars")
+        `normal-modes normal-deaths` = getIntOrZero("deaths_bedwars")
+        `normal-modes normal-kdr` = `normal-modes normal-kills`.toDouble() / `normal-modes normal-deaths`
+        `normal-modes final-kills` = getIntOrZero("final_kills_bedwars")
+        `normal-modes final-deaths` = getIntOrZero("final_deaths_bedwars")
+        `normal-modes final-kdr` = `normal-modes final-kills`.toDouble() / `normal-modes final-deaths`
+        `normal-modes total-kills` = `normal-modes normal-kills` + `normal-modes final-kills`
+        `normal-modes total-deaths` = `normal-modes normal-deaths` + `normal-modes final-deaths`
+        `normal-modes total-kdr` = `normal-modes total-kills`.toDouble() / `normal-modes total-deaths`
+        `normal-modes beds-broken` = getIntOrZero("beds_broken_bedwars")
+        `normal-modes beds-lost` = getIntOrZero("beds_lost_bedwars")
+        `normal-modes bblr` = `normal-modes beds-broken`.toDouble() / `normal-modes beds-lost`
+
+        `all-modes games-played` = getIntOrZero("games_played_bedwars_1")
+    }
+
+    private companion object {
         private const val LEVEL_ORNAMENT_1 = "✫"
 
         private const val LEVEL_ORNAMENT_2 = "✪"
@@ -312,298 +459,6 @@ class PlayerBedWarsStats(val delegate: Map<String, Any?>) : Map<String, Any?> by
         private const val LEVEL_ORNAMENT_3 = "⚝"
 
         private const val LEVEL_ORNAMENT_4 = "✥"
-
-        fun buildFromJson(json: JsonObject?): PlayerBedWarsStats {
-            fun getIntOrNull(key: String) = json?.get(key)?.asInt
-            fun getIntOrZero(key: String) = json?.get(key)?.asInt ?: 0
-
-            val experience = getIntOrZero("Experience")
-            val level = calculateLevel(experience)
-            val `level-rounded` = calculateLevel(experience).toInt()
-            val `level-formatted` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = true)
-            val `level-formatted-without-brackets` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = true)
-            val `level-formatted-without-ornament` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = false)
-            val `level-formatted-simple` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = false)
-            val coins = getIntOrZero("coins")
-
-            val `solo-mode win-streak` = getIntOrNull("eight_one_winstreak")
-            val `solo-mode games-played` = getIntOrZero("eight_one_games_played_bedwars")
-            val `solo-mode wins` = getIntOrZero("eight_one_wins_bedwars")
-            val `solo-mode losses` = getIntOrZero("eight_one_losses_bedwars")
-            val `solo-mode wlr` = `solo-mode wins`.toDouble() / `solo-mode losses`
-            val `solo-mode win-rate` = `solo-mode wins`.toDouble() / `solo-mode games-played`
-            val `solo-mode normal-kills` = getIntOrZero("eight_one_kills_bedwars")
-            val `solo-mode normal-deaths` = getIntOrZero("eight_one_deaths_bedwars")
-            val `solo-mode normal-kdr` = `solo-mode normal-kills`.toDouble() / `solo-mode normal-deaths`
-            val `solo-mode final-kills` = getIntOrZero("eight_one_final_kills_bedwars")
-            val `solo-mode final-deaths` = getIntOrZero("eight_one_final_deaths_bedwars")
-            val `solo-mode final-kdr` = `solo-mode final-kills`.toDouble() / `solo-mode final-deaths`
-            val `solo-mode total-kills` = `solo-mode normal-kills` + `solo-mode final-kills`
-            val `solo-mode total-deaths` = `solo-mode normal-deaths` + `solo-mode final-deaths`
-            val `solo-mode total-kdr` = `solo-mode total-kills`.toDouble() / `solo-mode total-deaths`
-            val `solo-mode beds-broken` = getIntOrZero("eight_one_beds_broken_bedwars")
-            val `solo-mode beds-lost` = getIntOrZero("eight_one_beds_lost_bedwars")
-            val `solo-mode bblr` = `solo-mode beds-broken`.toDouble() / `solo-mode beds-lost`
-
-            val `doubles-mode win-streak` = getIntOrNull("eight_two_winstreak")
-            val `doubles-mode games-played` = getIntOrZero("eight_two_games_played_bedwars")
-            val `doubles-mode wins` = getIntOrZero("eight_two_wins_bedwars")
-            val `doubles-mode losses` = getIntOrZero("eight_two_losses_bedwars")
-            val `doubles-mode wlr` = `doubles-mode wins`.toDouble() / `doubles-mode losses`
-            val `doubles-mode win-rate` = `doubles-mode wins`.toDouble() / `doubles-mode games-played`
-            val `doubles-mode normal-kills` = getIntOrZero("eight_two_kills_bedwars")
-            val `doubles-mode normal-deaths` = getIntOrZero("eight_two_deaths_bedwars")
-            val `doubles-mode normal-kdr` = `doubles-mode normal-kills`.toDouble() / `doubles-mode normal-deaths`
-            val `doubles-mode final-kills` = getIntOrZero("eight_two_final_kills_bedwars")
-            val `doubles-mode final-deaths` = getIntOrZero("eight_two_final_deaths_bedwars")
-            val `doubles-mode final-kdr` = `doubles-mode final-kills`.toDouble() / `doubles-mode final-deaths`
-            val `doubles-mode total-kills` = `doubles-mode normal-kills` + `doubles-mode final-kills`
-            val `doubles-mode total-deaths` = `doubles-mode normal-deaths` + `doubles-mode final-deaths`
-            val `doubles-mode total-kdr` = `doubles-mode total-kills`.toDouble() / `doubles-mode total-deaths`
-            val `doubles-mode beds-broken` = getIntOrZero("eight_two_beds_broken_bedwars")
-            val `doubles-mode beds-lost` = getIntOrZero("eight_two_beds_lost_bedwars")
-            val `doubles-mode bblr` = `doubles-mode beds-broken`.toDouble() / `doubles-mode beds-lost`
-
-            val `3v3v3v3-mode win-streak` = getIntOrNull("four_three_winstreak")
-            val `3v3v3v3-mode games-played` = getIntOrZero("four_three_games_played_bedwars")
-            val `3v3v3v3-mode wins` = getIntOrZero("four_three_wins_bedwars")
-            val `3v3v3v3-mode losses` = getIntOrZero("four_three_losses_bedwars")
-            val `3v3v3v3-mode wlr` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode losses`
-            val `3v3v3v3-mode win-rate` = `3v3v3v3-mode wins`.toDouble() / `3v3v3v3-mode games-played`
-            val `3v3v3v3-mode normal-kills` = getIntOrZero("four_three_kills_bedwars")
-            val `3v3v3v3-mode normal-deaths` = getIntOrZero("four_three_deaths_bedwars")
-            val `3v3v3v3-mode normal-kdr` = `3v3v3v3-mode normal-kills`.toDouble() / `3v3v3v3-mode normal-deaths`
-            val `3v3v3v3-mode final-kills` = getIntOrZero("four_three_final_kills_bedwars")
-            val `3v3v3v3-mode final-deaths` = getIntOrZero("four_three_final_deaths_bedwars")
-            val `3v3v3v3-mode final-kdr` = `3v3v3v3-mode final-kills`.toDouble() / `3v3v3v3-mode final-deaths`
-            val `3v3v3v3-mode total-kills` = `3v3v3v3-mode normal-kills` + `3v3v3v3-mode final-kills`
-            val `3v3v3v3-mode total-deaths` = `3v3v3v3-mode normal-deaths` + `3v3v3v3-mode final-deaths`
-            val `3v3v3v3-mode total-kdr` = `3v3v3v3-mode total-kills`.toDouble() / `3v3v3v3-mode total-deaths`
-            val `3v3v3v3-mode beds-broken` = getIntOrZero("four_three_beds_broken_bedwars")
-            val `3v3v3v3-mode beds-lost` = getIntOrZero("four_three_beds_lost_bedwars")
-            val `3v3v3v3-mode bblr` = `3v3v3v3-mode beds-broken`.toDouble() / `3v3v3v3-mode beds-lost`
-
-            val `4v4v4v4-mode win-streak` = getIntOrNull("four_four_winstreak")
-            val `4v4v4v4-mode games-played` = getIntOrZero("four_four_games_played_bedwars")
-            val `4v4v4v4-mode wins` = getIntOrZero("four_four_wins_bedwars")
-            val `4v4v4v4-mode losses` = getIntOrZero("four_four_losses_bedwars")
-            val `4v4v4v4-mode wlr` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode losses`
-            val `4v4v4v4-mode win-rate` = `4v4v4v4-mode wins`.toDouble() / `4v4v4v4-mode games-played`
-            val `4v4v4v4-mode normal-kills` = getIntOrZero("four_four_kills_bedwars")
-            val `4v4v4v4-mode normal-deaths` = getIntOrZero("four_four_deaths_bedwars")
-            val `4v4v4v4-mode normal-kdr` = `4v4v4v4-mode normal-kills`.toDouble() / `4v4v4v4-mode normal-deaths`
-            val `4v4v4v4-mode final-kills` = getIntOrZero("four_four_final_kills_bedwars")
-            val `4v4v4v4-mode final-deaths` = getIntOrZero("four_four_final_deaths_bedwars")
-            val `4v4v4v4-mode final-kdr` = `4v4v4v4-mode final-kills`.toDouble() / `4v4v4v4-mode final-deaths`
-            val `4v4v4v4-mode total-kills` = `4v4v4v4-mode normal-kills` + `4v4v4v4-mode final-kills`
-            val `4v4v4v4-mode total-deaths` = `4v4v4v4-mode normal-deaths` + `4v4v4v4-mode final-deaths`
-            val `4v4v4v4-mode total-kdr` = `4v4v4v4-mode total-kills`.toDouble() / `4v4v4v4-mode total-deaths`
-            val `4v4v4v4-mode beds-broken` = getIntOrZero("four_four_beds_broken_bedwars")
-            val `4v4v4v4-mode beds-lost` = getIntOrZero("four_four_beds_lost_bedwars")
-            val `4v4v4v4-mode bblr` = `4v4v4v4-mode beds-broken`.toDouble() / `4v4v4v4-mode beds-lost`
-
-            val `4v4-mode win-streak` = getIntOrNull("two_four_winstreak")
-            val `4v4-mode games-played` = getIntOrZero("two_four_games_played_bedwars")
-            val `4v4-mode wins` = getIntOrZero("two_four_wins_bedwars")
-            val `4v4-mode losses` = getIntOrZero("two_four_losses_bedwars")
-            val `4v4-mode wlr` = `4v4-mode wins`.toDouble() / `4v4-mode losses`
-            val `4v4-mode win-rate` = `4v4-mode wins`.toDouble() / `4v4-mode games-played`
-            val `4v4-mode normal-kills` = getIntOrZero("two_four_kills_bedwars")
-            val `4v4-mode normal-deaths` = getIntOrZero("two_four_deaths_bedwars")
-            val `4v4-mode normal-kdr` = `4v4-mode normal-kills`.toDouble() / `4v4-mode normal-deaths`
-            val `4v4-mode final-kills` = getIntOrZero("two_four_final_kills_bedwars")
-            val `4v4-mode final-deaths` = getIntOrZero("two_four_final_deaths_bedwars")
-            val `4v4-mode final-kdr` = `4v4-mode final-kills`.toDouble() / `4v4-mode final-deaths`
-            val `4v4-mode total-kills` = `4v4-mode normal-kills` + `4v4-mode final-kills`
-            val `4v4-mode total-deaths` = `4v4-mode normal-deaths` + `4v4-mode final-deaths`
-            val `4v4-mode total-kdr` = `4v4-mode total-kills`.toDouble() / `4v4-mode total-deaths`
-            val `4v4-mode beds-broken` = getIntOrZero("two_four_beds_broken_bedwars")
-            val `4v4-mode beds-lost` = getIntOrZero("two_four_beds_lost_bedwars")
-            val `4v4-mode bblr` = `4v4-mode beds-broken`.toDouble() / `4v4-mode beds-lost`
-
-            val `core-modes win-streak` = getIntOrNull("winstreak")
-            val `core-modes games-played` = `solo-mode games-played` + `doubles-mode games-played` + `3v3v3v3-mode games-played` + `4v4v4v4-mode games-played`
-            val `core-modes wins` = `solo-mode wins` + `doubles-mode wins` + `3v3v3v3-mode wins` + `4v4v4v4-mode wins`
-            val `core-modes losses` = `solo-mode losses` + `doubles-mode losses` + `3v3v3v3-mode losses` + `4v4v4v4-mode losses`
-            val `core-modes wlr` = `core-modes wins`.toDouble() / `core-modes losses`
-            val `core-modes win-rate` = `core-modes wins`.toDouble() / `core-modes games-played`
-            val `core-modes normal-kills` = `solo-mode normal-kills` + `doubles-mode normal-kills` + `3v3v3v3-mode normal-kills` + `4v4v4v4-mode normal-kills`
-            val `core-modes normal-deaths` = `solo-mode normal-deaths` + `doubles-mode normal-deaths` + `3v3v3v3-mode normal-deaths` + `4v4v4v4-mode normal-deaths`
-            val `core-modes normal-kdr` = `core-modes normal-kills`.toDouble() / `core-modes normal-deaths`
-            val `core-modes final-kills` = `solo-mode final-kills` + `doubles-mode final-kills` + `3v3v3v3-mode final-kills` + `4v4v4v4-mode final-kills`
-            val `core-modes final-deaths` = `solo-mode final-deaths` + `doubles-mode final-deaths` + `3v3v3v3-mode final-deaths` + `4v4v4v4-mode final-deaths`
-            val `core-modes final-kdr` = `core-modes final-kills`.toDouble() / `core-modes final-deaths`
-            val `core-modes total-kills` = `core-modes normal-kills` + `core-modes final-kills`
-            val `core-modes total-deaths` = `core-modes normal-deaths` + `core-modes final-deaths`
-            val `core-modes total-kdr` = `core-modes total-kills`.toDouble() / `core-modes total-deaths`
-            val `core-modes beds-broken` = `solo-mode beds-broken` + `doubles-mode beds-broken` + `3v3v3v3-mode beds-broken` + `4v4v4v4-mode beds-broken`
-            val `core-modes beds-lost` = `solo-mode beds-lost` + `doubles-mode beds-lost` + `3v3v3v3-mode beds-lost` + `4v4v4v4-mode beds-lost`
-            val `core-modes bblr` = `core-modes beds-broken`.toDouble() / `core-modes beds-lost`
-
-            val `normal-modes games-played` = getIntOrZero("games_played_bedwars")
-            val `normal-modes wins` = getIntOrZero("wins_bedwars")
-            val `normal-modes losses` = getIntOrZero("losses_bedwars")
-            val `normal-modes wlr` = `normal-modes wins`.toDouble() / `normal-modes losses`
-            val `normal-modes win-rate` = `normal-modes wins`.toDouble() / `normal-modes games-played`
-            val `normal-modes normal-kills` = getIntOrZero("kills_bedwars")
-            val `normal-modes normal-deaths` = getIntOrZero("deaths_bedwars")
-            val `normal-modes normal-kdr` = `normal-modes normal-kills`.toDouble() / `normal-modes normal-deaths`
-            val `normal-modes final-kills` = getIntOrZero("final_kills_bedwars")
-            val `normal-modes final-deaths` = getIntOrZero("final_deaths_bedwars")
-            val `normal-modes final-kdr` = `normal-modes final-kills`.toDouble() / `normal-modes final-deaths`
-            val `normal-modes total-kills` = `normal-modes normal-kills` + `normal-modes final-kills`
-            val `normal-modes total-deaths` = `normal-modes normal-deaths` + `normal-modes final-deaths`
-            val `normal-modes total-kdr` = `normal-modes total-kills`.toDouble() / `normal-modes total-deaths`
-            val `normal-modes beds-broken` = getIntOrZero("beds_broken_bedwars")
-            val `normal-modes beds-lost` = getIntOrZero("beds_lost_bedwars")
-            val `normal-modes bblr` = `normal-modes beds-broken`.toDouble() / `normal-modes beds-lost`
-
-            val `all-modes games-played` = getIntOrZero("games_played_bedwars_1")
-
-            return PlayerBedWarsStats(mapOf(
-                "experience" to experience,
-                "level" to level,
-                "level-formatted" to `level-formatted`,
-                "level-formatted-without-brackets" to `level-formatted-without-brackets`,
-                "level-formatted-without-ornament" to `level-formatted-without-ornament`,
-                "level-formatted-simple" to `level-formatted-simple`,
-                "coins" to coins,
-
-                "solo-mode win-streak" to `solo-mode win-streak`,
-                "solo-mode games-played" to `solo-mode games-played`,
-                "solo-mode wins" to `solo-mode wins`,
-                "solo-mode losses" to `solo-mode losses`,
-                "solo-mode wlr" to `solo-mode wlr`,
-                "solo-mode win-rate" to `solo-mode win-rate`,
-                "solo-mode normal-kills" to `solo-mode normal-kills`,
-                "solo-mode normal-deaths" to `solo-mode normal-deaths`,
-                "solo-mode normal-kdr" to `solo-mode normal-kdr`,
-                "solo-mode final-kills" to `solo-mode final-kills`,
-                "solo-mode final-deaths" to `solo-mode final-deaths`,
-                "solo-mode final-kdr" to `solo-mode final-kdr`,
-                "solo-mode total-kills" to `solo-mode total-kills`,
-                "solo-mode total-deaths" to `solo-mode total-deaths`,
-                "solo-mode total-kdr" to `solo-mode total-kdr`,
-                "solo-mode beds-broken" to `solo-mode beds-broken`,
-                "solo-mode beds-lost" to `solo-mode beds-lost`,
-                "solo-mode bblr" to `solo-mode bblr`,
-
-                "doubles-mode win-streak" to `doubles-mode win-streak`,
-                "doubles-mode games-played" to `doubles-mode games-played`,
-                "doubles-mode wins" to `doubles-mode wins`,
-                "doubles-mode losses" to `doubles-mode losses`,
-                "doubles-mode wlr" to `doubles-mode wlr`,
-                "doubles-mode win-rate" to `doubles-mode win-rate`,
-                "doubles-mode normal-kills" to `doubles-mode normal-kills`,
-                "doubles-mode normal-deaths" to `doubles-mode normal-deaths`,
-                "doubles-mode normal-kdr" to `doubles-mode normal-kdr`,
-                "doubles-mode final-kills" to `doubles-mode final-kills`,
-                "doubles-mode final-deaths" to `doubles-mode final-deaths`,
-                "doubles-mode final-kdr" to `doubles-mode final-kdr`,
-                "doubles-mode total-kills" to `doubles-mode total-kills`,
-                "doubles-mode total-deaths" to `doubles-mode total-deaths`,
-                "doubles-mode total-kdr" to `doubles-mode total-kdr`,
-                "doubles-mode beds-broken" to `doubles-mode beds-broken`,
-                "doubles-mode beds-lost" to `doubles-mode beds-lost`,
-                "doubles-mode bblr" to `doubles-mode bblr`,
-
-                "3v3v3v3-mode win-streak" to `3v3v3v3-mode win-streak`,
-                "3v3v3v3-mode games-played" to `3v3v3v3-mode games-played`,
-                "3v3v3v3-mode wins" to `3v3v3v3-mode wins`,
-                "3v3v3v3-mode losses" to `3v3v3v3-mode losses`,
-                "3v3v3v3-mode wlr" to `3v3v3v3-mode wlr`,
-                "3v3v3v3-mode win-rate" to `3v3v3v3-mode win-rate`,
-                "3v3v3v3-mode normal-kills" to `3v3v3v3-mode normal-kills`,
-                "3v3v3v3-mode normal-deaths" to `3v3v3v3-mode normal-deaths`,
-                "3v3v3v3-mode normal-kdr" to `3v3v3v3-mode normal-kdr`,
-                "3v3v3v3-mode final-kills" to `3v3v3v3-mode final-kills`,
-                "3v3v3v3-mode final-deaths" to `3v3v3v3-mode final-deaths`,
-                "3v3v3v3-mode final-kdr" to `3v3v3v3-mode final-kdr`,
-                "3v3v3v3-mode total-kills" to `3v3v3v3-mode total-kills`,
-                "3v3v3v3-mode total-deaths" to `3v3v3v3-mode total-deaths`,
-                "3v3v3v3-mode total-kdr" to `3v3v3v3-mode total-kdr`,
-                "3v3v3v3-mode beds-broken" to `3v3v3v3-mode beds-broken`,
-                "3v3v3v3-mode beds-lost" to `3v3v3v3-mode beds-lost`,
-                "3v3v3v3-mode bblr" to `3v3v3v3-mode bblr`,
-
-                "4v4v4v4-mode win-streak" to `4v4v4v4-mode win-streak`,
-                "4v4v4v4-mode games-played" to `4v4v4v4-mode games-played`,
-                "4v4v4v4-mode wins" to `4v4v4v4-mode wins`,
-                "4v4v4v4-mode losses" to `4v4v4v4-mode losses`,
-                "4v4v4v4-mode wlr" to `4v4v4v4-mode wlr`,
-                "4v4v4v4-mode win-rate" to `4v4v4v4-mode win-rate`,
-                "4v4v4v4-mode normal-kills" to `4v4v4v4-mode normal-kills`,
-                "4v4v4v4-mode normal-deaths" to `4v4v4v4-mode normal-deaths`,
-                "4v4v4v4-mode normal-kdr" to `4v4v4v4-mode normal-kdr`,
-                "4v4v4v4-mode final-kills" to `4v4v4v4-mode final-kills`,
-                "4v4v4v4-mode final-deaths" to `4v4v4v4-mode final-deaths`,
-                "4v4v4v4-mode final-kdr" to `4v4v4v4-mode final-kdr`,
-                "4v4v4v4-mode total-kills" to `4v4v4v4-mode total-kills`,
-                "4v4v4v4-mode total-deaths" to `4v4v4v4-mode total-deaths`,
-                "4v4v4v4-mode total-kdr" to `4v4v4v4-mode total-kdr`,
-                "4v4v4v4-mode beds-broken" to `4v4v4v4-mode beds-broken`,
-                "4v4v4v4-mode beds-lost" to `4v4v4v4-mode beds-lost`,
-                "4v4v4v4-mode bblr" to `4v4v4v4-mode bblr`,
-
-                "4v4-mode win-streak" to `4v4-mode win-streak`,
-                "4v4-mode games-played" to `4v4-mode games-played`,
-                "4v4-mode wins" to `4v4-mode wins`,
-                "4v4-mode losses" to `4v4-mode losses`,
-                "4v4-mode wlr" to `4v4-mode wlr`,
-                "4v4-mode win-rate" to `4v4-mode win-rate`,
-                "4v4-mode normal-kills" to `4v4-mode normal-kills`,
-                "4v4-mode normal-deaths" to `4v4-mode normal-deaths`,
-                "4v4-mode normal-kdr" to `4v4-mode normal-kdr`,
-                "4v4-mode final-kills" to `4v4-mode final-kills`,
-                "4v4-mode final-deaths" to `4v4-mode final-deaths`,
-                "4v4-mode final-kdr" to `4v4-mode final-kdr`,
-                "4v4-mode total-kills" to `4v4-mode total-kills`,
-                "4v4-mode total-deaths" to `4v4-mode total-deaths`,
-                "4v4-mode total-kdr" to `4v4-mode total-kdr`,
-                "4v4-mode beds-broken" to `4v4-mode beds-broken`,
-                "4v4-mode beds-lost" to `4v4-mode beds-lost`,
-                "4v4-mode bblr" to `4v4-mode bblr`,
-
-                "core-modes win-streak" to `core-modes win-streak`,
-                "core-modes games-played" to `core-modes games-played`,
-                "core-modes wins" to `core-modes wins`,
-                "core-modes losses" to `core-modes losses`,
-                "core-modes wlr" to `core-modes wlr`,
-                "core-modes win-rate" to `core-modes win-rate`,
-                "core-modes normal-kills" to `core-modes normal-kills`,
-                "core-modes normal-deaths" to `core-modes normal-deaths`,
-                "core-modes normal-kdr" to `core-modes normal-kdr`,
-                "core-modes final-kills" to `core-modes final-kills`,
-                "core-modes final-deaths" to `core-modes final-deaths`,
-                "core-modes final-kdr" to `core-modes final-kdr`,
-                "core-modes total-kills" to `core-modes total-kills`,
-                "core-modes total-deaths" to `core-modes total-deaths`,
-                "core-modes total-kdr" to `core-modes total-kdr`,
-                "core-modes beds-broken" to `core-modes beds-broken`,
-                "core-modes beds-lost" to `core-modes beds-lost`,
-                "core-modes bblr" to `core-modes bblr`,
-
-                "normal-modes games-played" to `normal-modes games-played`,
-                "normal-modes wins" to `normal-modes wins`,
-                "normal-modes losses" to `normal-modes losses`,
-                "normal-modes wlr" to `normal-modes wlr`,
-                "normal-modes win-rate" to `normal-modes win-rate`,
-                "normal-modes normal-kills" to `normal-modes normal-kills`,
-                "normal-modes normal-deaths" to `normal-modes normal-deaths`,
-                "normal-modes normal-kdr" to `normal-modes normal-kdr`,
-                "normal-modes final-kills" to `normal-modes final-kills`,
-                "normal-modes final-deaths" to `normal-modes final-deaths`,
-                "normal-modes final-kdr" to `normal-modes final-kdr`,
-                "normal-modes total-kills" to `normal-modes total-kills`,
-                "normal-modes total-deaths" to `normal-modes total-deaths`,
-                "normal-modes total-kdr" to `normal-modes total-kdr`,
-                "normal-modes beds-broken" to `normal-modes beds-broken`,
-                "normal-modes beds-lost" to `normal-modes beds-lost`,
-                "normal-modes bblr" to `normal-modes bblr`,
-
-                "all-modes games-played" to `all-modes games-played`
-            ))
-        }
 
         private fun calculateLevel(experience: Int): Double {
             val x = 100 * floor(experience.toDouble() / 487000)

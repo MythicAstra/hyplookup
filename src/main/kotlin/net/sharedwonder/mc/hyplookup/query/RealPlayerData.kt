@@ -16,8 +16,6 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
-import com.google.gson.JsonObject
-
 class RealPlayerData(
     val firstLogin: Long,
     val lastLogin: Long,
@@ -27,13 +25,14 @@ class RealPlayerData(
     val stats: PlayerStats
 ) : HypixelPlayerData() {
     companion object {
-        fun build(json: JsonObject): RealPlayerData = RealPlayerData(
-            json["firstLogin"]?.asLong ?: 0,
-            json["lastLogin"]?.asLong ?: 0,
-            json["lastLogout"]?.asLong ?: 0,
-            json["userLanguage"]?.asString ?: "?",
-            json["achievementPoints"]?.asInt ?: 0,
-            PlayerStats.buildFromJson(json["stats"]?.asJsonObject)
+        fun build(map: Map<String, Any>): RealPlayerData = RealPlayerData(
+            (map["firstLogin"] as Number?)?.toLong() ?: 0,
+            (map["lastLogin"] as Number?)?.toLong() ?: 0,
+            (map["lastLogout"] as Number?)?.toLong() ?: 0,
+            map["userLanguage"] as String? ?: "?",
+            (map["achievementPoints"] as Number?)?.toInt() ?: 0,
+            @Suppress("UNCHECKED_CAST")
+            PlayerStats.build(map["stats"] as Map<String, Any>?)
         )
     }
 }

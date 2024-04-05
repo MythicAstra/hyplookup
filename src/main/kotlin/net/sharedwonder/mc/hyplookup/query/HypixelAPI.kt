@@ -21,7 +21,6 @@ import net.sharedwonder.mc.ptbridge.utils.GSON
 import net.sharedwonder.mc.ptbridge.utils.HTTPRequestUtils
 import java.io.IOException
 import java.util.UUID
-import com.google.gson.JsonObject
 
 object HypixelAPI {
     private var baseUrl: String = "https://api.hypixel.net/v2"
@@ -40,7 +39,7 @@ object HypixelAPI {
     @JvmStatic
     @Throws(IOException::class)
     fun queryPlayerData(uuid: UUID): HypixelPlayerData {
-        val json = (HTTPRequestUtils.request("$baseUrl/player?uuid=$uuid") {
+        val map = (HTTPRequestUtils.request("$baseUrl/player?uuid=$uuid") {
             if (key != null) {
                 setRequestProperty("API-Key", key)
             }
@@ -52,9 +51,10 @@ object HypixelAPI {
         }.ifInterruptedByException {
             throw exception
         }.response).let {
-            GSON.fromJson(it.contentAsUtf8String, JsonObject::class.java)["player"]
+            @Suppress("UNCHECKED_CAST")
+            GSON.fromJson(it.contentAsUtf8String, Map::class.java)["player"] as Map<String, Any>?
         }
 
-        return if (json.isJsonNull) NicknamePlayer else RealPlayerData.build(json.asJsonObject)
+        return if (map == null) NicknamePlayer else RealPlayerData.build(map)
     }
 }

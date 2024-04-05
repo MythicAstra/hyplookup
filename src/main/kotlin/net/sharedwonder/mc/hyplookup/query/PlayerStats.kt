@@ -16,16 +16,15 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
-import com.google.gson.JsonObject
-
 class PlayerStats(
     val bedWars: PlayerBedWarsStats,
     val skyWars: PlayerSkyWarsStats
 ) {
     companion object {
-        fun buildFromJson(json: JsonObject?): PlayerStats = PlayerStats(
-            PlayerBedWarsStats.buildFromJson(json?.get("Bedwars")?.asJsonObject),
-            PlayerSkyWarsStats.buildFromJson(json?.get("SkyWars")?.asJsonObject)
+        @Suppress("UNCHECKED_CAST")
+        fun build(map: Map<String, Any>?): PlayerStats = PlayerStats(
+            PlayerBedWarsStats(map?.get("Bedwars") as Map<String, Any>?),
+            PlayerSkyWarsStats(map?.get("SkyWars") as Map<String, Any>?)
         )
     }
 }
