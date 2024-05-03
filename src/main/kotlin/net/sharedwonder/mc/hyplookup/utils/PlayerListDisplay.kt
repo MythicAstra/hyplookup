@@ -16,16 +16,16 @@
 
 package net.sharedwonder.mc.hyplookup.utils
 
+import kotlin.concurrent.thread
+import java.util.LinkedList
+import java.util.UUID
+import io.netty.buffer.Unpooled
 import net.sharedwonder.mc.hyplookup.handlers.SPUpdatePlayerList
 import net.sharedwonder.mc.hyplookup.query.HypixelPlayerData
 import net.sharedwonder.mc.hyplookup.query.RealPlayerData
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils
 import net.sharedwonder.mc.ptbridge.utils.FormattedText
 import net.sharedwonder.mc.ptbridge.utils.TextUtils
-import kotlin.concurrent.thread
-import java.util.LinkedList
-import java.util.UUID
-import io.netty.buffer.Unpooled
 import org.apache.logging.log4j.LogManager
 
 class PlayerListDisplay(private val hypLookupContext: HypLookupContext) {

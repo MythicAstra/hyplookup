@@ -16,6 +16,9 @@
 
 package net.sharedwonder.mc.hyplookup.handlers;
 
+import java.util.List;
+import java.util.Map;
+import io.netty.buffer.ByteBuf;
 import net.sharedwonder.mc.hyplookup.utils.Constants;
 import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
@@ -23,9 +26,6 @@ import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
 import net.sharedwonder.mc.ptbridge.utils.GsonInstance;
-import java.util.List;
-import java.util.Map;
-import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
 public final class SPUpdateChatMessage implements S2CPacketHandler {

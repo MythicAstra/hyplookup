@@ -16,15 +16,15 @@
 
 package net.sharedwonder.mc.hyplookup.handlers;
 
+import java.nio.charset.StandardCharsets;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.sharedwonder.mc.hyplookup.command.CommandParser;
 import net.sharedwonder.mc.hyplookup.utils.Constants;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.C2SPacketHandler;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
-import java.nio.charset.StandardCharsets;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;

@@ -16,10 +16,10 @@
 
 package net.sharedwonder.mc.hyplookup.utils
 
-import net.sharedwonder.mc.ptbridge.ConnectionContext
-import net.sharedwonder.mc.ptbridge.addon.ExternalContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import net.sharedwonder.mc.ptbridge.ConnectionContext
+import net.sharedwonder.mc.ptbridge.addon.ExternalContext
 
 class HypLookupContext(val connectionContext: ConnectionContext) : ExternalContext {
     @JvmField val playerUuidToName: MutableMap<UUID, String> = HashMap()

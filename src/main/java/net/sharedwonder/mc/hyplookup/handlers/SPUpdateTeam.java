@@ -16,14 +16,14 @@
 
 package net.sharedwonder.mc.hyplookup.handlers;
 
+import java.util.HashSet;
+import io.netty.buffer.ByteBuf;
 import net.sharedwonder.mc.hyplookup.utils.Constants;
 import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
-import java.util.HashSet;
-import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
 public final class SPUpdateTeam implements S2CPacketHandler {

@@ -16,9 +16,9 @@
 
 package net.sharedwonder.mc.hyplookup.handlers;
 
+import io.netty.buffer.ByteBuf;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
-import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
 public final class CLRequestLogin extends net.sharedwonder.mc.ptbridge.handlers.CLRequestLogin {

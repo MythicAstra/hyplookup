@@ -16,6 +16,8 @@
 
 package net.sharedwonder.mc.hyplookup;
 
+import java.io.FileReader;
+import java.io.IOException;
 import net.sharedwonder.mc.hyplookup.handlers.CLRequestLogin;
 import net.sharedwonder.mc.hyplookup.handlers.CPSendChatMessage;
 import net.sharedwonder.mc.hyplookup.handlers.SPChangeHeldItem;
@@ -31,8 +33,6 @@ import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.addon.AddonInitializer;
 import net.sharedwonder.mc.ptbridge.config.ConfigManager;
 import net.sharedwonder.mc.ptbridge.utils.GsonInstance;
-import java.io.FileReader;
-import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;

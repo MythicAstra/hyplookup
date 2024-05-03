@@ -16,6 +16,7 @@
 
 package net.sharedwonder.mc.hyplookup.utils
 
+import java.text.DecimalFormat
 import net.sharedwonder.mc.hyplookup.command.CommandException
 import net.sharedwonder.mc.hyplookup.query.RealPlayerData
 import net.sharedwonder.mc.ptbridge.utils.FormattedText
@@ -31,7 +32,6 @@ import net.sharedwonder.mc.ptbridge.utils.FormattedText.LIGHT_PURPLE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.RED
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
-import java.text.DecimalFormat
 
 enum class HypixelGame(val gameName: String) {
     BED_WARS("Bed Wars") {

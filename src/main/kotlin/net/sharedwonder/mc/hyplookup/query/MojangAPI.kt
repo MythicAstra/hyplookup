@@ -16,11 +16,11 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
+import com.google.gson.JsonObject
 import net.sharedwonder.mc.ptbridge.utils.GSON
 import net.sharedwonder.mc.ptbridge.utils.HTTPRequestUtils
 import net.sharedwonder.mc.ptbridge.utils.PlayerProfile
 import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
-import com.google.gson.JsonObject
 
 object MojangAPI {
     fun queryPlayerProfile(name: String): PlayerProfile? {

@@ -16,11 +16,11 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
+import java.io.IOException
+import java.util.UUID
 import net.sharedwonder.mc.hyplookup.HypLookup
 import net.sharedwonder.mc.ptbridge.utils.GSON
 import net.sharedwonder.mc.ptbridge.utils.HTTPRequestUtils
-import java.io.IOException
-import java.util.UUID
 
 object HypixelAPI {
     private var baseUrl: String = "https://api.hypixel.net/v2"

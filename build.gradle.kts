@@ -8,7 +8,7 @@ val GITHUB_REPO_URL = "https://github.com/sharedwonder/hyplookup"
 val S5W5_GPR_URL = "https://maven.pkg.github.com/sharedwonder/maven-repository"
 
 group = "net.sharedwonder.mc"
-version = "0.1.0"
+version = property("version").toString()
 
 repositories {
     mavenLocal()
@@ -17,16 +17,14 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.netty:netty-bom:4.1.101.Final"))
-    implementation("net.sharedwonder.mc:ptbridge:0.1.0")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation(platform("io.netty:netty-bom:4.1.109.Final"))
     implementation("io.netty:netty-buffer")
-    implementation("org.apache.logging.log4j:log4j-api:2.22.1")
-    compileOnly("org.jetbrains:annotations:24.0.1")
+    implementation("net.sharedwonder.mc:ptbridge:0.1.0")
+    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+    compileOnly("org.jetbrains:annotations:24.1.0")
 
-    testImplementation(platform("org.junit:junit-bom:5.9.3"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
 }
 
 java {

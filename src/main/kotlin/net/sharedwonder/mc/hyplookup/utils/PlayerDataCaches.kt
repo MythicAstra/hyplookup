@@ -16,14 +16,15 @@
 
 package net.sharedwonder.mc.hyplookup.utils
 
-import net.sharedwonder.mc.hyplookup.query.HypixelAPI
-import net.sharedwonder.mc.hyplookup.query.HypixelPlayerData
-import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
 import kotlin.concurrent.thread
 import java.io.IOException
+import java.io.Serial
 import java.net.SocketTimeoutException
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
+import net.sharedwonder.mc.hyplookup.query.HypixelAPI
+import net.sharedwonder.mc.hyplookup.query.HypixelPlayerData
+import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
 import org.apache.logging.log4j.LogManager
 
 object PlayerDataCaches {
@@ -33,7 +34,11 @@ object PlayerDataCaches {
 
     private val queryStatsThreads = ConcurrentHashMap<String, Thread>()
 
-    private val caches = LinkedHashMap<UUID, HypixelPlayerData>()
+    private val caches = object : LinkedHashMap<UUID, HypixelPlayerData>() {
+        @Serial private val serialVersionUID: Long = -984844544700582720L
+
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<UUID, HypixelPlayerData>): Boolean = size > DEFAULT_CACHE_SIZE_LIMIT
+    }
 
     fun getCachedPlayerData(playerUuid: UUID): HypixelPlayerData? = synchronized(this) { caches[playerUuid] }
 
@@ -110,12 +115,6 @@ object PlayerDataCaches {
 
     private fun addToCache(playerUuid: UUID, data: HypixelPlayerData) {
         synchronized(this) {
-            if (caches.size >= DEFAULT_CACHE_SIZE_LIMIT) {
-                caches.iterator().apply {
-                    next()
-                    remove()
-                }
-            }
             caches[playerUuid] = data
         }
     }

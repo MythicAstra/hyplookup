@@ -16,6 +16,7 @@
 
 package net.sharedwonder.mc.hyplookup.query
 
+import kotlin.math.floor
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.AQUA
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.BLACK
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.BLUE
@@ -32,7 +33,6 @@ import net.sharedwonder.mc.ptbridge.utils.FormattedText.LIGHT_PURPLE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.RED
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
 import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
-import kotlin.math.floor
 
 class PlayerBedWarsStats(map: Map<String, Any>?) {
     val experience: Int
