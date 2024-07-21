@@ -19,15 +19,16 @@ package net.sharedwonder.mc.hyplookup.handlers;
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
-import org.jetbrains.annotations.NotNull;
 
 public final class CLRequestLogin extends net.sharedwonder.mc.ptbridge.handlers.CLRequestLogin {
     @Override
-    public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
-        var flag = super.handle(connectionContext, in, transformed);
-        if (connectionContext.getProtocolVersion() != 47) {
+    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+        var flag = super.handle(context, in, transformed);
+        if (context.getProtocolVersion() != MINECRAFT_1_8_X_PROTOCOL_VERSION) {
             throw new RuntimeException("Protocol version is not 47 (Minecraft 1.8.x), which is not supported");
         }
         return flag;
     }
+
+    private static final int MINECRAFT_1_8_X_PROTOCOL_VERSION = 47;
 }

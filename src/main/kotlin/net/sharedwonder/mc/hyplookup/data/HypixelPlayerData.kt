@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.command
+package net.sharedwonder.mc.hyplookup.data
 
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
-
-object JvmGCCommand : Command {
-    override val expressions: Array<String> = arrayOf("jvm-gc", "gc")
-
-    override val description: String = "Runs the JVM garbage collector in the PTBridge process"
-
-    override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String? {
-        System.gc()
-        return null
-    }
-}
+sealed class HypixelPlayerData

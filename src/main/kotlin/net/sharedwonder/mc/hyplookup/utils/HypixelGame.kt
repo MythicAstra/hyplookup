@@ -18,25 +18,26 @@ package net.sharedwonder.mc.hyplookup.utils
 
 import java.text.DecimalFormat
 import net.sharedwonder.mc.hyplookup.command.CommandException
-import net.sharedwonder.mc.hyplookup.query.RealPlayerData
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.AQUA
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.BLACK
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.BLUE
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.DARK_GRAY
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.DARK_RED
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.GOLD
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.GRAY
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.GREEN
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.LIGHT_PURPLE
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.RED
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.YELLOW
+import net.sharedwonder.mc.hyplookup.data.RealPlayerData
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.AQUA
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.BLACK
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.BLUE
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.DARK_GRAY
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.DARK_RED
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.GOLD
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.GRAY
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.GREEN
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.LIGHT_PURPLE
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.RED
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.WHITE
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.YELLOW
 
 enum class HypixelGame(val gameName: String) {
     BED_WARS("Bed Wars") {
-        override fun queryStatsMessage(data: RealPlayerData, modifier: String?): String = data.stats.bedWars.run {
-            line("Level", `level-formatted-without-brackets`) +
+        override fun buildStatsMessage(data: RealPlayerData, modifier: String?): String = data.stats.bedWars.run {
+            "" +
+                line("Level", `level-formatted-without-brackets`) +
                 line("Tokens", coins) +
                 when (modifier) {
                     "solo", "1s" -> group("Solo Mode") +
@@ -116,21 +117,22 @@ enum class HypixelGame(val gameName: String) {
                 }
         }
 
-        override fun displayText(data: RealPlayerData, originalText: String): Array<String> = data.stats.bedWars.run {
+        override fun buildStatsPlayerListText(data: RealPlayerData, originalText: String): Array<String> = data.stats.bedWars.run {
             arrayOf(
                 "$`level-formatted` $originalText",
                 `core-modes win-streak`?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(`core-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(`core-modes final-kdr`),
+                getNumberColor(`core-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + MCTexts.BOLD + DECIMAL_FORMAT_1.format(`core-modes final-kdr`),
                 getNumberColor(`core-modes final-kills`, 1000, 3500, 7500, 10000, 15000, 20000, 30000) + `core-modes final-kills`,
-                getNumberColor(`core-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(`core-modes win-rate`),
+                getNumberColor(`core-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + MCTexts.BOLD + DECIMAL_FORMAT_2.format(`core-modes win-rate`),
                 getNumberColor(`core-modes wins`, 250, 500, 1000, 2000, 4000, 8000, 10000) + `core-modes wins`
             )
         }
     },
 
     SKY_WARS("Sky Wars") {
-        override fun queryStatsMessage(data: RealPlayerData, modifier: String?): String = data.stats.skyWars.run {
-            line("Level", `level-formatted-without-brackets`) +
+        override fun buildStatsMessage(data: RealPlayerData, modifier: String?): String = data.stats.skyWars.run {
+            "" +
+                line("Level", `level-formatted-without-brackets`) +
                 line("Coins", coins) +
                 line("Souls", souls) +
                 when (modifier) {
@@ -182,21 +184,21 @@ enum class HypixelGame(val gameName: String) {
                 }
         }
 
-        override fun displayText(data: RealPlayerData, originalText: String): Array<String> = data.stats.skyWars.run {
+        override fun buildStatsPlayerListText(data: RealPlayerData, originalText: String): Array<String> = data.stats.skyWars.run {
             arrayOf(
                 "$`level-formatted` $originalText",
                 `core-modes win-streak`?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(`core-modes kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + FormattedText.BOLD + DECIMAL_FORMAT_1.format(`core-modes kdr`),
+                getNumberColor(`core-modes kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + MCTexts.BOLD + DECIMAL_FORMAT_1.format(`core-modes kdr`),
                 getNumberColor(`core-modes kills`, 1000, 3500, 7500, 10000, 25000, 30000, 50000) + `core-modes kills`,
-                getNumberColor(`core-modes win-rate`, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + FormattedText.BOLD + DECIMAL_FORMAT_2.format(`core-modes win-rate`),
+                getNumberColor(`core-modes win-rate`, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + MCTexts.BOLD + DECIMAL_FORMAT_2.format(`core-modes win-rate`),
                 getNumberColor(`core-modes wins`, 100, 500, 1000, 2000, 3000, 6000, 8000) + `core-modes wins`
             )
         }
     };
 
-    abstract fun queryStatsMessage(data: RealPlayerData, modifier: String?): String
+    abstract fun buildStatsMessage(data: RealPlayerData, modifier: String?): String
 
-    abstract fun displayText(data: RealPlayerData, originalText: String): Array<String>
+    abstract fun buildStatsPlayerListText(data: RealPlayerData, originalText: String): Array<String>
 
     companion object {
         private const val UNKNOWN = "$DARK_RED?"
@@ -231,33 +233,44 @@ enum class HypixelGame(val gameName: String) {
 
         private fun entry(description: String, value: Any) = " $DARK_GRAY- $YELLOW$description: $GREEN$value\n"
 
-        private fun getNumberColor(number: Number, t1: Number, t2: Number, t3: Number, t4: Number, t5: Number, t6: Number, t7: Number): String {
-            if (number is Float || number is Double) {
-                val doubleNumber = number.toDouble()
-                return when {
-                    doubleNumber.isNaN() -> DARK_RED
-                    doubleNumber.isInfinite() -> BLACK
-                    doubleNumber < t1.toDouble() -> GRAY
-                    doubleNumber < t2.toDouble() -> WHITE
-                    doubleNumber < t3.toDouble() -> GREEN
-                    doubleNumber < t4.toDouble() -> BLUE
-                    doubleNumber < t5.toDouble() -> YELLOW
-                    doubleNumber < t6.toDouble() -> RED
-                    doubleNumber < t7.toDouble() -> LIGHT_PURPLE
-                    else -> GOLD
-                }
-            } else {
-                val longNumber = number.toLong()
-                return when {
-                    longNumber < t1.toLong() -> GRAY
-                    longNumber < t2.toLong() -> WHITE
-                    longNumber < t3.toLong() -> GREEN
-                    longNumber < t4.toLong() -> BLUE
-                    longNumber < t5.toLong() -> YELLOW
-                    longNumber < t6.toLong() -> RED
-                    longNumber < t7.toLong() -> LIGHT_PURPLE
-                    else -> GOLD
-                }
+        private fun getNumberColor(number: Double, t1: Double, t2: Double, t3: Double, t4: Double, t5: Double, t6: Double, t7: Double): String {
+            return when {
+                number.isNaN() -> DARK_RED
+                number.isInfinite() -> BLACK
+                number < t1 -> GRAY
+                number < t2 -> WHITE
+                number < t3 -> GREEN
+                number < t4 -> BLUE
+                number < t5 -> YELLOW
+                number < t6 -> RED
+                number < t7 -> LIGHT_PURPLE
+                else -> GOLD
+            }
+        }
+
+        private fun getNumberColor(number: Int, t1: Int, t2: Int, t3: Int, t4: Int, t5: Int, t6: Int, t7: Int): String {
+            return when {
+                number < t1 -> GRAY
+                number < t2 -> WHITE
+                number < t3 -> GREEN
+                number < t4 -> BLUE
+                number < t5 -> YELLOW
+                number < t6 -> RED
+                number < t7 -> LIGHT_PURPLE
+                else -> GOLD
+            }
+        }
+
+        private fun getNumberColor(number: Long, t1: Long, t2: Long, t3: Long, t4: Long, t5: Long, t6: Long, t7: Long): String {
+            return when {
+                number < t1 -> GRAY
+                number < t2 -> WHITE
+                number < t3 -> GREEN
+                number < t4 -> BLUE
+                number < t5 -> YELLOW
+                number < t6 -> RED
+                number < t7 -> LIGHT_PURPLE
+                else -> GOLD
             }
         }
     }

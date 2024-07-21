@@ -1,8 +1,8 @@
 {
     "id": "hyplookup",
     "name": "HypLookup",
-    "version": "0.1.0",
-    "description": "Query Hypixel player data and display it in the game",
-    "author": "sharedwonder (Liu Baihao)",
+    "version": "${version}",
+    "description": "Queries and displays Hypixel player data",
+    "author": "sharedwonder",
     "initializer": "net.sharedwonder.mc.hyplookup.HypLookup"
 }

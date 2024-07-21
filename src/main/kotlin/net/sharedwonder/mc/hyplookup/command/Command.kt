@@ -16,13 +16,12 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
+import net.sharedwonder.mc.hyplookup.HypLookupContext
 
 interface Command {
     val expressions: Array<String>
 
     val description: String
 
-    fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String?
+    fun run(hypLookupContext: HypLookupContext, args: List<String>): String?
 }

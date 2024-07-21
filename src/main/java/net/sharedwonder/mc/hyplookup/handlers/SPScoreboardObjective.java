@@ -17,14 +17,14 @@
 package net.sharedwonder.mc.hyplookup.handlers;
 
 import io.netty.buffer.ByteBuf;
-import net.sharedwonder.mc.hyplookup.utils.Constants;
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
+import net.sharedwonder.mc.hyplookup.Constants;
+import net.sharedwonder.mc.hyplookup.HypLookupContext;
+import net.sharedwonder.mc.hyplookup.utils.HypixelGame;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
-import net.sharedwonder.mc.ptbridge.utils.TextUtils;
-import org.jetbrains.annotations.NotNull;
+import net.sharedwonder.mc.ptbridge.utils.MCTexts;
 
 public final class SPScoreboardObjective implements S2CPacketHandler {
     @Override
@@ -33,19 +33,22 @@ public final class SPScoreboardObjective implements S2CPacketHandler {
     }
 
     @Override
-    public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
-        var hypLookupContext = connectionContext.getExternalContext(HypLookupContext.class);
+    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+        var hypLookupContext = context.getExternalContext(HypLookupContext.class);
 
         var name = PacketUtils.readUtf8String(in);
         var action = in.readByte();
 
-        if (action == 0 || action == 2) {
-            var title = TextUtils.toPlaintext(PacketUtils.readUtf8String(in));
+        if (action == Constants.SCOREBOARD_ADD || action == Constants.SCOREBOARD_UPDATE) {
+            var title = MCTexts.toPlaintext(PacketUtils.readUtf8String(in));
             hypLookupContext.scoreboardObjectives.put(name, title);
-            if (name.equals(hypLookupContext.scoreboard.getSidebar())) {
-                hypLookupContext.detectGame(title);
+            if (name.equals(hypLookupContext.sidebarScoreboardName)) {
+                hypLookupContext.currentGame = HypixelGame.getByScoreboardTitle(title);
+                if (hypLookupContext.currentGame == null) {
+                    hypLookupContext.stopDisplayingStats();
+                }
             }
-        } else if (action == 1) {
+        } else if (action == Constants.SCOREBOARD_REMOVE) {
             hypLookupContext.scoreboardObjectives.remove(name);
         }
 

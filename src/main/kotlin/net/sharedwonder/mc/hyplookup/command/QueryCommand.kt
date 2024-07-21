@@ -16,40 +16,40 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.query.MojangAPI
-import net.sharedwonder.mc.hyplookup.query.RealPlayerData
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
+import net.sharedwonder.mc.hyplookup.HypLookupContext
+import net.sharedwonder.mc.hyplookup.data.RealPlayerData
 import net.sharedwonder.mc.hyplookup.utils.HypixelGame
-import net.sharedwonder.mc.hyplookup.utils.PlayerDataCaches
-import net.sharedwonder.mc.ptbridge.ConnectionContext
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
+import net.sharedwonder.mc.hyplookup.utils.MojangAPI
+import net.sharedwonder.mc.hyplookup.utils.PlayerDataFetcher
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
 import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
 import org.apache.logging.log4j.LogManager
 
 object QueryCommand : Command {
     override val expressions: Array<String> = arrayOf("query", "q")
 
-    override val description: String = "Queries the data of a player in the Hypixel"
+    override val description: String = "Queries a player's stats in the Hypixel"
 
     private val LOGGER = LogManager.getLogger(QueryCommand::class.java)
 
-    override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String {
-        val player = args.getOrElse(0) { connectionContext.playerUsername }.let { if (it == ".") connectionContext.playerUsername else it }
-        val game = if (args.size > 1) HypixelGame.getByName(args[1]) else hypLookupContext.detectedGame
+    override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
+        val clientPlayerName = hypLookupContext.connectionContext.playerUsername
+        val name = args.getOrElse(0) { clientPlayerName }.let { if (it == ".") clientPlayerName else it }
+        val game = if (args.size > 1) HypixelGame.getByName(args[1]) else hypLookupContext.currentGame
         if (game == null) {
             throw CommandException("Unsupported/unknown game")
         }
         val modifier = if (args.size > 2) args[2] else null
 
-        val (name, uuid) = try {
-            MojangAPI.queryPlayerProfile(player)
+        val (_, uuid) = try {
+            MojangAPI.fetchPlayerProfile(name)
         } catch (exception: RuntimeException) {
-            LOGGER.warn("Failed to query player profile: $player", exception)
-            throw CommandException("Failed to query player profile: $player")
-        } ?: throw CommandException("Player not found: $player")
+            LOGGER.warn(exception)
+            throw CommandException(exception.message)
+        } ?: throw CommandException("Player not found: $name")
 
-        val data = PlayerDataCaches.queryPlayerData(name, uuid, 5) ?: throw CommandException("Failed to query player data: $name/${UUIDUtils.uuidToString(uuid)}")
-        return "${FormattedText.YELLOW}${game.gameName}${FormattedText.RESET} stats of ${FormattedText.GREEN}$name${FormattedText.RESET}:\n" +
-            game.queryStatsMessage(data as RealPlayerData, modifier)
+        val data = PlayerDataFetcher.fetch(uuid, name, attempts = 5) ?: throw CommandException("Failed to query the player's stats: $name/${UUIDUtils.uuidToString(uuid)}")
+
+        return "${MCTexts.GREEN}$name${MCTexts.RESET}'s ${MCTexts.YELLOW}${game.gameName}${MCTexts.RESET} stats:\n${game.buildStatsMessage(data as RealPlayerData, modifier)}"
     }
 }

@@ -18,13 +18,12 @@ package net.sharedwonder.mc.hyplookup.handlers;
 
 import java.util.HashSet;
 import io.netty.buffer.ByteBuf;
-import net.sharedwonder.mc.hyplookup.utils.Constants;
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
+import net.sharedwonder.mc.hyplookup.Constants;
+import net.sharedwonder.mc.hyplookup.HypLookupContext;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
-import org.jetbrains.annotations.NotNull;
 
 public final class SPUpdateTeam implements S2CPacketHandler {
     @Override
@@ -33,13 +32,13 @@ public final class SPUpdateTeam implements S2CPacketHandler {
     }
 
     @Override
-    public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
-        var hypLookupContext = connectionContext.getExternalContext(HypLookupContext.class);
+    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+        var hypLookupContext = context.getExternalContext(HypLookupContext.class);
 
         var teamName = PacketUtils.readUtf8String(in);
         var action = in.readByte();
 
-        if (action == 0 || action == 2) {
+        if (action == Constants.TEAM_CREATE_AND_ADD_PLAYER || action == Constants.TEAM_CREATE) {
             PacketUtils.skipChunk(in);
             hypLookupContext.teamPrefix.put(teamName, PacketUtils.readUtf8String(in));
             hypLookupContext.teamPostfix.put(teamName, PacketUtils.readUtf8String(in));
@@ -50,35 +49,7 @@ public final class SPUpdateTeam implements S2CPacketHandler {
             hypLookupContext.teamToPlayers.computeIfAbsent(teamName, key -> new HashSet<>());
         }
 
-        if (action == 2) {
-            hypLookupContext.playerListDisplay.update();
-        }
-
-        if (action == 0 || action == 3) {
-            var count = PacketUtils.readVarint(in);
-            for (var counter = 0; counter < count; ++counter) {
-                var playerName = PacketUtils.readUtf8String(in);
-
-                hypLookupContext.playerToTeam.put(playerName, teamName);
-                hypLookupContext.teamToPlayers.get(teamName).add(playerName);
-            }
-
-            hypLookupContext.playerListDisplay.update();
-        }
-
-        if (action == 4) {
-            var count = PacketUtils.readVarint(in);
-            for (var counter = 0; counter < count; ++counter) {
-                var playerName = PacketUtils.readUtf8String(in);
-
-                hypLookupContext.playerToTeam.remove(playerName);
-                hypLookupContext.teamToPlayers.get(teamName).remove(playerName);
-            }
-
-            hypLookupContext.playerListDisplay.update();
-        }
-
-        if (action == 1) {
+        if (action == Constants.TEAM_REMOVE) {
             hypLookupContext.teamPrefix.remove(teamName);
             hypLookupContext.teamPostfix.remove(teamName);
 
@@ -86,9 +57,29 @@ public final class SPUpdateTeam implements S2CPacketHandler {
                 hypLookupContext.playerToTeam.remove(playerName);
             }
             hypLookupContext.teamToPlayers.remove(teamName);
-
-            hypLookupContext.playerListDisplay.update();
         }
+
+        if (action == Constants.TEAM_CREATE_AND_ADD_PLAYER || action == Constants.TEAM_ADD_PLAYER) {
+            var count = PacketUtils.readVarint(in);
+            for (var counter = 0; counter < count; ++counter) {
+                var playerName = PacketUtils.readUtf8String(in);
+
+                hypLookupContext.playerToTeam.put(playerName, teamName);
+                hypLookupContext.teamToPlayers.get(teamName).add(playerName);
+            }
+        }
+
+        if (action == Constants.TEAM_REMOVE_PLAYER) {
+            var count = PacketUtils.readVarint(in);
+            for (var counter = 0; counter < count; ++counter) {
+                var playerName = PacketUtils.readUtf8String(in);
+
+                hypLookupContext.playerToTeam.remove(playerName);
+                hypLookupContext.teamToPlayers.get(teamName).remove(playerName);
+            }
+        }
+
+        hypLookupContext.updateDisplaying();
 
         return HandledFlag.PASSED;
     }

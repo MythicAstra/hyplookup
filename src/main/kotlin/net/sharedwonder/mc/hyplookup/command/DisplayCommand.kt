@@ -16,16 +16,15 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
+import net.sharedwonder.mc.hyplookup.HypLookupContext
 
 object DisplayCommand : Command {
     override val expressions: Array<String> = arrayOf("display", "d")
 
-    override val description: String = "Displays player stats in the player list"
+    override val description: String = "Starts displaying player stats in the player list"
 
-    override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String {
-        hypLookupContext.playerListDisplay.startOverwriting()
-        return "Started to display player stats in the player list."
+    override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
+        hypLookupContext.startDisplayingStats()
+        return "Started displaying player stats in the player list."
     }
 }

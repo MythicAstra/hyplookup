@@ -16,26 +16,35 @@
 
 @file:JvmName("Constants")
 
-package net.sharedwonder.mc.hyplookup.utils
+package net.sharedwonder.mc.hyplookup
 
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
 
 const val PID_CP_SEND_CHAT_MESSAGE: Int = 0x1
-
 const val PID_SP_UPDATE_CHAT_MESSAGE: Int = 0x2
-
 const val PID_SP_CHANGE_HELD_ITEM: Int = 0x9
-
 const val PID_SP_UPDATE_PLAYER_LIST: Int = 0x38
-
 const val PID_SP_SCOREBOARD_OBJECTIVE: Int = 0x3b
-
 const val PID_SP_DISPLAY_SCOREBOARD: Int = 0x3d
-
 const val PID_SP_UPDATE_TEAM: Int = 0x3e
 
 const val COMMAND_PREFIX: Char = '/'
-
 const val CHAT_MESSAGE_ID: Int = 1
 
-const val HYPLOOKUP_MESSAGE_PREFIX: String = "${FormattedText.BLUE}[HypLookup]${FormattedText.RESET} "
+const val PLAYER_LIST_ADD_PLAYER: Int = 0
+const val PLAYER_LIST_UPDATE_DISPLAY_NAME: Int = 3
+const val PLAYER_LIST_REMOVE_PLAYER: Int = 4
+
+const val TEAM_CREATE_AND_ADD_PLAYER: Int = 0
+const val TEAM_REMOVE: Int = 1
+const val TEAM_CREATE: Int = 2
+const val TEAM_ADD_PLAYER: Int = 3
+const val TEAM_REMOVE_PLAYER: Int = 4
+
+const val SIDEBAR_SCOREBOARD: Int = 1
+
+const val SCOREBOARD_ADD: Int = 0
+const val SCOREBOARD_REMOVE: Int = 1
+const val SCOREBOARD_UPDATE: Int = 2
+
+const val HYPLOOKUP_MESSAGE_PREFIX: String = "${MCTexts.BLUE}[HypLookup]${MCTexts.RESET} "

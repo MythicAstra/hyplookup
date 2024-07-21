@@ -16,16 +16,18 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
+import net.sharedwonder.mc.hyplookup.HypLookupContext
+import net.sharedwonder.mc.hyplookup.utils.PlayerDataFetcher
 
 object UpdateCommand : Command {
     override val expressions: Array<String> = arrayOf("update", "u", "up")
 
     override val description: String = "Clears cache to update player data"
 
-    override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String {
-        hypLookupContext.playerListDisplay.fullUpdate()
-        return "Cache has been cleared, player data will be updated."
+    override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
+        PlayerDataFetcher.cache.clear()
+        hypLookupContext.updateDisplaying()
+
+        return "Cache has been cleared, all player data will be updated."
     }
 }

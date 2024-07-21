@@ -16,50 +16,98 @@
 
 package net.sharedwonder.mc.hyplookup.handlers;
 
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import com.google.gson.stream.JsonReader;
 import io.netty.buffer.ByteBuf;
-import net.sharedwonder.mc.hyplookup.utils.Constants;
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
+import io.netty.buffer.ByteBufInputStream;
+import net.sharedwonder.mc.hyplookup.Constants;
+import net.sharedwonder.mc.hyplookup.HypLookup;
+import net.sharedwonder.mc.hyplookup.HypLookupContext;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
-import net.sharedwonder.mc.ptbridge.utils.GsonInstance;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class SPUpdateChatMessage implements S2CPacketHandler {
+    private final @Nullable String joinedGameMessage = HypLookup.CONFIG.getHypixelJoinedGameMessage();
+
+    private final @Nullable String rejectedGameMessage = HypLookup.CONFIG.getHypixelRejoinedGameMessage();
+
     @Override
     public int getId() {
         return Constants.PID_SP_UPDATE_CHAT_MESSAGE;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
-        var hypLookupContext = connectionContext.getExternalContext(HypLookupContext.class);
-        var message = PacketUtils.readUtf8String(in);
-        var deserialized = (Map<String, Object>) GsonInstance.getGson().fromJson(message, Map.class);
-        if (hypLookupContext.getDetectedGame() == null) {
+    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+        var hypLookupContext = context.getExternalContext(HypLookupContext.class);
+        if (hypLookupContext.currentGame == null) {
             return HandledFlag.PASSED;
         }
 
-        if (deserialized.containsKey("extra")) {
-            var extra = (List<Map<String, Object>>) deserialized.get("extra");
+        var size = PacketUtils.readVarint(in);
+        try (var reader = new JsonReader(new InputStreamReader(new ByteBufInputStream(in, size), StandardCharsets.UTF_8))) {
+            reader.beginObject();
             var flag = false;
-            if (extra.size() > 4) {
-                var string = (String) extra.get(4).get("text");
-                flag = string.startsWith(" has joined") || string.startsWith("加入了游戏");
-            } else if (extra.size() > 1) {
-                var string = (String) extra.get(1).get("text");
-                flag = string.startsWith("reconnected") || string.startsWith("重新连接");
+            while (reader.hasNext()) {
+                if (reader.nextName().equals("extra")) {
+                    reader.beginArray();
+                    flag = check(reader);
+                    break;
+                }
+                reader.skipValue();
             }
 
             if (flag) {
-                hypLookupContext.playerListDisplay.startOverwriting();
+                hypLookupContext.startDisplayingStats();
             }
+        } catch (Exception ignored) {
         }
 
         return HandledFlag.PASSED;
+    }
+
+    private boolean check(JsonReader reader) throws IOException {
+        var index = 0;
+        while (reader.hasNext()) {
+            if (index > 4) {
+                return false;
+            }
+
+            if (index == 1) {
+                if (checkMessage(reader, rejectedGameMessage, "reconnected", "重新连接")) {
+                    return true;
+                }
+            } else if (index == 4) {
+                if (checkMessage(reader, joinedGameMessage, "has joined", "加入了游戏")) {
+                    return true;
+                }
+            } else {
+                reader.skipValue();
+            }
+
+            ++index;
+        }
+        return false;
+    }
+
+    private static boolean checkMessage(JsonReader reader, @Nullable String custom, String en, String zh) throws IOException {
+        reader.beginObject();
+        while (reader.hasNext()) {
+            if (!reader.nextName().equals("text")) {
+                reader.skipValue();
+                continue;
+            }
+
+            var message = reader.nextString();
+            if (custom != null ? message.contains(custom) : message.contains(en) || message.contains(zh)) {
+                return true;
+            }
+        }
+        reader.endObject();
+        return false;
     }
 }

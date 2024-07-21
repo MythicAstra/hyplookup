@@ -14,17 +14,29 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.utils
+package net.sharedwonder.mc.hyplookup
 
 import com.google.gson.annotations.SerializedName
+import net.sharedwonder.mc.ptbridge.config.Config
+import net.sharedwonder.mc.ptbridge.config.ConfigFileType
 
-class HypLookupConfig(
+@Config(name = "hyplookup", type = ConfigFileType.JSON)
+class HypLookupConfig {
     @SerializedName("hypixel-api-base-url")
-    val hypixelApiBaseUrl: String?,
+    val hypixelApiBaseUrl: String = "https://api.hypixel.net/v2"
 
     @SerializedName("hypixel-api-key")
-    val hypixelApiKey: String?,
+    val hypixelApiKey: String? = null
 
     @SerializedName("hypixel-api-user-agent")
-    val hypixelApiUserAgent: String?
-)
+    val hypixelApiUserAgent: String? = null
+
+    @SerializedName("hypixel-joined-game-message")
+    val hypixelJoinedGameMessage: String? = null
+
+    @SerializedName("hypixel-rejoined-game-message")
+    val hypixelRejoinedGameMessage: String? = null
+
+    @SerializedName("player-data-cache-limit")
+    val playerDataCacheLimit: Int = 300
+}

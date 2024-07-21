@@ -16,21 +16,19 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
-import net.sharedwonder.mc.ptbridge.utils.TextUtils
+import net.sharedwonder.mc.hyplookup.HypLookupContext
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
 
 object HelpCommand : Command {
     override val expressions: Array<String> = arrayOf("help", "h")
 
     override val description: String = "Shows the help of HypLookup commands"
 
-    override fun run(connectionContext: ConnectionContext, hypLookupContext: HypLookupContext, args: List<String>): String {
+    override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
         val table = ArrayList<Array<String>>()
         for (command in CommandParser.COMMANDS) {
-            table.add(arrayOf(command.expressions.joinToString("${FormattedText.GRAY}/${FormattedText.AQUA}", FormattedText.AQUA), FormattedText.YELLOW + command.description))
+            table.add(arrayOf(command.expressions.joinToString("${MCTexts.GRAY}/${MCTexts.AQUA}", MCTexts.AQUA), MCTexts.YELLOW + command.description))
         }
-        return "Help:\n" + TextUtils.alignTextTable(table, "${FormattedText.DARK_GRAY} - ").joinToString("\n")
+        return "Help:\n" + MCTexts.alignTextTable(table, "${MCTexts.DARK_GRAY} - ").joinToString("\n")
     }
 }

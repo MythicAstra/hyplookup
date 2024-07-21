@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.query
+package net.sharedwonder.mc.hyplookup.data
 
 class PlayerStats(
     val bedWars: PlayerBedWarsStats,

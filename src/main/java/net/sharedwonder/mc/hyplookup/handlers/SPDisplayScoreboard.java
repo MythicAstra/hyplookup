@@ -17,13 +17,13 @@
 package net.sharedwonder.mc.hyplookup.handlers;
 
 import io.netty.buffer.ByteBuf;
-import net.sharedwonder.mc.hyplookup.utils.Constants;
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext;
+import net.sharedwonder.mc.hyplookup.Constants;
+import net.sharedwonder.mc.hyplookup.HypLookupContext;
+import net.sharedwonder.mc.hyplookup.utils.HypixelGame;
 import net.sharedwonder.mc.ptbridge.ConnectionContext;
 import net.sharedwonder.mc.ptbridge.packet.HandledFlag;
 import net.sharedwonder.mc.ptbridge.packet.PacketUtils;
 import net.sharedwonder.mc.ptbridge.packet.S2CPacketHandler;
-import org.jetbrains.annotations.NotNull;
 
 public final class SPDisplayScoreboard implements S2CPacketHandler {
     @Override
@@ -32,22 +32,20 @@ public final class SPDisplayScoreboard implements S2CPacketHandler {
     }
 
     @Override
-    public @NotNull HandledFlag handle(@NotNull ConnectionContext connectionContext, @NotNull ByteBuf in, @NotNull ByteBuf transformed) {
-        var hypLookupContext = connectionContext.getExternalContext(HypLookupContext.class);
+    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+        var hypLookupContext = context.getExternalContext(HypLookupContext.class);
 
         var position = in.readByte();
         var objectiveName = PacketUtils.readUtf8String(in);
 
-        if (objectiveName.isEmpty()) {
-            hypLookupContext.scoreboard.set(position, null);
-        } else {
-            hypLookupContext.scoreboard.set(position, objectiveName);
-        }
-
-        if (position == 1) {
+        if (position == Constants.SIDEBAR_SCOREBOARD) {
+            hypLookupContext.sidebarScoreboardName = objectiveName;
             var title = hypLookupContext.scoreboardObjectives.get(objectiveName);
             if (title != null) {
-                hypLookupContext.detectGame(title);
+                hypLookupContext.currentGame = HypixelGame.getByScoreboardTitle(title);
+                if (hypLookupContext.currentGame == null) {
+                    hypLookupContext.stopDisplayingStats();
+                }
             }
         }
 

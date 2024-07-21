@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.query
+package net.sharedwonder.mc.hyplookup.utils
 
+import com.google.gson.Gson
 import com.google.gson.JsonObject
-import net.sharedwonder.mc.ptbridge.utils.GSON
-import net.sharedwonder.mc.ptbridge.utils.HTTPRequestUtils
+import net.sharedwonder.mc.ptbridge.http.HTTPRequestUtils
 import net.sharedwonder.mc.ptbridge.utils.PlayerProfile
 import net.sharedwonder.mc.ptbridge.utils.UUIDUtils
 
 object MojangAPI {
-    fun queryPlayerProfile(name: String): PlayerProfile? {
-        val json = GSON.fromJson(HTTPRequestUtils.request("https://api.mojang.com/users/profiles/minecraft/$name", "GET")
+    private val GSON = Gson()
+
+    fun fetchPlayerProfile(name: String): PlayerProfile? {
+        val json = GSON.fromJson(HTTPRequestUtils.request("https://api.mojang.com/users/profiles/minecraft/$name")
             .ifErrorResponse {
                 return null
             }.ifInterruptedByException {
-                throw buildException("Failed to query UUID for $name")
+                throw buildException("Failed to fetch the player profile: $name")
             }.response.contentAsUtf8String, JsonObject::class.java)
         return PlayerProfile(json["name"].asString, UUIDUtils.stringToUuid(json["id"].asString))
     }

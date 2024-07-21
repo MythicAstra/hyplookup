@@ -16,13 +16,11 @@
 
 package net.sharedwonder.mc.hyplookup.command
 
-import net.sharedwonder.mc.hyplookup.utils.HYPLOOKUP_MESSAGE_PREFIX
-import net.sharedwonder.mc.hyplookup.utils.HypLookupContext
-import net.sharedwonder.mc.ptbridge.ConnectionContext
-import net.sharedwonder.mc.ptbridge.utils.FormattedText
-import net.sharedwonder.mc.ptbridge.utils.TextUtils
+import net.sharedwonder.mc.hyplookup.HYPLOOKUP_MESSAGE_PREFIX
+import net.sharedwonder.mc.hyplookup.HypLookupContext
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
 
-class CommandParser(private val connectionContext: ConnectionContext, input: String) {
+class CommandParser(val input: String, private val hypLookupContext: HypLookupContext) {
     val isMatched: Boolean
 
     private val commandLine: String
@@ -57,14 +55,13 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
             val args = splitCommandLine(commandLine)
             val command = if (commandLine.isNotBlank()) EXPRESSION_TO_COMMAND[args[0]] else HelpCommand
             if (command != null) {
-                val hypLookupContext = connectionContext.getExternalContext(HypLookupContext::class.java)
-                val responseText = command.run(connectionContext, hypLookupContext, args.drop(1)) ?: return null
-                TextUtils.serialize(HYPLOOKUP_MESSAGE_PREFIX + responseText)
+                val responseText = command.run(hypLookupContext, args.drop(1)) ?: return null
+                MCTexts.serialize(HYPLOOKUP_MESSAGE_PREFIX + responseText)
             } else {
-                TextUtils.serialize("$HYPLOOKUP_MESSAGE_PREFIX${FormattedText.RED}Unknown command: ${args[0]}")
+                MCTexts.serialize("$HYPLOOKUP_MESSAGE_PREFIX${MCTexts.RED}Unknown command: ${args[0]}")
             }
         } catch (exception: CommandException) {
-            TextUtils.serialize(HYPLOOKUP_MESSAGE_PREFIX + FormattedText.RED + exception.message)
+            MCTexts.serialize(HYPLOOKUP_MESSAGE_PREFIX + MCTexts.RED + (exception.message ?: "Unknown error"))
         }
     }
 
@@ -128,9 +125,10 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
 
         @JvmField val COMMANDS: MutableList<Command> = ArrayList()
 
-        @JvmField val EXPRESSION_TO_COMMAND: MutableMap<String, Command> = HashMap()
+        private val EXPRESSION_TO_COMMAND: MutableMap<String, Command> = HashMap()
 
-        private fun registerCommand(command: Command) {
+        @JvmStatic
+        fun registerCommand(command: Command) {
             COMMANDS.add(command)
             command.expressions.forEach {
                 EXPRESSION_TO_COMMAND.compute(it) { key, value ->
@@ -146,7 +144,6 @@ class CommandParser(private val connectionContext: ConnectionContext, input: Str
             registerCommand(QueryCommand)
             registerCommand(DisplayCommand)
             registerCommand(UpdateCommand)
-            registerCommand(JvmGCCommand)
         }
     }
 }

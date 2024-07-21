@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.query
+package net.sharedwonder.mc.hyplookup.data
 
-import net.sharedwonder.mc.ptbridge.utils.FormattedText.WHITE
-import net.sharedwonder.mc.ptbridge.utils.TextUtils
+import net.sharedwonder.mc.ptbridge.utils.MCTexts
+import net.sharedwonder.mc.ptbridge.utils.MCTexts.WHITE
 
 class PlayerSkyWarsStats(map: Map<String, Any>?) {
     val experience: Int
@@ -161,8 +161,8 @@ class PlayerSkyWarsStats(map: Map<String, Any>?) {
             ?: (`level-formatted-without-brackets`.take(2) + '[' + `level-formatted-without-brackets`.drop(2) + ']')
         `level-formatted-without-ornament` = `level-formatted`.dropLast(2) + `level-formatted`.take(2) + ']'
         `level-formatted-simple` = `level-formatted-without-brackets`
-            .dropLast(if (`level-formatted-without-brackets`.dropLast(2).matches(TextUtils.FORMATTING_REGEX)) 3 else 1)
-            .let { if (it.dropLast(2).matches(TextUtils.FORMATTING_REGEX)) it.dropLast(2) else it }
+            .dropLast(if (MCTexts.isFormattedText(`level-formatted-without-brackets`.dropLast(2))) 3 else 1)
+            .let { if (MCTexts.isFormattedText(it.dropLast(2))) it.dropLast(2) else it }
         coins = getIntOrZero("coins")
         souls = getIntOrZero("souls")
 

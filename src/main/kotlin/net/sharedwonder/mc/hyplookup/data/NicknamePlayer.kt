@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.mc.hyplookup.query
+package net.sharedwonder.mc.hyplookup.data
 
-sealed class HypixelPlayerData
+data object NicknamePlayer : HypixelPlayerData()
