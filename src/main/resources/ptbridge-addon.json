@@ -1,8 +1,0 @@
-{
-    "id": "hyplookup",
-    "name": "HypLookup",
-    "version": "${version}",
-    "description": "Queries and displays Hypixel player data",
-    "author": "sharedwonder",
-    "initializer": "net.sharedwonder.mc.hyplookup.HypLookup"
-}

@@ -3,25 +3,24 @@ plugins {
     kotlin("jvm") version "2.0.0"
 }
 
-val GITHUB_REPO_URL = "https://github.com/sharedwonder/hyplookup"
-val GITHUB_PKG_URL = "https://maven.pkg.github.com/sharedwonder/maven-repository"
+val REPO_URL = "https://github.com/sharedwonder/hyplookup"
+val PKG_URL = "https://maven.pkg.github.com/sharedwonder/maven-repository"
 
-group = "net.sharedwonder.mc"
+group = "net.sharedwonder"
 version = property("version").toString()
 
 repositories {
     mavenLocal()
     mavenCentral()
-    maven(GITHUB_PKG_URL)
+    maven(PKG_URL)
 }
 
 dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
-    implementation(platform("io.netty:netty-bom:4.1.111.Final"))
-    implementation("io.netty:netty-buffer")
-    implementation("net.sharedwonder.mc:ptbridge:0.1.0")
+    implementation("io.netty:netty-buffer:4.1.112.Final")
+    implementation("net.sharedwonder:lightproxy:0.1.0")
     implementation("org.apache.logging.log4j:log4j-api:2.23.1")
-    compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
@@ -44,7 +43,7 @@ publishing {
             pom {
                 name = project.name
                 description = project.description
-                url = GITHUB_REPO_URL
+                url = REPO_URL
 
                 licenses {
                     license {
@@ -62,9 +61,9 @@ publishing {
                 }
 
                 scm {
-                    connection = "scm:git:$GITHUB_REPO_URL.git"
-                    developerConnection = "scm:git:$GITHUB_REPO_URL.git"
-                    url = GITHUB_REPO_URL
+                    connection = "scm:git:$REPO_URL.git"
+                    developerConnection = "scm:git:$REPO_URL.git"
+                    url = REPO_URL
                 }
             }
         }
@@ -72,7 +71,7 @@ publishing {
 
     repositories {
         mavenLocal()
-        maven(GITHUB_PKG_URL) {
+        maven(PKG_URL) {
             name = "GitHubPackages"
             credentials {
                 username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
@@ -87,7 +86,7 @@ tasks.withType<JavaCompile> {
 }
 
 tasks.processResources {
-    filesMatching("ptbridge-addon.json") {
+    filesMatching("lightproxy-addon.json") {
         expand("version" to version)
     }
 }
