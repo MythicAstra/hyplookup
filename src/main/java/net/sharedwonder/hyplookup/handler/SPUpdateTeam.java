@@ -79,7 +79,7 @@ public final class SPUpdateTeam implements S2CPacketHandler {
             }
         }
 
-        hypLookupContext.updateDisplaying();
+        hypLookupContext.updatePlayerList();
 
         return HandledFlag.PASSED;
     }

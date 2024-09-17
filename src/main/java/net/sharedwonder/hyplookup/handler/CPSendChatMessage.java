@@ -45,7 +45,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
                     LOGGER.info(() -> context.getPlayerUsername() + " issued a HypLookup command: " + message);
                 }
                 try {
-                    hypLookupContext.runCommand(parser);
+                    hypLookupContext.submitCommand(parser);
                 } catch (IllegalStateException exception) {
                     LOGGER.error("Failed to run HypLookup command: " + message, exception);
                 }

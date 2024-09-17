@@ -16,16 +16,16 @@
 
 package net.sharedwonder.hyplookup.data
 
-class RealNamePlayer(
+class PlayerData(
     val firstLogin: Long,
     val lastLogin: Long,
     val lastLogout: Long,
     val userLanguage: String,
     val achievementPoints: Int,
     val stats: PlayerStats
-) : HypixelPlayerData() {
+): Player {
     companion object {
-        fun build(map: Map<String, *>): RealNamePlayer = RealNamePlayer(
+        fun build(map: Map<String, *>): PlayerData = PlayerData(
             (map["firstLogin"] as Number?)?.toLong() ?: 0,
             (map["lastLogin"] as Number?)?.toLong() ?: 0,
             (map["lastLogout"] as Number?)?.toLong() ?: 0,

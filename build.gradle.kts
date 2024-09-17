@@ -1,10 +1,12 @@
 plugins {
+    java
     `maven-publish`
-    kotlin("jvm") version "2.0.0"
+    signing
+    kotlin("jvm") version "2.0.20"
 }
 
-val REPO_URL = "https://github.com/sharedwonder/hyplookup"
-val PKG_URL = "https://maven.pkg.github.com/sharedwonder/maven-repository"
+val repoUri = "https://github.com/sharedwonder/hyplookup"
+val pkgUri = "https://maven.pkg.github.com/sharedwonder/maven-repository"
 
 group = "net.sharedwonder"
 version = property("version").toString()
@@ -12,18 +14,19 @@ version = property("version").toString()
 repositories {
     mavenLocal()
     mavenCentral()
-    maven(PKG_URL)
+    maven(pkgUri)
 }
 
 dependencies {
+    implementation("net.sharedwonder:lightproxy:0.1.0")
+
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("io.netty:netty-buffer:4.1.112.Final")
-    implementation("net.sharedwonder:lightproxy:0.1.0")
-    implementation("org.apache.logging.log4j:log4j-api:2.23.1")
+    implementation("org.apache.logging.log4j:log4j-api:2.24.0")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
 }
 
 java {
@@ -36,14 +39,25 @@ kotlin {
 }
 
 publishing {
+    repositories {
+        mavenLocal()
+        maven(pkgUri) {
+            name = "GitHubPackages"
+            credentials {
+                username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+                password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
     publications {
-        create<MavenPublication>("maven") {
+        register<MavenPublication>("maven") {
             from(components["java"])
 
             pom {
                 name = project.name
                 description = project.description
-                url = REPO_URL
+                url = repoUri
 
                 licenses {
                     license {
@@ -61,24 +75,17 @@ publishing {
                 }
 
                 scm {
-                    connection = "scm:git:$REPO_URL.git"
-                    developerConnection = "scm:git:$REPO_URL.git"
-                    url = REPO_URL
+                    connection = "scm:git:$repoUri.git"
+                    developerConnection = "scm:git:$repoUri.git"
+                    url = repoUri
                 }
             }
         }
     }
+}
 
-    repositories {
-        mavenLocal()
-        maven(PKG_URL) {
-            name = "GitHubPackages"
-            credentials {
-                username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-                password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
+signing {
+    sign(publishing.publications["maven"])
 }
 
 tasks.withType<JavaCompile> {

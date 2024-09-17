@@ -18,48 +18,36 @@ package net.sharedwonder.hyplookup.command
 
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.LinkedBlockingQueue
-import io.netty.buffer.Unpooled
-import net.sharedwonder.hyplookup.CHAT_MESSAGE_ID
-import net.sharedwonder.hyplookup.PID_SP_UPDATE_CHAT_MESSAGE
-import net.sharedwonder.lightproxy.ConnectionContext
-import net.sharedwonder.lightproxy.packet.PacketUtils
+import net.sharedwonder.hyplookup.HypLookupContext
 import org.apache.logging.log4j.LogManager
 
-class CommandRunner(private val connectionContext: ConnectionContext) : Thread("HYPL-CommandRunner") {
-    val commandQueue: BlockingQueue<CommandParser> = LinkedBlockingQueue()
+class CommandRunner(private val hypLookupContext: HypLookupContext) : Thread("HYPL-CommandRunner") {
+    private val queue: BlockingQueue<CommandParser> = LinkedBlockingQueue()
+
+    fun offerCommand(parser: CommandParser) {
+        queue.add(parser)
+    }
 
     override fun run() {
         while (!isInterrupted) {
             val parser = try {
-                commandQueue.take()
+                queue.take()
             } catch (exception: InterruptedException) {
                 return
             }
-            try {
-                val response = parser.run() ?: return
-                val bytes = response.toByteArray()
-
-                if (isInterrupted) {
-                    return
-                }
-
-                val size = PacketUtils.calcVarintSize(bytes.size) + bytes.size + 2
-                val packet = Unpooled.buffer(size + PacketUtils.VARINT_MAX_SIZE)
-                PacketUtils.writeVarint(packet, size)
-                PacketUtils.writeVarint(packet, PID_SP_UPDATE_CHAT_MESSAGE)
-                PacketUtils.writeByteArray(packet, bytes)
-                packet.writeByte(CHAT_MESSAGE_ID)
-
-                if (isInterrupted) {
-                    return
-                }
-
-                connectionContext.sendToClient(packet)
+            val message = try {
+                parser.run()
             } catch (exception: Throwable) {
-                logger.error("An error occurred while processing user command (issued by ${connectionContext.playerUsername}): " + parser.input, exception)
+                logger.error("An error occurred while processing user command (issued by ${hypLookupContext.connectionContext.playerUsername}): " + parser.input, exception)
+                continue
+            }
+            if (message != null) {
+                hypLookupContext.printMessageToChat(message)
             }
         }
     }
-}
 
-private val logger = LogManager.getLogger(CommandRunner::class.java)
+    companion object {
+        private val logger = LogManager.getLogger(CommandRunner::class.java)
+    }
+}

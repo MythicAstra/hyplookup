@@ -17,7 +17,7 @@
 package net.sharedwonder.hyplookup.command
 
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.lightproxy.util.MCText
+import net.sharedwonder.hyplookup.util.MCText
 
 object HelpCommand : Command {
     override val expressions: Array<String> = arrayOf("help", "h")
@@ -25,6 +25,10 @@ object HelpCommand : Command {
     override val description: String = "Shows the help of HypLookup commands"
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
+        if (args.isNotEmpty()) {
+            throw CommandException("Too many arguments")
+        }
+
         val table = ArrayList<Array<String>>()
         for (command in CommandParser.commands) {
             table.add(arrayOf(command.expressions.joinToString("${MCText.GRAY}/${MCText.AQUA}", MCText.AQUA), MCText.YELLOW + command.description))

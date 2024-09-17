@@ -17,7 +17,7 @@
 package net.sharedwonder.hyplookup.command
 
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.hyplookup.util.PlayerDataFetcher
+import net.sharedwonder.hyplookup.PlayerDataFetcher
 
 object UpdateCommand : Command {
     override val expressions: Array<String> = arrayOf("update", "u", "up")
@@ -25,9 +25,13 @@ object UpdateCommand : Command {
     override val description: String = "Clears cache to update player data"
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
-        PlayerDataFetcher.clearCache()
-        hypLookupContext.updateDisplaying()
+        if (args.isNotEmpty()) {
+            throw CommandException("Too many arguments")
+        }
 
-        return "Cache has been cleared, all player data will be updated."
+        PlayerDataFetcher.clearCache()
+        hypLookupContext.updatePlayerList()
+
+        return "Updating player data..."
     }
 }

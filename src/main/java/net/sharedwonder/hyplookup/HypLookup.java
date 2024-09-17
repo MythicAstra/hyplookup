@@ -21,7 +21,7 @@ import net.sharedwonder.hyplookup.handler.CPSendChatMessage;
 import net.sharedwonder.hyplookup.handler.SPChangeHeldItem;
 import net.sharedwonder.hyplookup.handler.SPDisplayScoreboard;
 import net.sharedwonder.hyplookup.handler.SPScoreboardObjective;
-import net.sharedwonder.hyplookup.handler.SPUpdateChatMessage;
+import net.sharedwonder.hyplookup.handler.SPUpdateMessage;
 import net.sharedwonder.hyplookup.handler.SPUpdatePlayerList;
 import net.sharedwonder.hyplookup.handler.SPUpdateTeam;
 import net.sharedwonder.lightproxy.addon.AddonInitializer;
@@ -42,7 +42,7 @@ public final class HypLookup implements AddonInitializer {
 
         registerHandler(C2S_LOGIN_PACKET_HANDLERS, new CLRequestLogin());
         registerHandler(C2S_PLAY_PACKET_HANDLERS, new CPSendChatMessage());
-        registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPUpdateChatMessage());
+        registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPUpdateMessage());
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPChangeHeldItem());
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPUpdatePlayerList());
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPScoreboardObjective());

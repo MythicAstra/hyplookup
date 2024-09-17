@@ -16,18 +16,14 @@
 
 package net.sharedwonder.hyplookup.data
 
-import net.sharedwonder.lightproxy.util.MCText
+import net.sharedwonder.hyplookup.util.MCText
 
 class PlayerSkyWarsStats(map: Map<String, *>?) {
     val experience: Int
 
-    val `level-formatted`: String
+    val `formatted-level`: String
 
-    val `level-formatted-without-brackets`: String
-
-    val `level-formatted-without-ornament`: String
-
-    val `level-formatted-simple`: String
+    val `formatted-level-without-brackets`: String
 
     val coins: Int
 
@@ -155,13 +151,9 @@ class PlayerSkyWarsStats(map: Map<String, *>?) {
         fun getStringOrNull(key: String) = map?.get(key) as String?
 
         experience = getIntOrZero("skywars_experience")
-        `level-formatted-without-brackets` = getStringOrNull("levelFormatted") ?: "${MCText.GRAY}1⋆"
-        `level-formatted` = getStringOrNull("levelFormattedWithBrackets")?.dropLast(1)
-            ?: (`level-formatted-without-brackets`.take(2) + '[' + `level-formatted-without-brackets`.drop(2) + ']')
-        `level-formatted-without-ornament` = `level-formatted`.dropLast(2) + `level-formatted`.take(2) + ']'
-        `level-formatted-simple` = `level-formatted-without-brackets`
-            .dropLast(if (MCText.isFormattedText(`level-formatted-without-brackets`.dropLast(2))) 3 else 1)
-            .let { if (MCText.isFormattedText(it.dropLast(2))) it.dropLast(2) else it }
+        `formatted-level-without-brackets` = getStringOrNull("levelFormatted") ?: "${MCText.GRAY}1⋆"
+        `formatted-level` = (getStringOrNull("levelFormattedWithBrackets")?.substringBefore(']')
+            ?: (`formatted-level-without-brackets`.take(2) + '[' + `formatted-level-without-brackets`.drop(2))) + ']'
         coins = getIntOrZero("coins")
         souls = getIntOrZero("souls")
 

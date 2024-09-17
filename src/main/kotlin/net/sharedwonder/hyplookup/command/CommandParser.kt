@@ -16,9 +16,8 @@
 
 package net.sharedwonder.hyplookup.command
 
-import net.sharedwonder.hyplookup.HYPLOOKUP_MESSAGE_PREFIX
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.lightproxy.util.MCText
+import net.sharedwonder.hyplookup.util.MCText
 
 class CommandParser(val input: String, private val hypLookupContext: HypLookupContext) {
     val isMatched: Boolean
@@ -56,12 +55,12 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
             val command = if (commandLine.isNotBlank()) expressions[args[0]] else HelpCommand
             if (command != null) {
                 val responseText = command.run(hypLookupContext, args.drop(1)) ?: return null
-                MCText.serialize(HYPLOOKUP_MESSAGE_PREFIX + responseText)
+                responseText
             } else {
-                MCText.serialize("$HYPLOOKUP_MESSAGE_PREFIX${MCText.RED}Unknown command: ${args[0]}")
+                "${MCText.RED}Unknown command: ${args[0]}"
             }
         } catch (exception: CommandException) {
-            MCText.serialize(HYPLOOKUP_MESSAGE_PREFIX + MCText.RED + (exception.message ?: "Unknown error"))
+            MCText.RED + (exception.message ?: "Unknown error while executing command")
         }
     }
 
@@ -143,6 +142,7 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
             registerCommand(HelpCommand)
             registerCommand(QueryCommand)
             registerCommand(DisplayCommand)
+            registerCommand(StopCommand)
             registerCommand(UpdateCommand)
         }
     }

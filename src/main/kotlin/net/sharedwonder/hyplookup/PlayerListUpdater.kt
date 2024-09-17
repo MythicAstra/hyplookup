@@ -14,67 +14,52 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.hyplookup.util
+package net.sharedwonder.hyplookup
 
 import java.util.UUID
 import java.util.concurrent.Executors
-import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.SynchronousQueue
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
-import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.hyplookup.PID_SP_UPDATE_PLAYER_LIST
-import net.sharedwonder.hyplookup.PLAYER_LIST_UPDATE_DISPLAY_NAME
-import net.sharedwonder.hyplookup.data.RealNamePlayer
+import net.sharedwonder.hyplookup.data.PlayerData
+import net.sharedwonder.hyplookup.util.MCText
 import net.sharedwonder.lightproxy.packet.PacketUtils
-import net.sharedwonder.lightproxy.util.MCText
 import org.apache.logging.log4j.LogManager
 
 class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-PlayerListUpdater") {
-    private val updatingLock = ReentrantLock()
+    private val updatingSync = SynchronousQueue<Any>()
 
-    private val needUpdate = updatingLock.newCondition()
+    private val continuingSync = SynchronousQueue<Any>()
 
-    private val continuingLock = ReentrantLock()
-
-    private val canContinue = continuingLock.newCondition()
+    private val none = Any()
 
     @Volatile
-    private var needUpdateBool = true
+    private var needUpdate = true
 
     @Volatile
-    private var canContinueBool = true
+    private var canContinue = true
 
-    private var queryingThreadExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2)
+    private var queryingThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()
 
     fun triggerUpdating() {
-        needUpdateBool = true
+        needUpdate = true
         continueUpdating()
-        updatingLock.lock()
-        try {
-            needUpdate.signal()
-        } finally {
-            updatingLock.unlock()
-        }
+        updatingSync.offer(none)
     }
 
     override fun run() {
         try {
             while (!isInterrupted) {
-                if (needUpdateBool) {
-                    needUpdateBool = false
+                if (needUpdate) {
+                    needUpdate = false
                     update()
                     continue
                 }
 
-                updatingLock.lock()
                 try {
-                    if (!needUpdateBool) {
-                        needUpdate.await()
-                    }
+                    updatingSync.take()
                 } catch (exception: InterruptedException) {
                     return
-                } finally {
-                    updatingLock.unlock()
                 }
             }
         } finally {
@@ -83,20 +68,15 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
     }
 
     private fun continueUpdating() {
-        canContinueBool = true
-        continuingLock.lock()
-        try {
-            canContinue.signal()
-        } finally {
-            continuingLock.unlock()
-        }
+        canContinue = true
+        continuingSync.offer(none)
     }
 
     private fun update() {
         try {
             var players = ArrayList<Pair<UUID, String>>(hypLookupContext.players.size)
             for ((uuid, name) in hypLookupContext.players) {
-                if (isInterrupted || needUpdateBool) {
+                if (isInterrupted || needUpdate) {
                     return
                 }
 
@@ -104,20 +84,20 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
                 PlayerDataFetcher.fetch(uuid, name, queryingThreadExecutor) { continueUpdating() }
             }
 
-            if (isInterrupted || needUpdateBool) {
+            if (isInterrupted || needUpdate) {
                 return
             }
 
             val uuids = ArrayList<UUID>(players.size)
             val table = ArrayList<Array<String>>(players.size)
 
-            while (players.isNotEmpty() && !isInterrupted && !needUpdateBool) {
-                canContinueBool = false
+            while (players.isNotEmpty() && !isInterrupted && !needUpdate) {
+                canContinue = false
 
                 val next = ArrayList<Pair<UUID, String>>(players.size)
 
                 for ((uuid, name) in players) {
-                    if (isInterrupted || needUpdateBool) {
+                    if (isInterrupted || needUpdate) {
                         return
                     }
 
@@ -134,33 +114,28 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
                     }
                 }
 
-                if (isInterrupted || needUpdateBool) {
+                if (isInterrupted || needUpdate) {
                     return
                 }
 
                 val packet = buildPacket(uuids, table)
 
-                if (isInterrupted || needUpdateBool) {
+                if (isInterrupted || needUpdate) {
                     return
                 }
 
                 hypLookupContext.connectionContext.sendToClient(packet)
                 players = next
 
-                if (canContinueBool) {
+                if (canContinue) {
                     continue
                 }
 
-                continuingLock.lock()
                 try {
-                    if (!canContinueBool) {
-                        canContinue.await()
-                    }
+                    continuingSync.take()
                 } catch (exception: InterruptedException) {
                     interrupt()
                     return
-                } finally {
-                    continuingLock.unlock()
                 }
             }
         } catch (exception: Throwable) {
@@ -175,15 +150,15 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
         val namePrefix = hypLookupContext.playerToTeam[name]?.let { hypLookupContext.teamPrefix[it] } ?: ""
         val namePostfix = hypLookupContext.playerToTeam[name]?.let { hypLookupContext.teamPostfix[it] } ?: ""
 
-        val originalText = "${MCText.RESET}$namePrefix$name$namePostfix"
-        return if (playerData is RealNamePlayer) {
-            checkNotNull(hypLookupContext.currentGame).buildStatsPlayerListText(playerData, originalText)
+        val originalText = "$namePrefix$name$namePostfix"
+        return if (playerData is PlayerData) {
+            checkNotNull(hypLookupContext.currentGame).buildShortStatsText(playerData, originalText)
         } else {
-            arrayOf("${MCText.DARK_RED}${MCText.BOLD}NICK $originalText")
+            arrayOf("${MCText.DARK_RED}${MCText.BOLD}NICK ${MCText.RESET}$originalText")
         }
     }
 
-    private fun buildPacket(uuids: ArrayList<UUID>, table: ArrayList<Array<String>>): ByteBuf {
+    private fun buildPacket(uuids: List<UUID>, table: List<Array<String>>): ByteBuf {
         val chunk = Unpooled.buffer()
         chunk.writeByte(PLAYER_LIST_UPDATE_DISPLAY_NAME)
         PacketUtils.writeVarint(chunk, uuids.size)
@@ -203,6 +178,8 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
         chunk.release()
         return packet
     }
-}
 
-private val logger = LogManager.getLogger(PlayerListUpdater::class.java)
+    companion object {
+        private val logger = LogManager.getLogger(PlayerListUpdater::class.java)
+    }
+}

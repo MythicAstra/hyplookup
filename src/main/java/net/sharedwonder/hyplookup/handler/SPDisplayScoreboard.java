@@ -19,7 +19,6 @@ package net.sharedwonder.hyplookup.handler;
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.hyplookup.Constants;
 import net.sharedwonder.hyplookup.HypLookupContext;
-import net.sharedwonder.hyplookup.util.HypixelGame;
 import net.sharedwonder.lightproxy.ConnectionContext;
 import net.sharedwonder.lightproxy.packet.HandledFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
@@ -42,10 +41,7 @@ public final class SPDisplayScoreboard implements S2CPacketHandler {
             hypLookupContext.sidebarScoreboardName = objectiveName;
             var title = hypLookupContext.scoreboardObjectives.get(objectiveName);
             if (title != null) {
-                hypLookupContext.currentGame = HypixelGame.getByScoreboardTitle(title);
-                if (hypLookupContext.currentGame == null) {
-                    hypLookupContext.stopDisplayingStats();
-                }
+                hypLookupContext.whenScoreboardTitleUpdates(title);
             }
         }
 

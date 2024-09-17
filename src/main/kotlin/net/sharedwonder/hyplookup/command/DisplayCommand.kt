@@ -17,6 +17,7 @@
 package net.sharedwonder.hyplookup.command
 
 import net.sharedwonder.hyplookup.HypLookupContext
+import net.sharedwonder.hyplookup.util.GameType
 
 object DisplayCommand : Command {
     override val expressions: Array<String> = arrayOf("display", "d")
@@ -24,7 +25,17 @@ object DisplayCommand : Command {
     override val description: String = "Starts displaying player stats in the player list"
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
-        hypLookupContext.startDisplayingStats()
-        return "Started displaying player stats in the player list."
+        val gameType = when (args.size) {
+            0 -> hypLookupContext.currentGame
+            1 -> GameType.getById(args[0])
+            else -> throw CommandException("Too many arguments")
+        }
+
+        if (gameType == null) {
+            throw CommandException("Unsupported/unknown game")
+        }
+
+        hypLookupContext.userTriggeredDisplayingStats(gameType)
+        return "Started displaying player stats (game: ${gameType.gameName}) in the player list"
     }
 }

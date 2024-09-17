@@ -19,12 +19,11 @@ package net.sharedwonder.hyplookup.handler;
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.hyplookup.Constants;
 import net.sharedwonder.hyplookup.HypLookupContext;
-import net.sharedwonder.hyplookup.util.HypixelGame;
+import net.sharedwonder.hyplookup.util.MCText;
 import net.sharedwonder.lightproxy.ConnectionContext;
 import net.sharedwonder.lightproxy.packet.HandledFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
 import net.sharedwonder.lightproxy.packet.S2CPacketHandler;
-import net.sharedwonder.lightproxy.util.MCText;
 
 public final class SPScoreboardObjective implements S2CPacketHandler {
     @Override
@@ -43,10 +42,7 @@ public final class SPScoreboardObjective implements S2CPacketHandler {
             var title = MCText.toPlaintext(PacketUtils.readUtf8String(in));
             hypLookupContext.scoreboardObjectives.put(name, title);
             if (name.equals(hypLookupContext.sidebarScoreboardName)) {
-                hypLookupContext.currentGame = HypixelGame.getByScoreboardTitle(title);
-                if (hypLookupContext.currentGame == null) {
-                    hypLookupContext.stopDisplayingStats();
-                }
+                hypLookupContext.whenScoreboardTitleUpdates(title);
             }
         } else if (action == Constants.SCOREBOARD_REMOVE) {
             hypLookupContext.scoreboardObjectives.remove(name);

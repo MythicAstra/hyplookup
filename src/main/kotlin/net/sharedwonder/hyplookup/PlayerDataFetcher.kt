@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.hyplookup.util
+package net.sharedwonder.hyplookup
 
 import java.io.IOException
-import java.io.Serial
 import java.net.SocketTimeoutException
 import java.util.Collections
 import java.util.Timer
@@ -26,18 +25,17 @@ import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.locks.ReentrantLock
 import java.util.function.Consumer
-import net.sharedwonder.hyplookup.HypLookup
-import net.sharedwonder.hyplookup.data.HypixelPlayerData
-import net.sharedwonder.lightproxy.util.UUIDUtils
+import net.sharedwonder.hyplookup.data.Player
+import net.sharedwonder.hyplookup.util.HypixelAPI
+import net.sharedwonder.lightproxy.util.UuidUtils
 import org.apache.logging.log4j.LogManager
 
 object PlayerDataFetcher {
     private val logger = LogManager.getLogger(PlayerDataFetcher::class.java)
 
-    private val cache: MutableMap<UUID, HypixelPlayerData> = Collections.synchronizedMap(object : LinkedHashMap<UUID, HypixelPlayerData>() {
-        @Serial private val serialVersionUID: Long = -984844544700582720L
-
-        override fun removeEldestEntry(eldest: Map.Entry<UUID, HypixelPlayerData>): Boolean = size > cacheLimit
+    @Suppress("serial")
+    private val cache = Collections.synchronizedMap(object : LinkedHashMap<UUID, Player>() {
+        override fun removeEldestEntry(eldest: Map.Entry<UUID, Player>): Boolean = size > cacheLimit
     })
 
     private val cacheLimit = HypLookup.CONFIG.playerDataCacheLimit
@@ -51,22 +49,14 @@ object PlayerDataFetcher {
     private var throttling = false
 
     @JvmStatic
-    fun fetch(uuid: UUID, name: String, attempts: Int): HypixelPlayerData? {
-        cache[uuid]?.also { return it }
+    fun fetch(uuid: UUID, name: String): Player? {
+        cache[uuid]?.let { return it }
 
-        for (counter in 0..<attempts) {
-            val (error, data) = fetch(uuid, name)
-            if (data != null) {
-                return data
-            } else if (error) {
-                return null
-            }
-        }
-        return null
+        return fetchImpl(uuid, name).first
     }
 
     @JvmStatic
-    fun fetch(uuid: UUID, name: String, executor: Executor, consumer: Consumer<HypixelPlayerData>) {
+    fun fetch(uuid: UUID, name: String, executor: Executor, consumer: Consumer<Player>) {
         if (cache.containsKey(uuid)) {
             return
         }
@@ -80,7 +70,7 @@ object PlayerDataFetcher {
 
         executor.execute {
             try {
-                while (!Thread.currentThread().isInterrupted) {
+                while (true) {
                     if (throttling) {
                         throttlingLock.lock()
                         try {
@@ -93,15 +83,16 @@ object PlayerDataFetcher {
                             throttlingLock.unlock()
                         }
                     }
-                    val (failed, data) = fetch(uuid, name)
+                    val (data, retry) = fetchImpl(uuid, name)
                     if (data != null) {
                         try {
                             consumer.accept(data)
                         } catch (exception: Throwable) {
-                            logger.error("An error occurred while consuming Hypixel player data: $name/${UUIDUtils.uuidToString(uuid)}", exception)
+                            logger.error("An error occurred while consuming Hypixel player data: $name/${UuidUtils.uuidToString(uuid)}", exception)
                         }
-                        break
-                    } else if (failed) {
+                        return@execute
+                    }
+                    if (!retry || Thread.currentThread().isInterrupted) {
                         return@execute
                     }
                 }
@@ -114,47 +105,57 @@ object PlayerDataFetcher {
     }
 
     @JvmStatic
-    fun getCached(uuid: UUID): HypixelPlayerData? = cache[uuid]
+    fun hasCached(uuid: UUID): Boolean = cache.containsKey(uuid)
+
+    @JvmStatic
+    fun getCached(uuid: UUID): Player? = cache[uuid]
 
     @JvmStatic
     fun clearCache() {
         cache.clear()
     }
 
-    private fun fetch(uuid: UUID, name: String): Pair<Boolean, HypixelPlayerData?> {
+    private fun fetchImpl(uuid: UUID, name: String): Pair<Player?, Boolean> {
         try {
-            return Pair(false, HypixelAPI.fetchPlayerData(uuid).also { cache[uuid] = it })
+            return Pair(HypixelAPI.fetchPlayerData(uuid).also { cache[uuid] = it }, false)
         } catch (exception: SocketTimeoutException) {
-            logger.warn("Timeout when fetching Hypixel player data: $name/${UUIDUtils.uuidToString(uuid)}")
+            logger.warn("Timeout when fetching Hypixel player data: $name/${UuidUtils.uuidToString(uuid)}")
+            return Pair(null, true)
         } catch (exception: IOException) {
-            logger.warn("An IO exception thrown while fetching Hypixel player data: $name/${UUIDUtils.uuidToString(uuid)}", exception)
+            logger.warn("An IO exception thrown while fetching Hypixel player data: $name/${UuidUtils.uuidToString(uuid)}", exception)
+            return Pair(null, true)
+        } catch (exception: InterruptedException) {
+            return Pair(null, false)
         } catch (exception: HypixelAPI.ThrottlingException) {
-            if (!throttling) {
-                synchronized(this) {
-                    if (throttling) {
-                        return Pair(true, null)
-                    }
-                    throttling = true
-                }
-
-                Timer().schedule(object : TimerTask() {
-                    override fun run() {
-                        throttling = false
-                        throttlingLock.lock()
-                        try {
-                            throttlingEnded.signalAll()
-                        } finally {
-                            throttlingLock.unlock()
-                        }
-                    }
-                }, HypLookup.CONFIG.hypixelApiThrottlingTimeout)
-                logger.warn("Hypixel API rate limit exceeded")
-            }
-            return Pair(true, null)
+            throttle()
+            return Pair(null, false)
         } catch (exception: Throwable) {
-            logger.error("An error occurred while fetching Hypixel player data: $name/${UUIDUtils.uuidToString(uuid)}", exception)
-            return Pair(true, null)
+            logger.error("An error occurred while fetching Hypixel player data: $name/${UuidUtils.uuidToString(uuid)}", exception)
+            return Pair(null, false)
         }
-        return Pair(false, null)
+    }
+
+    private fun throttle() {
+        if (!throttling) {
+            synchronized(this) {
+                if (throttling) {
+                    return
+                }
+                throttling = true
+            }
+
+            Timer().schedule(object : TimerTask() {
+                override fun run() {
+                    throttling = false
+                    throttlingLock.lock()
+                    try {
+                        throttlingEnded.signalAll()
+                    } finally {
+                        throttlingLock.unlock()
+                    }
+                }
+            }, HypLookup.CONFIG.hypixelApiThrottlingTimeout)
+            logger.warn("Hypixel API rate limit exceeded")
+        }
     }
 }

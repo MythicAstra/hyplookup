@@ -16,4 +16,6 @@
 
 package net.sharedwonder.hyplookup.data
 
-sealed class HypixelPlayerData
+sealed interface Player {
+    data object None : Player
+}

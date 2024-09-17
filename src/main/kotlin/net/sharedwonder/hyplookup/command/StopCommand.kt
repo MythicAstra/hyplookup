@@ -14,6 +14,17 @@
  * limitations under the License.
  */
 
-package net.sharedwonder.hyplookup.data
+package net.sharedwonder.hyplookup.command
 
-data object NicknamePlayer : HypixelPlayerData()
+import net.sharedwonder.hyplookup.HypLookupContext
+
+object StopCommand : Command {
+    override val expressions: Array<String> = arrayOf("stop", "s")
+
+    override val description: String = "Starts displaying player stats in the player list"
+
+    override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
+        hypLookupContext.stopDisplayingStats()
+        return "Stopped displaying player stats in the player list"
+    }
+}

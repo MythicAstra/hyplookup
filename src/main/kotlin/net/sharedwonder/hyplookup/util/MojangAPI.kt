@@ -16,43 +16,42 @@
 
 package net.sharedwonder.hyplookup.util
 
-import java.io.IOException
-import java.io.StringReader
+import java.net.URI
+import java.net.http.HttpRequest
 import java.util.UUID
-import com.google.gson.stream.JsonReader
-import net.sharedwonder.lightproxy.http.HTTPRequestUtils
+import net.sharedwonder.lightproxy.http.HttpUtils
+import net.sharedwonder.lightproxy.util.JsonParser
 import net.sharedwonder.lightproxy.util.PlayerProfile
-import net.sharedwonder.lightproxy.util.UUIDUtils
+import net.sharedwonder.lightproxy.util.UuidUtils
 
 object MojangAPI {
+    @JvmStatic
     fun fetchPlayerProfile(name: String): PlayerProfile? {
-        val json = HTTPRequestUtils.request("https://api.mojang.com/users/profiles/minecraft/$name")
-            .ifErrorResponse {
-                return null
-            }.ifInterruptedByException {
+        val json = HttpUtils.request(HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/$name")).build())
+            .whenFailedByException {
                 throw buildException("Failed to fetch the player profile: $name")
-            }.response.contentAsUtf8String
+            }.isErrorResponse {
+                return null
+            }.asResponse.contentAsUtf8String!!
 
-        var uuid: UUID? = null
-
-        try {
-            JsonReader(StringReader(json)).use {
-                it.beginObject()
-                while (it.hasNext()) {
-                    when (it.nextName()) {
-                        "id" -> uuid = UUIDUtils.stringToUuid(it.nextString())
-                        else -> it.skipValue()
+        val uuid: UUID? = try {
+            JsonParser(json).nextObject {
+                while (hasNext()) {
+                    if (nextName() == "id") {
+                        return@nextObject UuidUtils.stringToUuid(nextString())
                     }
+                    skipValue()
                 }
-                it.endObject()
+                null
             }
-        } catch (exception: IOException) {
-            // StringReader never throws IOException (before closing)
-            throw AssertionError()
         } catch (exception: IllegalStateException) {
-            throw RuntimeException("Cannot parse the response: $json", exception)
+            throw RuntimeException("Failed to fetch the player profile, invalid response: $json", exception)
         }
 
-        return uuid?.let { PlayerProfile(name, it) } ?: throw RuntimeException("Cannot parse the response: $json")
+        if (uuid == null) {
+            throw RuntimeException("Failed to fetch the player profile, missing the player UUID: $json")
+        }
+
+        return PlayerProfile(name, uuid)
     }
 }

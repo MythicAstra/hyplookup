@@ -17,37 +17,37 @@
 package net.sharedwonder.hyplookup.data
 
 import kotlin.math.floor
-import net.sharedwonder.lightproxy.util.MCText.AQUA
-import net.sharedwonder.lightproxy.util.MCText.BLACK
-import net.sharedwonder.lightproxy.util.MCText.BLUE
-import net.sharedwonder.lightproxy.util.MCText.DARK_AQUA
-import net.sharedwonder.lightproxy.util.MCText.DARK_BLUE
-import net.sharedwonder.lightproxy.util.MCText.DARK_GRAY
-import net.sharedwonder.lightproxy.util.MCText.DARK_GREEN
-import net.sharedwonder.lightproxy.util.MCText.DARK_PURPLE
-import net.sharedwonder.lightproxy.util.MCText.DARK_RED
-import net.sharedwonder.lightproxy.util.MCText.GOLD
-import net.sharedwonder.lightproxy.util.MCText.GRAY
-import net.sharedwonder.lightproxy.util.MCText.GREEN
-import net.sharedwonder.lightproxy.util.MCText.LIGHT_PURPLE
-import net.sharedwonder.lightproxy.util.MCText.RED
-import net.sharedwonder.lightproxy.util.MCText.WHITE
-import net.sharedwonder.lightproxy.util.MCText.YELLOW
+import net.sharedwonder.hyplookup.util.MCText.AQUA
+import net.sharedwonder.hyplookup.util.MCText.BLACK
+import net.sharedwonder.hyplookup.util.MCText.BLUE
+import net.sharedwonder.hyplookup.util.MCText.DARK_AQUA
+import net.sharedwonder.hyplookup.util.MCText.DARK_BLUE
+import net.sharedwonder.hyplookup.util.MCText.DARK_GRAY
+import net.sharedwonder.hyplookup.util.MCText.DARK_GREEN
+import net.sharedwonder.hyplookup.util.MCText.DARK_PURPLE
+import net.sharedwonder.hyplookup.util.MCText.DARK_RED
+import net.sharedwonder.hyplookup.util.MCText.GOLD
+import net.sharedwonder.hyplookup.util.MCText.GRAY
+import net.sharedwonder.hyplookup.util.MCText.GREEN
+import net.sharedwonder.hyplookup.util.MCText.LIGHT_PURPLE
+import net.sharedwonder.hyplookup.util.MCText.RED
+import net.sharedwonder.hyplookup.util.MCText.WHITE
+import net.sharedwonder.hyplookup.util.MCText.YELLOW
 
 class PlayerBedWarsStats(map: Map<String, *>?) {
     val experience: Int
 
     val level: Double
 
-    val `level-rounded`: Int
+    val `rounded-level`: Int
 
-    val `level-formatted`: String
+    val `formatted-level`: String
 
-    val `level-formatted-without-brackets`: String
+    val `formatted-level-without-brackets`: String
 
-    val `level-formatted-without-ornament`: String
+    val `formatted-level-without-decoration`: String
 
-    val `level-formatted-simple`: String
+    val `colored-level`: String
 
     val coins: Int
 
@@ -309,11 +309,11 @@ class PlayerBedWarsStats(map: Map<String, *>?) {
 
         experience = getIntOrZero("Experience")
         level = calculateLevel(experience)
-        `level-rounded` = calculateLevel(experience).toInt()
-        `level-formatted` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = true)
-        `level-formatted-without-brackets` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = true)
-        `level-formatted-without-ornament` = formatLevel(`level-rounded`, includeBrackets = true, includeOrnament = false)
-        `level-formatted-simple` = formatLevel(`level-rounded`, includeBrackets = false, includeOrnament = false)
+        `rounded-level` = calculateLevel(experience).toInt()
+        `formatted-level` = formatLevel(`rounded-level`, includeBrackets = true, includeDecoration = true)
+        `formatted-level-without-brackets` = formatLevel(`rounded-level`, includeBrackets = false, includeDecoration = true)
+        `formatted-level-without-decoration` = formatLevel(`rounded-level`, includeBrackets = true, includeDecoration = false)
+        `colored-level` = formatLevel(`rounded-level`, includeBrackets = false, includeDecoration = false)
         coins = getIntOrZero("coins")
 
         `solo-mode win-streak` = getIntOrNull("eight_one_winstreak")
@@ -452,13 +452,13 @@ class PlayerBedWarsStats(map: Map<String, *>?) {
     }
 }
 
-private const val LEVEL_ORNAMENT_1 = "✫"
+private const val LEVEL_DECORATION_1 = '✫'
 
-private const val LEVEL_ORNAMENT_2 = "✪"
+private const val LEVEL_DECORATION_2 = '✪'
 
-private const val LEVEL_ORNAMENT_3 = "⚝"
+private const val LEVEL_DECORATION_3 = '⚝'
 
-private const val LEVEL_ORNAMENT_4 = "✥"
+private const val LEVEL_DECORATION_4 = '✥'
 
 private fun calculateLevel(experience: Int): Double {
     val x = 100 * floor(experience.toDouble() / 487000)
@@ -472,93 +472,93 @@ private fun calculateLevel(experience: Int): Double {
     }
 }
 
-private fun formatLevel(level: Int, includeBrackets: Boolean, includeOrnament: Boolean): String {
+private fun formatLevel(level: Int, includeBrackets: Boolean, includeDecoration: Boolean): String {
     return when {
-        level <= 99 -> format0To999Level(level, includeBrackets, includeOrnament, GRAY)
-        level <= 199 -> format0To999Level(level, includeBrackets, includeOrnament, WHITE)
-        level <= 299 -> format0To999Level(level, includeBrackets, includeOrnament, GOLD)
-        level <= 399 -> format0To999Level(level, includeBrackets, includeOrnament, AQUA)
-        level <= 499 -> format0To999Level(level, includeBrackets, includeOrnament, DARK_GREEN)
-        level <= 599 -> format0To999Level(level, includeBrackets, includeOrnament, DARK_AQUA)
-        level <= 699 -> format0To999Level(level, includeBrackets, includeOrnament, DARK_RED)
-        level <= 799 -> format0To999Level(level, includeBrackets, includeOrnament, LIGHT_PURPLE)
-        level <= 899 -> format0To999Level(level, includeBrackets, includeOrnament, BLUE)
-        level <= 999 -> format0To999Level(level, includeBrackets, includeOrnament, DARK_PURPLE)
-        level <= 1099 -> formatThousandLevel(level, includeBrackets, includeOrnament, LEVEL_ORNAMENT_1, RED, GOLD, YELLOW, GREEN, AQUA, LIGHT_PURPLE, DARK_PURPLE)
+        level <= 99 -> format0To999Level(level, includeBrackets, includeDecoration, GRAY)
+        level <= 199 -> format0To999Level(level, includeBrackets, includeDecoration, WHITE)
+        level <= 299 -> format0To999Level(level, includeBrackets, includeDecoration, GOLD)
+        level <= 399 -> format0To999Level(level, includeBrackets, includeDecoration, AQUA)
+        level <= 499 -> format0To999Level(level, includeBrackets, includeDecoration, DARK_GREEN)
+        level <= 599 -> format0To999Level(level, includeBrackets, includeDecoration, DARK_AQUA)
+        level <= 699 -> format0To999Level(level, includeBrackets, includeDecoration, DARK_RED)
+        level <= 799 -> format0To999Level(level, includeBrackets, includeDecoration, LIGHT_PURPLE)
+        level <= 899 -> format0To999Level(level, includeBrackets, includeDecoration, BLUE)
+        level <= 999 -> format0To999Level(level, includeBrackets, includeDecoration, DARK_PURPLE)
+        level <= 1099 -> formatThousandLevel(level, includeBrackets, includeDecoration, LEVEL_DECORATION_1, RED, GOLD, YELLOW, GREEN, AQUA, LIGHT_PURPLE, DARK_PURPLE)
 
-        level <= 1199 -> format1100To1999Level(level, includeBrackets, includeOrnament, WHITE, GRAY)
-        level <= 1299 -> format1100To1999Level(level, includeBrackets, includeOrnament, YELLOW, GOLD)
-        level <= 1399 -> format1100To1999Level(level, includeBrackets, includeOrnament, AQUA, DARK_AQUA)
-        level <= 1499 -> format1100To1999Level(level, includeBrackets, includeOrnament, GREEN, DARK_GREEN)
-        level <= 1599 -> format1100To1999Level(level, includeBrackets, includeOrnament, DARK_AQUA, BLUE)
-        level <= 1699 -> format1100To1999Level(level, includeBrackets, includeOrnament, RED, DARK_RED)
-        level <= 1799 -> format1100To1999Level(level, includeBrackets, includeOrnament, LIGHT_PURPLE, DARK_PURPLE)
-        level <= 1899 -> format1100To1999Level(level, includeBrackets, includeOrnament, BLUE, DARK_BLUE)
-        level <= 1999 -> format1100To1999Level(level, includeBrackets, includeOrnament, DARK_PURPLE, DARK_GRAY)
-        level <= 2099 -> formatThousandLevel(level, includeBrackets, includeOrnament, LEVEL_ORNAMENT_2, DARK_GRAY, GRAY, WHITE, WHITE, GRAY, GRAY, DARK_GRAY)
+        level <= 1199 -> format1100To1999Level(level, includeBrackets, includeDecoration, WHITE, GRAY)
+        level <= 1299 -> format1100To1999Level(level, includeBrackets, includeDecoration, YELLOW, GOLD)
+        level <= 1399 -> format1100To1999Level(level, includeBrackets, includeDecoration, AQUA, DARK_AQUA)
+        level <= 1499 -> format1100To1999Level(level, includeBrackets, includeDecoration, GREEN, DARK_GREEN)
+        level <= 1599 -> format1100To1999Level(level, includeBrackets, includeDecoration, DARK_AQUA, BLUE)
+        level <= 1699 -> format1100To1999Level(level, includeBrackets, includeDecoration, RED, DARK_RED)
+        level <= 1799 -> format1100To1999Level(level, includeBrackets, includeDecoration, LIGHT_PURPLE, DARK_PURPLE)
+        level <= 1899 -> format1100To1999Level(level, includeBrackets, includeDecoration, BLUE, DARK_BLUE)
+        level <= 1999 -> format1100To1999Level(level, includeBrackets, includeDecoration, DARK_PURPLE, DARK_GRAY)
+        level <= 2099 -> formatThousandLevel(level, includeBrackets, includeDecoration, LEVEL_DECORATION_2, DARK_GRAY, GRAY, WHITE, WHITE, GRAY, GRAY, DARK_GRAY)
 
-        level <= 2199 -> format2100To3099Level(level, includeBrackets, includeOrnament, WHITE, YELLOW, GOLD, GOLD, GOLD)
-        level <= 2299 -> format2100To3099Level(level, includeBrackets, includeOrnament, GOLD, WHITE, AQUA, DARK_AQUA, DARK_AQUA)
-        level <= 2399 -> format2100To3099Level(level, includeBrackets, includeOrnament, DARK_PURPLE, LIGHT_PURPLE, GOLD, YELLOW, DARK_AQUA)
-        level <= 2499 -> format2100To3099Level(level, includeBrackets, includeOrnament, AQUA, WHITE, GRAY, GRAY, DARK_GRAY)
-        level <= 2599 -> format2100To3099Level(level, includeBrackets, includeOrnament, WHITE, GREEN, DARK_GRAY, DARK_GRAY, DARK_GRAY)
-        level <= 2699 -> format2100To3099Level(level, includeBrackets, includeOrnament, DARK_RED, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
-        level <= 2799 -> format2100To3099Level(level, includeBrackets, includeOrnament, YELLOW, WHITE, DARK_GRAY, DARK_GRAY, DARK_GRAY)
-        level <= 2899 -> format2100To3099Level(level, includeBrackets, includeOrnament, GREEN, DARK_GREEN, GOLD, GOLD, YELLOW)
-        level <= 2999 -> format2100To3099Level(level, includeBrackets, includeOrnament, AQUA, DARK_AQUA, BLUE, BLUE, DARK_BLUE)
-        level <= 3099 -> format2100To3099Level(level, includeBrackets, includeOrnament, YELLOW, GOLD, RED, RED, DARK_RED)
+        level <= 2199 -> format2100To3099Level(level, includeBrackets, includeDecoration, WHITE, YELLOW, GOLD, GOLD, GOLD)
+        level <= 2299 -> format2100To3099Level(level, includeBrackets, includeDecoration, GOLD, WHITE, AQUA, DARK_AQUA, DARK_AQUA)
+        level <= 2399 -> format2100To3099Level(level, includeBrackets, includeDecoration, DARK_PURPLE, LIGHT_PURPLE, GOLD, YELLOW, DARK_AQUA)
+        level <= 2499 -> format2100To3099Level(level, includeBrackets, includeDecoration, AQUA, WHITE, GRAY, GRAY, DARK_GRAY)
+        level <= 2599 -> format2100To3099Level(level, includeBrackets, includeDecoration, WHITE, GREEN, DARK_GRAY, DARK_GRAY, DARK_GRAY)
+        level <= 2699 -> format2100To3099Level(level, includeBrackets, includeDecoration, DARK_RED, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
+        level <= 2799 -> format2100To3099Level(level, includeBrackets, includeDecoration, YELLOW, WHITE, DARK_GRAY, DARK_GRAY, DARK_GRAY)
+        level <= 2899 -> format2100To3099Level(level, includeBrackets, includeDecoration, GREEN, DARK_GREEN, GOLD, GOLD, YELLOW)
+        level <= 2999 -> format2100To3099Level(level, includeBrackets, includeDecoration, AQUA, DARK_AQUA, BLUE, BLUE, DARK_BLUE)
+        level <= 3099 -> format2100To3099Level(level, includeBrackets, includeDecoration, YELLOW, GOLD, RED, RED, DARK_RED)
 
-        level <= 3199 -> format3100To9999Level(level, includeBrackets, includeOrnament, BLUE, BLUE, AQUA, AQUA, GOLD, GOLD, YELLOW)
-        level <= 3299 -> format3100To9999Level(level, includeBrackets, includeOrnament, RED, DARK_RED, GRAY, GRAY, DARK_RED, RED, RED)
-        level <= 3399 -> format3100To9999Level(level, includeBrackets, includeOrnament, BLUE, BLUE, BLUE, LIGHT_PURPLE, RED, RED, DARK_RED)
-        level <= 3499 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_GREEN, GREEN, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE, DARK_PURPLE, DARK_GREEN)
-        level <= 3599 -> format3100To9999Level(level, includeBrackets, includeOrnament, RED, RED, DARK_RED, DARK_RED, DARK_GREEN, GREEN, GREEN)
-        level <= 3699 -> format3100To9999Level(level, includeBrackets, includeOrnament, GREEN, GREEN, GREEN, AQUA, BLUE, BLUE, DARK_BLUE)
-        level <= 3799 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_RED, DARK_RED, RED, RED, AQUA, DARK_AQUA, DARK_AQUA)
-        level <= 3899 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_BLUE, DARK_BLUE, BLUE, DARK_PURPLE, DARK_PURPLE, LIGHT_PURPLE, DARK_BLUE)
-        level <= 3999 -> format3100To9999Level(level, includeBrackets, includeOrnament, RED, RED, GREEN, GREEN, AQUA, BLUE, BLUE)
-        level <= 4099 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_PURPLE, DARK_PURPLE, RED, RED, GOLD, GOLD, YELLOW)
-        level <= 4199 -> format3100To9999Level(level, includeBrackets, includeOrnament, YELLOW, YELLOW, GOLD, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
-        level <= 4299 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_BLUE, BLUE, DARK_AQUA, AQUA, WHITE, GRAY, GRAY)
-        level <= 4399 -> format3100To9999Level(level, includeBrackets, includeOrnament, BLACK, DARK_PURPLE, DARK_GRAY, DARK_GRAY, DARK_PURPLE, DARK_PURPLE, BLACK)
-        level <= 4499 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_GREEN, DARK_GREEN, GREEN, YELLOW, GOLD, DARK_PURPLE, LIGHT_PURPLE)
-        level <= 4599 -> format3100To9999Level(level, includeBrackets, includeOrnament, WHITE, WHITE, AQUA, AQUA, DARK_AQUA, DARK_AQUA, DARK_AQUA)
-        level <= 4699 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_AQUA, AQUA, YELLOW, YELLOW, GOLD, LIGHT_PURPLE, DARK_PURPLE)
-        level <= 4799 -> format3100To9999Level(level, includeBrackets, includeOrnament, WHITE, DARK_RED, RED, RED, BLUE, DARK_BLUE, BLUE)
-        level <= 4899 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_PURPLE, DARK_PURPLE, RED, GOLD, YELLOW, AQUA, DARK_AQUA)
-        level <= 4999 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_GREEN, GREEN, WHITE, WHITE, GREEN, GREEN, DARK_GREEN)
+        level <= 3199 -> format3100To9999Level(level, includeBrackets, includeDecoration, BLUE, BLUE, AQUA, AQUA, GOLD, GOLD, YELLOW)
+        level <= 3299 -> format3100To9999Level(level, includeBrackets, includeDecoration, RED, DARK_RED, GRAY, GRAY, DARK_RED, RED, RED)
+        level <= 3399 -> format3100To9999Level(level, includeBrackets, includeDecoration, BLUE, BLUE, BLUE, LIGHT_PURPLE, RED, RED, DARK_RED)
+        level <= 3499 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_GREEN, GREEN, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE, DARK_PURPLE, DARK_GREEN)
+        level <= 3599 -> format3100To9999Level(level, includeBrackets, includeDecoration, RED, RED, DARK_RED, DARK_RED, DARK_GREEN, GREEN, GREEN)
+        level <= 3699 -> format3100To9999Level(level, includeBrackets, includeDecoration, GREEN, GREEN, GREEN, AQUA, BLUE, BLUE, DARK_BLUE)
+        level <= 3799 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_RED, DARK_RED, RED, RED, AQUA, DARK_AQUA, DARK_AQUA)
+        level <= 3899 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_BLUE, DARK_BLUE, BLUE, DARK_PURPLE, DARK_PURPLE, LIGHT_PURPLE, DARK_BLUE)
+        level <= 3999 -> format3100To9999Level(level, includeBrackets, includeDecoration, RED, RED, GREEN, GREEN, AQUA, BLUE, BLUE)
+        level <= 4099 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_PURPLE, DARK_PURPLE, RED, RED, GOLD, GOLD, YELLOW)
+        level <= 4199 -> format3100To9999Level(level, includeBrackets, includeDecoration, YELLOW, YELLOW, GOLD, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
+        level <= 4299 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_BLUE, BLUE, DARK_AQUA, AQUA, WHITE, GRAY, GRAY)
+        level <= 4399 -> format3100To9999Level(level, includeBrackets, includeDecoration, BLACK, DARK_PURPLE, DARK_GRAY, DARK_GRAY, DARK_PURPLE, DARK_PURPLE, BLACK)
+        level <= 4499 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_GREEN, DARK_GREEN, GREEN, YELLOW, GOLD, DARK_PURPLE, LIGHT_PURPLE)
+        level <= 4599 -> format3100To9999Level(level, includeBrackets, includeDecoration, WHITE, WHITE, AQUA, AQUA, DARK_AQUA, DARK_AQUA, DARK_AQUA)
+        level <= 4699 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_AQUA, AQUA, YELLOW, YELLOW, GOLD, LIGHT_PURPLE, DARK_PURPLE)
+        level <= 4799 -> format3100To9999Level(level, includeBrackets, includeDecoration, WHITE, DARK_RED, RED, RED, BLUE, DARK_BLUE, BLUE)
+        level <= 4899 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_PURPLE, DARK_PURPLE, RED, GOLD, YELLOW, AQUA, DARK_AQUA)
+        level <= 4999 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_GREEN, GREEN, WHITE, WHITE, GREEN, GREEN, DARK_GREEN)
 
-        level <= 9999 -> format3100To9999Level(level, includeBrackets, includeOrnament, DARK_RED, DARK_RED, DARK_PURPLE, BLUE, BLUE, DARK_BLUE, BLACK)
+        level <= 9999 -> format3100To9999Level(level, includeBrackets, includeDecoration, DARK_RED, DARK_RED, DARK_PURPLE, BLUE, BLUE, DARK_BLUE, BLACK)
 
         else -> {
-            val ornament = if (includeOrnament) LEVEL_ORNAMENT_4 else ""
-            if (includeBrackets) "$BLACK[$level$ornament]" else "$BLACK$level$ornament"
+            val decoration = if (includeDecoration) LEVEL_DECORATION_4 else ""
+            if (includeBrackets) "$BLACK[$level$decoration]" else "$BLACK$level$decoration"
         }
     }
 }
 
-private fun format0To999Level(level: Int, includeBrackets: Boolean, includeOrnament: Boolean, color: String): String {
-    val ornament = if (includeOrnament) LEVEL_ORNAMENT_1 else ""
-    return if (includeBrackets) "$color[$level$ornament]" else "$color$level$ornament"
+private fun format0To999Level(level: Int, includeBrackets: Boolean, includeDecoration: Boolean, color: String): String {
+    val decoration = if (includeDecoration) LEVEL_DECORATION_1 else ""
+    return if (includeBrackets) "$color[$level$decoration]" else "$color$level$decoration"
 }
 
-private fun format1100To1999Level(level: Int, includeBrackets: Boolean, includeOrnament: Boolean, levelColor: String, ornamentColor: String): String {
-    val ornament = if (includeOrnament) ornamentColor + LEVEL_ORNAMENT_2 else ""
-    return if (includeBrackets) "$GRAY[$levelColor$level$ornament$GRAY]" else "$levelColor$level$ornament"
+private fun format1100To1999Level(level: Int, includeBrackets: Boolean, includeDecoration: Boolean, levelColor: String, decorationColor: String): String {
+    val decoration = if (includeDecoration) decorationColor + LEVEL_DECORATION_2 else ""
+    return if (includeBrackets) "$GRAY[$levelColor$level$decoration$GRAY]" else "$levelColor$level$decoration"
 }
 
-private fun format2100To3099Level(level: Int, includeBrackets: Boolean, includeOrnament: Boolean, color1: String, color2: String, color3: String, color4: String,
+private fun format2100To3099Level(level: Int, includeBrackets: Boolean, includeDecoration: Boolean, color1: String, color2: String, color3: String, color4: String,
                                   color5: String): String =
-    formatThousandLevel(level, includeBrackets, includeOrnament, LEVEL_ORNAMENT_3, color1, color1, color2, color2, color3, color4, color5)
+    formatThousandLevel(level, includeBrackets, includeDecoration, LEVEL_DECORATION_3, color1, color1, color2, color2, color3, color4, color5)
 
-private fun format3100To9999Level(level: Int, includeBrackets: Boolean, includeOrnament: Boolean, color1: String, color2: String, color3: String, color4: String,
+private fun format3100To9999Level(level: Int, includeBrackets: Boolean, includeDecoration: Boolean, color1: String, color2: String, color3: String, color4: String,
                                   color5: String, color6: String, color7: String): String =
-    formatThousandLevel(level, includeBrackets, includeOrnament, LEVEL_ORNAMENT_4, color1, color2, color3, color4, color5, color6, color7)
+    formatThousandLevel(level, includeBrackets, includeDecoration, LEVEL_DECORATION_4, color1, color2, color3, color4, color5, color6, color7)
 
-private fun formatThousandLevel(level: Int, includeBrackets: Boolean, includeOrnament: Boolean, ornament: String, color1: String, color2: String, color3: String,
+private fun formatThousandLevel(level: Int, includeBrackets: Boolean, includeDecoration: Boolean, decoration: Char, color1: String, color2: String, color3: String,
                                 color4: String, color5: String, color6: String, color7: String): String {
     val levelStr = level.toString()
-    val formattedOrnament = if (includeOrnament) color6 + ornament else ""
+    val formattedDecoration = if (includeDecoration) color6 + decoration else ""
     val formattedLevel = "$color2${levelStr[0]}$color3${levelStr[1]}$color4${levelStr[2]}$color5${levelStr[3]}"
-    return if (includeBrackets) "$color1[$formattedLevel$formattedOrnament$color7]" else "$formattedLevel$formattedOrnament"
+    return if (includeBrackets) "$color1[$formattedLevel$formattedDecoration$color7]" else "$formattedLevel$formattedDecoration"
 }

@@ -17,39 +17,44 @@
 package net.sharedwonder.hyplookup.command
 
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.hyplookup.data.RealNamePlayer
-import net.sharedwonder.hyplookup.util.HypixelGame
+import net.sharedwonder.hyplookup.PlayerDataFetcher
+import net.sharedwonder.hyplookup.data.PlayerData
+import net.sharedwonder.hyplookup.util.GameType
+import net.sharedwonder.hyplookup.util.MCText
 import net.sharedwonder.hyplookup.util.MojangAPI
-import net.sharedwonder.hyplookup.util.PlayerDataFetcher
-import net.sharedwonder.lightproxy.util.MCText
-import net.sharedwonder.lightproxy.util.UUIDUtils
+import net.sharedwonder.lightproxy.util.UuidUtils
 import org.apache.logging.log4j.LogManager
 
 object QueryCommand : Command {
     override val expressions: Array<String> = arrayOf("query", "q")
 
-    override val description: String = "Queries a player's stats in the Hypixel"
+    override val description: String = "Queries player stats in the Hypixel"
 
     private val logger = LogManager.getLogger(QueryCommand::class.java)
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
-        val clientPlayerName = hypLookupContext.connectionContext.playerUsername
-        val name = args.getOrElse(0) { clientPlayerName }.let { if (it == ".") clientPlayerName else it }
-        val game = if (args.size > 1) HypixelGame.getByName(args[1]) else hypLookupContext.currentGame
+        val name = if (args.isEmpty() || args[0] == ".") hypLookupContext.connectionContext.playerUsername else args[0]
+        val game = if (args.size > 1) GameType.getById(args[1]) else hypLookupContext.currentGame
         if (game == null) {
             throw CommandException("Unsupported/unknown game")
         }
         val modifier = if (args.size > 2) args[2] else null
+        if (args.size >= 3) {
+            throw CommandException("Too many arguments")
+        }
 
         val (_, uuid) = try {
             MojangAPI.fetchPlayerProfile(name)
         } catch (exception: RuntimeException) {
-            logger.warn(exception)
             throw CommandException(exception.message)
         } ?: throw CommandException("Player not found: $name")
 
-        val data = PlayerDataFetcher.fetch(uuid, name, attempts = 5) ?: throw CommandException("Failed to query the player's stats: $name/${UUIDUtils.uuidToString(uuid)}")
+        val data = PlayerDataFetcher.fetch(uuid, name) ?: throw CommandException("Failed to query the player stats: $name/${UuidUtils.uuidToString(uuid)}")
 
-        return "${MCText.GREEN}$name${MCText.RESET}'s ${MCText.YELLOW}${game.gameName}${MCText.RESET} stats:\n${game.buildStatsMessage(data as RealNamePlayer, modifier)}"
+        if (data !is PlayerData) {
+            throw CommandException("Player not found: $name")
+        }
+
+        return "${MCText.GREEN}$name${MCText.RESET}'s ${MCText.YELLOW}${game.gameName}${MCText.RESET} stats:\n${game.buildStatsText(data, modifier)}"
     }
 }
