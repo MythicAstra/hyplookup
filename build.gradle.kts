@@ -1,9 +1,10 @@
 plugins {
+    java
     kotlin("jvm") version "2.0.20"
 }
 
 group = "net.sharedwonder"
-version = property("version").toString()
+version = property("version") as String
 
 repositories {
     mavenLocal()
@@ -15,11 +16,10 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("io.netty:netty-buffer:4.1.112.Final")
-    implementation("org.apache.logging.log4j:log4j-api:2.24.0")
+    implementation("org.apache.logging.log4j:log4j-api:2.24.1")
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
 }
 
 java {

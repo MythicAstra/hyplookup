@@ -21,7 +21,7 @@ class PlayerStats(
     val skyWars: PlayerSkyWarsStats
 ) {
     companion object {
-        @Suppress("UNCHECKED_CAST")
+        @Suppress("unchecked_cast")
         fun build(map: Map<String, *>?): PlayerStats = PlayerStats(
             PlayerBedWarsStats(map?.get("Bedwars") as Map<String, *>?),
             PlayerSkyWarsStats(map?.get("SkyWars") as Map<String, *>?)

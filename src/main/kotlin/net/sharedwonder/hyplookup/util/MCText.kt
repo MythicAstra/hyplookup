@@ -48,6 +48,7 @@ object MCText {
 
     @JvmStatic
     fun serialize(text: String): String = JsonBuilder().objectValue { entry("text", text) }.toString()
+
     @JvmStatic
     fun getColor(colorId: Byte): String {
         return when (colorId.toInt()) {
@@ -120,7 +121,7 @@ object MCText {
             aligned[rowIndex] = builder.toString()
         }
 
-        @Suppress("UNCHECKED_CAST")
+        @Suppress("unchecked_cast")
         return aligned as Array<String>
     }
 }

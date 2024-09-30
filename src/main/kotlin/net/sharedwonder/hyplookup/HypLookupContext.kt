@@ -21,10 +21,8 @@ import java.util.concurrent.ConcurrentHashMap
 import io.netty.buffer.Unpooled
 import net.sharedwonder.hyplookup.command.CommandParser
 import net.sharedwonder.hyplookup.command.CommandRunner
-import net.sharedwonder.hyplookup.data.PlayerData
 import net.sharedwonder.hyplookup.util.GameType
 import net.sharedwonder.hyplookup.util.MCText
-import net.sharedwonder.hyplookup.util.MojangAPI
 import net.sharedwonder.lightproxy.ConnectionContext
 import net.sharedwonder.lightproxy.addon.ExternalContext
 import net.sharedwonder.lightproxy.packet.PacketUtils
@@ -109,23 +107,6 @@ class HypLookupContext(val connectionContext: ConnectionContext) : ExternalConte
                     stopDisplayingStats()
                 }
             }
-        }
-    }
-
-    fun printStatsToChat(playerName: String, gameType: GameType) {
-        Thread.ofVirtual().start {
-            val (_, uuid) = try {
-                MojangAPI.fetchPlayerProfile(playerName) ?: return@start
-            } catch (exception: RuntimeException) {
-                return@start
-            }
-            val player = PlayerDataFetcher.fetch(uuid, playerName)
-            val text = if (player is PlayerData) {
-                gameType.buildShortStatsText(player, playerName).joinToString(" ")
-            } else {
-                "${MCText.DARK_RED}${MCText.BOLD}NICK ${MCText.RESET}$playerName"
-            }
-            printMessageToChat(text)
         }
     }
 

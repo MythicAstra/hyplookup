@@ -35,10 +35,8 @@ object PlayerDataFetcher {
 
     @Suppress("serial")
     private val cache = Collections.synchronizedMap(object : LinkedHashMap<UUID, Player>() {
-        override fun removeEldestEntry(eldest: Map.Entry<UUID, Player>): Boolean = size > cacheLimit
+        override fun removeEldestEntry(eldest: Map.Entry<UUID, Player>): Boolean = size > HypLookup.CONFIG.playerDataCacheLimit
     })
-
-    private val cacheLimit = HypLookup.CONFIG.playerDataCacheLimit
 
     private val fetching = HashSet<UUID>()
 

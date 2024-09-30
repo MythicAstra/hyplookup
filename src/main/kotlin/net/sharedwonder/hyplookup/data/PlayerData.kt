@@ -31,7 +31,7 @@ class PlayerData(
             (map["lastLogout"] as Number?)?.toLong() ?: 0,
             map["userLanguage"] as String? ?: "?",
             (map["achievementPoints"] as Number?)?.toInt() ?: 0,
-            @Suppress("UNCHECKED_CAST")
+            @Suppress("unchecked_cast")
             PlayerStats.build(map["stats"] as Map<String, *>?)
         )
     }

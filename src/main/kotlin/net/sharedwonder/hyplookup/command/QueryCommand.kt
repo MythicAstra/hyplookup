@@ -33,15 +33,13 @@ object QueryCommand : Command {
     private val logger = LogManager.getLogger(QueryCommand::class.java)
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
-        val name = if (args.isEmpty() || args[0] == ".") hypLookupContext.connectionContext.playerUsername else args[0]
-        val game = if (args.size > 1) GameType.getById(args[1]) else hypLookupContext.currentGame
-        if (game == null) {
-            throw CommandException("Unsupported/unknown game")
-        }
-        val modifier = if (args.size > 2) args[2] else null
-        if (args.size >= 3) {
+        if (args.size > 3) {
             throw CommandException("Too many arguments")
         }
+
+        val name = if (args.isEmpty() || args[0] == ".") hypLookupContext.connectionContext.playerUsername else args[0]
+        val game = (if (args.size > 1) GameType.getById(args[1]) else hypLookupContext.currentGame) ?: throw CommandException("Unsupported/unknown game")
+        val modifier = if (args.size > 2) args[2] else null
 
         val (_, uuid) = try {
             MojangAPI.fetchPlayerProfile(name)

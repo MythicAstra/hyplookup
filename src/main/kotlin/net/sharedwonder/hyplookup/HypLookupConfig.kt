@@ -22,8 +22,8 @@ import net.sharedwonder.lightproxy.config.ConfigFileType
 
 @Config(name = "hyplookup", type = ConfigFileType.JSON)
 class HypLookupConfig {
-    @SerializedName("hypixel-api-base-url")
-    val hypixelApiBaseUrl: String = "https://api.hypixel.net/v2"
+    @SerializedName("hypixel-api-base-uri")
+    val hypixelApiBaseUri: String = "https://api.hypixel.net/v2"
 
     @SerializedName("hypixel-api-key")
     val hypixelApiKey: String? = null

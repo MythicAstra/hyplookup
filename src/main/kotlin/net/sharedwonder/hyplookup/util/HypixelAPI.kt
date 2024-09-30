@@ -18,44 +18,42 @@ package net.sharedwonder.hyplookup.util
 
 import java.io.Serial
 import java.net.URI
+import java.net.URISyntaxException
 import java.net.http.HttpRequest
 import java.util.UUID
 import net.sharedwonder.hyplookup.HypLookup
 import net.sharedwonder.hyplookup.data.Player
 import net.sharedwonder.hyplookup.data.PlayerData
+import net.sharedwonder.lightproxy.http.HttpRequestResult
 import net.sharedwonder.lightproxy.http.HttpUtils
 import net.sharedwonder.lightproxy.util.JsonUtils
 import net.sharedwonder.lightproxy.util.UuidUtils
 
 object HypixelAPI {
-    private val baseUrl = HypLookup.CONFIG.hypixelApiBaseUrl
-
-    private val key = HypLookup.CONFIG.hypixelApiKey
-
-    private val userAgent = HypLookup.CONFIG.hypixelApiUserAgent
-
     @JvmStatic
     fun fetchPlayerData(uuid: UUID): Player {
-        val requestBuilder = HttpRequest.newBuilder(URI.create("$baseUrl/player?uuid=${UuidUtils.uuidToString(uuid)}"))
-        if (key != null) {
-            requestBuilder.header("API-Key", key)
+        val requestBuilder = try {
+            HttpRequest.newBuilder(URI("${HypLookup.CONFIG.hypixelApiBaseUri}/player?uuid=${UuidUtils.uuidToString(uuid)}"))
+        } catch (exception: URISyntaxException) {
+            throw RuntimeException(exception)
         }
-        if (userAgent != null) {
-            requestBuilder.header("User-Agent", userAgent)
+        if (HypLookup.CONFIG.hypixelApiKey != null) {
+            requestBuilder.header("API-Key", HypLookup.CONFIG.hypixelApiKey)
+        }
+        if (HypLookup.CONFIG.hypixelApiUserAgent != null) {
+            requestBuilder.header("User-Agent", HypLookup.CONFIG.hypixelApiUserAgent)
         }
 
         val result = HttpUtils.request(requestBuilder.build())
             .whenInterrupted {
                 throw InterruptedException()
-            }.whenFailedByException {
-                throw buildException("Failed to access Hypixel API")
-            }.isErrorResponse {
-                if (status == 429 && JsonUtils.fromJson(contentAsUtf8String, Map::class.java)["throttle"] == true) {
+            }.onFailure {
+                if (this is HttpRequestResult.Response && status == 429 && JsonUtils.fromJson(contentAsUtf8String, Map::class.java)["throttle"] == true) {
                     throw ThrottlingException()
                 }
                 throw buildException("Failed to access Hypixel API")
             }.asResponse.contentAsUtf8String.let {
-                @Suppress("UNCHECKED_CAST")
+                @Suppress("unchecked_cast")
                 JsonUtils.fromJson(it, Map::class.java)["player"] as Map<String, *>?
             }
 
