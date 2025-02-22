@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@ package net.sharedwonder.hyplookup.handler;
 
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.lightproxy.ConnectionContext;
-import net.sharedwonder.lightproxy.packet.HandledFlag;
+import net.sharedwonder.lightproxy.packet.HandleFlag;
 
 public final class CLRequestLogin extends net.sharedwonder.lightproxy.handler.CLRequestLogin {
     @Override
-    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+    public HandleFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
         var flag = super.handle(context, in, transformed);
         if (context.getProtocolVersion() != MINECRAFT_1_8_X_PROTOCOL_VERSION) {
             throw new RuntimeException("Protocol version is not 47 (Minecraft 1.8.x), which is not supported");

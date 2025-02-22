@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ public final class HypLookup implements AddonInitializer {
         registerExternalContextType(HypLookupContext.class, HypLookupContext::new);
 
         registerHandler(C2S_LOGIN_PACKET_HANDLERS, new CLRequestLogin());
+
         registerHandler(C2S_PLAY_PACKET_HANDLERS, new CPSendChatMessage());
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPUpdateMessage());
         registerHandler(S2C_PLAY_PACKET_HANDLERS, new SPChangeHeldItem());

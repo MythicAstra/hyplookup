@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,7 @@ import net.sharedwonder.hyplookup.util.MCText.YELLOW
 enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: String, aliases: Array<String> = emptyArray()) {
     BED_WARS("bed_wars", "Bed Wars", "BED WARS", arrayOf("bw", "bedwars")) {
         override fun buildStatsText(data: PlayerData, modifier: String?): String = data.stats.bedWars.run {
-            "" +
-                line("Level", `formatted-level-without-brackets`) +
+            line("Level", `formatted-level-without-brackets`) +
                 line("Tokens", coins) +
                 when (modifier) {
                     "solo", "1s" -> group("Solo Mode") +
@@ -130,8 +129,7 @@ enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: S
 
     SKY_WARS("sky_wars", "Sky Wars", "SKYWARS", arrayOf("sw", "skywars")) {
         override fun buildStatsText(data: PlayerData, modifier: String?): String = data.stats.skyWars.run {
-            "" +
-                line("Level", `formatted-level-without-brackets`) +
+            line("Level", `formatted-level-without-brackets`) +
                 line("Coins", coins) +
                 line("Souls", souls) +
                 when (modifier) {

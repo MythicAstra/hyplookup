@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import net.sharedwonder.hyplookup.HypLookupContext;
 import net.sharedwonder.hyplookup.command.CommandParser;
 import net.sharedwonder.lightproxy.ConnectionContext;
 import net.sharedwonder.lightproxy.packet.C2SPacketHandler;
-import net.sharedwonder.lightproxy.packet.HandledFlag;
+import net.sharedwonder.lightproxy.packet.HandleFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +34,7 @@ public final class CPSendChatMessage implements C2SPacketHandler {
     }
 
     @Override
-    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+    public HandleFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
         var message = PacketUtils.readUtf8String(in);
 
         if (message.charAt(0) == Constants.COMMAND_PREFIX) {
@@ -49,11 +49,11 @@ public final class CPSendChatMessage implements C2SPacketHandler {
                 } catch (IllegalStateException exception) {
                     LOGGER.error("Failed to run HypLookup command: " + message, exception);
                 }
-                return HandledFlag.BLOCKED;
+                return HandleFlag.BLOCKED;
             }
         }
 
-        return HandledFlag.PASSED;
+        return HandleFlag.PASSED;
     }
 
     private static final Logger LOGGER = LogManager.getLogger(CPSendChatMessage.class);

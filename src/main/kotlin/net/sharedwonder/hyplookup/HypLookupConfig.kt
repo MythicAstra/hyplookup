@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package net.sharedwonder.hyplookup
 
 import com.google.gson.annotations.SerializedName
 import net.sharedwonder.lightproxy.config.Config
-import net.sharedwonder.lightproxy.config.ConfigFileType
+import net.sharedwonder.lightproxy.config.ConfigFormat
 
-@Config(name = "hyplookup", type = ConfigFileType.JSON)
+@Config(filename = "hyplookup.json", format = ConfigFormat.JSON)
 class HypLookupConfig {
     @SerializedName("hypixel-api-base-uri")
     val hypixelApiBaseUri: String = "https://api.hypixel.net/v2"

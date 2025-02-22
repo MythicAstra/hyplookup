@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,6 @@ object DisplayCommand : Command {
         }
 
         hypLookupContext.userTriggeredDisplayingStats(gameType)
-        return "Started displaying player stats (game: ${gameType.gameName}) in the player list"
+        return "Started displaying player stats (${gameType.gameName}) in the player list"
     }
 }
