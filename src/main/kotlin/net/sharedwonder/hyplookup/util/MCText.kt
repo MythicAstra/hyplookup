@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ object MCText {
     private val escapableChars: CharArray = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'k', 'l', 'm', 'n', 'o', 'r')
 
     @JvmStatic
-    fun serialize(text: String): String = JsonBuilder().objectValue { entry("text", text) }.toString()
+    fun serialize(text: String): String = JsonBuilder().objectValue { "text" value text }.toString()
 
     @JvmStatic
     fun getColor(colorId: Byte): String {

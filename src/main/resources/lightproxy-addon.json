@@ -2,7 +2,7 @@
     "id": "hyplookup",
     "name": "HypLookup",
     "version": "${version}",
-    "description": "Queries and displays Hypixel player data",
-    "author": "sharedwonder",
+    "description": "Queries Hypixel player data",
+    "author": "MythicAstra",
     "initializer": "net.sharedwonder.hyplookup.HypLookup"
 }

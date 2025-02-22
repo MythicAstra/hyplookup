@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,14 +44,14 @@ object HypixelAPI {
             requestBuilder.header("User-Agent", HypLookup.CONFIG.hypixelApiUserAgent)
         }
 
-        val result = HttpUtils.request(requestBuilder.build())
+        val result = HttpUtils.sendRequest(requestBuilder.build())
             .whenInterrupted {
                 throw InterruptedException()
             }.onFailure {
                 if (this is HttpRequestResult.Response && status == 429 && JsonUtils.fromJson(contentAsUtf8String, Map::class.java)["throttle"] == true) {
                     throw ThrottlingException()
                 }
-                throw buildException("Failed to access Hypixel API")
+                throw newException("Failed to access Hypixel API")
             }.asResponse.contentAsUtf8String.let {
                 @Suppress("unchecked_cast")
                 JsonUtils.fromJson(it, Map::class.java)["player"] as Map<String, *>?

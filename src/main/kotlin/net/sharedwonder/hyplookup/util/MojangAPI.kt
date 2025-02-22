@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ import net.sharedwonder.lightproxy.util.UuidUtils
 object MojangAPI {
     @JvmStatic
     fun fetchPlayerProfile(name: String): PlayerProfile? {
-        val json = HttpUtils.request(HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/$name")).build())
+        val json = HttpUtils.sendRequest(HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/$name")).build())
             .whenFailedByException {
-                throw buildException("Failed to fetch the player profile: $name")
+                throw newException("Failed to fetch the player profile: $name")
             }.isErrorResponse {
                 return null
             }.asResponse.contentAsUtf8String!!

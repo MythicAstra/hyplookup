@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 sharedwonder (Liu Baihao).
+ * Copyright (C) 2025 MythicAstra
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import io.netty.buffer.ByteBuf;
 import net.sharedwonder.hyplookup.Constants;
 import net.sharedwonder.hyplookup.HypLookupContext;
 import net.sharedwonder.lightproxy.ConnectionContext;
-import net.sharedwonder.lightproxy.packet.HandledFlag;
+import net.sharedwonder.lightproxy.packet.HandleFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
 import net.sharedwonder.lightproxy.packet.S2CPacketHandler;
 
@@ -32,7 +32,7 @@ public final class SPUpdateTeam implements S2CPacketHandler {
     }
 
     @Override
-    public HandledFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
+    public HandleFlag handle(ConnectionContext context, ByteBuf in, ByteBuf transformed) {
         var hypLookupContext = context.getExternalContext(HypLookupContext.class);
 
         var teamName = PacketUtils.readUtf8String(in);
@@ -81,6 +81,6 @@ public final class SPUpdateTeam implements S2CPacketHandler {
 
         hypLookupContext.updatePlayerList();
 
-        return HandledFlag.PASSED;
+        return HandleFlag.PASSED;
     }
 }
