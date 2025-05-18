@@ -19,9 +19,9 @@ package net.sharedwonder.hyplookup.command
 import net.sharedwonder.hyplookup.HypLookupContext
 
 object StopCommand : Command {
-    override val expressions: Array<String> = arrayOf("stop", "s")
+    override val keywords: Array<String> = arrayOf("stop", "s")
 
-    override val description: String = "Starts displaying player stats in the player list"
+    override val description: String = "Stops displaying player stats in the player list"
 
     override fun run(hypLookupContext: HypLookupContext, args: List<String>): String {
         hypLookupContext.stopDisplayingStats()

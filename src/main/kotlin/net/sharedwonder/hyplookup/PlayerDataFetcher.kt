@@ -44,6 +44,7 @@ object PlayerDataFetcher {
 
     private val throttlingEnded = throttlingLock.newCondition()
 
+    @Volatile
     private var throttling = false
 
     @JvmStatic
@@ -142,6 +143,8 @@ object PlayerDataFetcher {
                 throttling = true
             }
 
+            logger.warn("Hypixel API rate limit exceeded")
+
             Timer().schedule(object : TimerTask() {
                 override fun run() {
                     throttling = false
@@ -153,7 +156,6 @@ object PlayerDataFetcher {
                     }
                 }
             }, HypLookup.CONFIG.hypixelApiThrottlingTimeout)
-            logger.warn("Hypixel API rate limit exceeded")
         }
     }
 }

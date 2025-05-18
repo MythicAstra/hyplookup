@@ -17,22 +17,22 @@
 package net.sharedwonder.hyplookup.data
 
 import kotlin.math.floor
-import net.sharedwonder.hyplookup.util.MCText.AQUA
-import net.sharedwonder.hyplookup.util.MCText.BLACK
-import net.sharedwonder.hyplookup.util.MCText.BLUE
-import net.sharedwonder.hyplookup.util.MCText.DARK_AQUA
-import net.sharedwonder.hyplookup.util.MCText.DARK_BLUE
-import net.sharedwonder.hyplookup.util.MCText.DARK_GRAY
-import net.sharedwonder.hyplookup.util.MCText.DARK_GREEN
-import net.sharedwonder.hyplookup.util.MCText.DARK_PURPLE
-import net.sharedwonder.hyplookup.util.MCText.DARK_RED
-import net.sharedwonder.hyplookup.util.MCText.GOLD
-import net.sharedwonder.hyplookup.util.MCText.GRAY
-import net.sharedwonder.hyplookup.util.MCText.GREEN
-import net.sharedwonder.hyplookup.util.MCText.LIGHT_PURPLE
-import net.sharedwonder.hyplookup.util.MCText.RED
-import net.sharedwonder.hyplookup.util.MCText.WHITE
-import net.sharedwonder.hyplookup.util.MCText.YELLOW
+import net.sharedwonder.hyplookup.util.McText.AQUA
+import net.sharedwonder.hyplookup.util.McText.BLACK
+import net.sharedwonder.hyplookup.util.McText.BLUE
+import net.sharedwonder.hyplookup.util.McText.DARK_AQUA
+import net.sharedwonder.hyplookup.util.McText.DARK_BLUE
+import net.sharedwonder.hyplookup.util.McText.DARK_GRAY
+import net.sharedwonder.hyplookup.util.McText.DARK_GREEN
+import net.sharedwonder.hyplookup.util.McText.DARK_PURPLE
+import net.sharedwonder.hyplookup.util.McText.DARK_RED
+import net.sharedwonder.hyplookup.util.McText.GOLD
+import net.sharedwonder.hyplookup.util.McText.GRAY
+import net.sharedwonder.hyplookup.util.McText.GREEN
+import net.sharedwonder.hyplookup.util.McText.LIGHT_PURPLE
+import net.sharedwonder.hyplookup.util.McText.RED
+import net.sharedwonder.hyplookup.util.McText.WHITE
+import net.sharedwonder.hyplookup.util.McText.YELLOW
 
 class PlayerBedWarsStats(map: Map<String, *>?) {
     val experience: Int

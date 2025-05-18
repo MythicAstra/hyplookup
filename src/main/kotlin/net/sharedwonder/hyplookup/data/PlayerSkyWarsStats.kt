@@ -16,7 +16,7 @@
 
 package net.sharedwonder.hyplookup.data
 
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 
 class PlayerSkyWarsStats(map: Map<String, *>?) {
     val experience: Int
@@ -151,7 +151,7 @@ class PlayerSkyWarsStats(map: Map<String, *>?) {
         fun getStringOrNull(key: String) = map?.get(key) as String?
 
         experience = getIntOrZero("skywars_experience")
-        `formatted-level-without-brackets` = getStringOrNull("levelFormatted") ?: "${MCText.GRAY}1⋆"
+        `formatted-level-without-brackets` = getStringOrNull("levelFormatted") ?: "${McText.GRAY}1⋆"
         `formatted-level` = (getStringOrNull("levelFormattedWithBrackets")?.substringBefore(']')
             ?: (`formatted-level-without-brackets`.take(2) + '[' + `formatted-level-without-brackets`.drop(2))) + ']'
         coins = getIntOrZero("coins")

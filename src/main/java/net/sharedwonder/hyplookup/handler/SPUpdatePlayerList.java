@@ -19,7 +19,7 @@ package net.sharedwonder.hyplookup.handler;
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.hyplookup.Constants;
 import net.sharedwonder.hyplookup.HypLookupContext;
-import net.sharedwonder.hyplookup.util.MCText;
+import net.sharedwonder.hyplookup.util.McText;
 import net.sharedwonder.lightproxy.ConnectionContext;
 import net.sharedwonder.lightproxy.packet.HandleFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
@@ -43,7 +43,7 @@ public final class SPUpdatePlayerList implements S2CPacketHandler {
                 var playerUuid = PacketUtils.readUuid(in);
                 var playerName = PacketUtils.readUtf8String(in);
 
-                if (!playerName.startsWith(MCText.OBFUSCATED)) {
+                if (!playerName.startsWith(McText.OBFUSCATED)) {
                     hypLookupContext.players.put(playerUuid, playerName);
                 }
             }

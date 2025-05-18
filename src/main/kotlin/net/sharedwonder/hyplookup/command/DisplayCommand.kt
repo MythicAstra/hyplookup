@@ -20,7 +20,7 @@ import net.sharedwonder.hyplookup.HypLookupContext
 import net.sharedwonder.hyplookup.util.GameType
 
 object DisplayCommand : Command {
-    override val expressions: Array<String> = arrayOf("display", "d")
+    override val keywords: Array<String> = arrayOf("display", "d")
 
     override val description: String = "Starts displaying player stats in the player list"
 

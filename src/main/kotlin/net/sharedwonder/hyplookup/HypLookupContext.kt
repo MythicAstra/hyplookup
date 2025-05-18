@@ -22,7 +22,7 @@ import io.netty.buffer.Unpooled
 import net.sharedwonder.hyplookup.command.CommandParser
 import net.sharedwonder.hyplookup.command.CommandRunner
 import net.sharedwonder.hyplookup.util.GameType
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 import net.sharedwonder.lightproxy.ConnectionContext
 import net.sharedwonder.lightproxy.addon.ExternalContext
 import net.sharedwonder.lightproxy.packet.PacketUtils
@@ -111,7 +111,7 @@ class HypLookupContext(val connectionContext: ConnectionContext) : ExternalConte
     }
 
     fun printMessageToChat(message: String) {
-        val bytes = MCText.serialize("${MCText.BLUE}[HypLookup]${MCText.RESET} $message").toByteArray()
+        val bytes = McText.serialize("${McText.BLUE}[HypLookup]${McText.RESET} $message").toByteArray()
 
         val size = PacketUtils.calcVarintSize(bytes.size) + bytes.size + 2
         val packet = Unpooled.buffer(size + PacketUtils.VARINT_MAX_SIZE)

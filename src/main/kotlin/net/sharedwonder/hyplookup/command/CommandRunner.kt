@@ -46,8 +46,6 @@ class CommandRunner(private val hypLookupContext: HypLookupContext) : Thread("HY
             }
         }
     }
-
-    companion object {
-        private val logger = LogManager.getLogger(CommandRunner::class.java)
-    }
 }
+
+private val logger = LogManager.getLogger(CommandRunner::class.java)

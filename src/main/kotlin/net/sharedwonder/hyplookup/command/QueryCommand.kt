@@ -20,13 +20,13 @@ import net.sharedwonder.hyplookup.HypLookupContext
 import net.sharedwonder.hyplookup.PlayerDataFetcher
 import net.sharedwonder.hyplookup.data.PlayerData
 import net.sharedwonder.hyplookup.util.GameType
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 import net.sharedwonder.hyplookup.util.MojangAPI
 import net.sharedwonder.lightproxy.util.UuidUtils
 import org.apache.logging.log4j.LogManager
 
 object QueryCommand : Command {
-    override val expressions: Array<String> = arrayOf("query", "q")
+    override val keywords: Array<String> = arrayOf("query", "q")
 
     override val description: String = "Queries player stats in the Hypixel"
 
@@ -53,6 +53,6 @@ object QueryCommand : Command {
             throw CommandException("Player not found: $name")
         }
 
-        return "${MCText.GREEN}$name${MCText.RESET}'s ${MCText.YELLOW}${game.gameName}${MCText.RESET} stats:\n${game.buildStatsText(data, modifier)}"
+        return "${McText.GREEN}$name${McText.RESET}'s ${McText.YELLOW}${game.gameName}${McText.RESET} stats:\n${game.buildStatsText(data, modifier)}"
     }
 }

@@ -19,7 +19,7 @@ package net.sharedwonder.hyplookup.handler;
 import io.netty.buffer.ByteBuf;
 import net.sharedwonder.hyplookup.Constants;
 import net.sharedwonder.hyplookup.HypLookupContext;
-import net.sharedwonder.hyplookup.util.MCText;
+import net.sharedwonder.hyplookup.util.McText;
 import net.sharedwonder.lightproxy.ConnectionContext;
 import net.sharedwonder.lightproxy.packet.HandleFlag;
 import net.sharedwonder.lightproxy.packet.PacketUtils;
@@ -39,7 +39,7 @@ public final class SPScoreboardObjective implements S2CPacketHandler {
         var action = in.readByte();
 
         if (action == Constants.SCOREBOARD_ADD || action == Constants.SCOREBOARD_UPDATE) {
-            var title = MCText.toPlaintext(PacketUtils.readUtf8String(in));
+            var title = McText.toPlaintext(PacketUtils.readUtf8String(in));
             hypLookupContext.scoreboardObjectives.put(name, title);
             if (name.equals(hypLookupContext.sidebarScoreboardName)) {
                 hypLookupContext.whenScoreboardTitleUpdates(title);

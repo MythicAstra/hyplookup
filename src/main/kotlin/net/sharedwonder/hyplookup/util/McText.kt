@@ -18,7 +18,7 @@ package net.sharedwonder.hyplookup.util
 
 import net.sharedwonder.lightproxy.util.JsonBuilder
 
-object MCText {
+object McText {
     const val BLACK: String = "§0"
     const val DARK_BLUE: String = "§1"
     const val DARK_GREEN: String = "§2"
@@ -47,7 +47,7 @@ object MCText {
     private val escapableChars: CharArray = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'k', 'l', 'm', 'n', 'o', 'r')
 
     @JvmStatic
-    fun serialize(text: String): String = JsonBuilder().objectValue { "text" value text }.toString()
+    fun serialize(text: String): String = JsonBuilder().objectValue { "text" value text }.writer.toString()
 
     @JvmStatic
     fun getColor(colorId: Byte): String {

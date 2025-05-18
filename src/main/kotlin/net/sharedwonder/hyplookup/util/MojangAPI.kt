@@ -18,9 +18,8 @@ package net.sharedwonder.hyplookup.util
 
 import java.net.URI
 import java.net.http.HttpRequest
-import java.util.UUID
+import com.google.gson.stream.JsonReader
 import net.sharedwonder.lightproxy.http.HttpUtils
-import net.sharedwonder.lightproxy.util.JsonParser
 import net.sharedwonder.lightproxy.util.PlayerProfile
 import net.sharedwonder.lightproxy.util.UuidUtils
 
@@ -28,30 +27,26 @@ object MojangAPI {
     @JvmStatic
     fun fetchPlayerProfile(name: String): PlayerProfile? {
         val json = HttpUtils.sendRequest(HttpRequest.newBuilder(URI.create("https://api.mojang.com/users/profiles/minecraft/$name")).build())
-            .whenFailedByException {
+            .onInterruption {
+                throw interruptedException
+            }.onIoError {
                 throw newException("Failed to fetch the player profile: $name")
-            }.isErrorResponse {
+            }.onHttpError {
                 return null
-            }.asResponse.contentAsUtf8String!!
+            }.asResponse.contentAsUtf8String
 
-        val uuid: UUID? = try {
-            JsonParser(json).nextObject {
-                while (hasNext()) {
-                    if (nextName() == "id") {
-                        return@nextObject UuidUtils.stringToUuid(nextString())
-                    }
-                    skipValue()
+        try {
+            val reader = JsonReader(json.reader())
+            reader.beginObject()
+            while (reader.hasNext()) {
+                if (reader.nextName() == "id") {
+                    return PlayerProfile(name, UuidUtils.stringToUuid(reader.nextString()))
                 }
-                null
+                reader.skipValue()
             }
+            throw RuntimeException("Failed to fetch the player profile, missing the player UUID: $json")
         } catch (exception: IllegalStateException) {
             throw RuntimeException("Failed to fetch the player profile, invalid response: $json", exception)
         }
-
-        if (uuid == null) {
-            throw RuntimeException("Failed to fetch the player profile, missing the player UUID: $json")
-        }
-
-        return PlayerProfile(name, uuid)
     }
 }

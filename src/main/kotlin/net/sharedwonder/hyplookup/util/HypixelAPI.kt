@@ -24,7 +24,6 @@ import java.util.UUID
 import net.sharedwonder.hyplookup.HypLookup
 import net.sharedwonder.hyplookup.data.Player
 import net.sharedwonder.hyplookup.data.PlayerData
-import net.sharedwonder.lightproxy.http.HttpRequestResult
 import net.sharedwonder.lightproxy.http.HttpUtils
 import net.sharedwonder.lightproxy.util.JsonUtils
 import net.sharedwonder.lightproxy.util.UuidUtils
@@ -45,13 +44,14 @@ object HypixelAPI {
         }
 
         val result = HttpUtils.sendRequest(requestBuilder.build())
-            .whenInterrupted {
-                throw InterruptedException()
-            }.onFailure {
-                if (this is HttpRequestResult.Response && status == 429 && JsonUtils.fromJson(contentAsUtf8String, Map::class.java)["throttle"] == true) {
+            .onInterruption {
+                throw interruptedException
+            }.onIoError {
+                throw newException("Failed to access Hypixel API")
+            }.onHttpError {
+                if (status == 429 && JsonUtils.fromJson(contentAsUtf8String, Map::class.java)["throttle"] == true) {
                     throw ThrottlingException()
                 }
-                throw newException("Failed to access Hypixel API")
             }.asResponse.contentAsUtf8String.let {
                 @Suppress("unchecked_cast")
                 JsonUtils.fromJson(it, Map::class.java)["player"] as Map<String, *>?

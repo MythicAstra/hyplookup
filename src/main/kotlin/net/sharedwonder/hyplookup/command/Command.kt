@@ -19,7 +19,7 @@ package net.sharedwonder.hyplookup.command
 import net.sharedwonder.hyplookup.HypLookupContext
 
 interface Command {
-    val expressions: Array<String>
+    val keywords: Array<String>
 
     val description: String
 

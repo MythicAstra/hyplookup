@@ -23,7 +23,7 @@ class PlayerData(
     val userLanguage: String,
     val achievementPoints: Int,
     val stats: PlayerStats
-): Player {
+) : Player {
     companion object {
         fun build(map: Map<String, *>): PlayerData = PlayerData(
             (map["firstLogin"] as Number?)?.toLong() ?: 0,

@@ -16,8 +16,9 @@
 
 package net.sharedwonder.hyplookup.command
 
+import java.util.Collections
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 
 class CommandParser(val input: String, private val hypLookupContext: HypLookupContext) {
     val isMatched: Boolean
@@ -50,29 +51,24 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
     fun run(): String? {
         check(isMatched) { "Not a HypLookup command" }
 
-        return try {
+        try {
             val args = splitCommandLine(commandLine)
-            val command = if (commandLine.isNotBlank()) expressions[args[0]] else HelpCommand
-            if (command != null) {
-                val responseText = command.run(hypLookupContext, args.drop(1)) ?: return null
-                responseText
-            } else {
-                "${MCText.RED}Unknown command: ${args[0]}"
-            }
+            val command = if (args.isNotEmpty()) keywords[args[0]] else HelpCommand
+            return if (command != null) command.run(hypLookupContext, args.drop(1)) else "${McText.RED}Unknown command: ${args[0]}"
         } catch (exception: CommandException) {
-            MCText.RED + (exception.message ?: "Unknown error while executing command")
+            return McText.RED + (exception.message ?: "Unknown error while executing command")
         }
     }
 
     private fun splitCommandLine(commandLine: String): List<String> {
-        if (commandLine.isEmpty()) {
+        if (commandLine.isBlank()) {
             return emptyList()
         }
 
         val result = ArrayList<String>()
         val builder = StringBuilder()
         var escape = false
-        var inString = false
+        var betweenQuotes = false
 
         for (char in commandLine) {
             when {
@@ -86,10 +82,10 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
                 }
 
                 char == '"' -> {
-                    inString = !inString
+                    betweenQuotes = !betweenQuotes
                 }
 
-                char.isWhitespace() && !inString -> {
+                char.isWhitespace() && !betweenQuotes -> {
                     if (builder.isNotEmpty()) {
                         result.add(builder.toString())
                         builder.clear()
@@ -104,7 +100,7 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
             throw CommandException("Invalid command line: end with '\\'")
         }
 
-        if (inString) {
+        if (betweenQuotes) {
             throw CommandException("Invalid command line: missing closing quote")
         }
 
@@ -122,18 +118,19 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
 
         private const val COMMAND_EXPR_3 = "/."
 
-        val commands: List<Command> = ArrayList()
+        val commands: List<Command> = Collections.synchronizedList(ArrayList())
 
-        private val expressions: MutableMap<String, Command> = HashMap()
+        private val keywords: MutableMap<String, Command> = HashMap()
 
         @JvmStatic
         fun registerCommand(command: Command) {
             (commands as MutableList).add(command)
-            command.expressions.forEach {
-                expressions.compute(it) { key, value ->
+            command.keywords.forEach {
+                keywords.compute(it) { key, value ->
                     if (value != null) {
-                        throw RuntimeException("The expression '$key' is also used by the command: ${value.javaClass.typeName}")
-                    } else command
+                        throw Error("The keyword '$key' is also used by the command: ${value.javaClass.name}")
+                    }
+                    command
                 }
             }
         }
@@ -143,7 +140,6 @@ class CommandParser(val input: String, private val hypLookupContext: HypLookupCo
             registerCommand(QueryCommand)
             registerCommand(DisplayCommand)
             registerCommand(StopCommand)
-            registerCommand(UpdateCommand)
         }
     }
 }

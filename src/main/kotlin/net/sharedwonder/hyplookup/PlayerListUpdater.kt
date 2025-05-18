@@ -19,10 +19,11 @@ package net.sharedwonder.hyplookup
 import java.util.UUID
 import java.util.concurrent.Executors
 import java.util.concurrent.SynchronousQueue
+import java.util.concurrent.atomic.AtomicBoolean
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import net.sharedwonder.hyplookup.data.PlayerData
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 import net.sharedwonder.lightproxy.packet.PacketUtils
 import org.apache.logging.log4j.LogManager
 
@@ -33,16 +34,14 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
 
     private val none = Any()
 
-    @Volatile
-    private var needUpdate = true
+    private var needUpdate = AtomicBoolean(true)
 
-    @Volatile
-    private var canContinue = true
+    private var canContinue = AtomicBoolean(true)
 
     private var queryingThreadExecutor = Executors.newVirtualThreadPerTaskExecutor()
 
     fun triggerUpdating() {
-        needUpdate = true
+        needUpdate.set(true)
         continueUpdating()
         updatingSync.offer(none)
     }
@@ -50,33 +49,24 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
     override fun run() {
         try {
             while (!isInterrupted) {
-                if (needUpdate) {
-                    needUpdate = false
+                if (needUpdate.getAndSet(false)) {
                     update()
                     continue
                 }
 
-                try {
-                    updatingSync.take()
-                } catch (exception: InterruptedException) {
-                    return
-                }
+                updatingSync.take()
             }
+        } catch (_: InterruptedException) {
         } finally {
             queryingThreadExecutor.shutdownNow()
         }
-    }
-
-    private fun continueUpdating() {
-        canContinue = true
-        continuingSync.offer(none)
     }
 
     private fun update() {
         try {
             var players = ArrayList<Pair<UUID, String>>(hypLookupContext.players.size)
             for ((uuid, name) in hypLookupContext.players) {
-                if (isInterrupted || needUpdate) {
+                if (isInterrupted || needUpdate.get()) {
                     return
                 }
 
@@ -84,20 +74,20 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
                 PlayerDataFetcher.fetch(uuid, name, queryingThreadExecutor) { continueUpdating() }
             }
 
-            if (isInterrupted || needUpdate) {
+            if (isInterrupted || needUpdate.get()) {
                 return
             }
 
             val uuids = ArrayList<UUID>(players.size)
             val table = ArrayList<Array<String>>(players.size)
 
-            while (players.isNotEmpty() && !isInterrupted && !needUpdate) {
-                canContinue = false
+            while (players.isNotEmpty() && !isInterrupted && !needUpdate.get()) {
+                canContinue.set(false)
 
                 val next = ArrayList<Pair<UUID, String>>(players.size)
 
                 for ((uuid, name) in players) {
-                    if (isInterrupted || needUpdate) {
+                    if (isInterrupted || needUpdate.get()) {
                         return
                     }
 
@@ -114,34 +104,30 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
                     }
                 }
 
-                if (isInterrupted || needUpdate) {
+                if (isInterrupted || needUpdate.get()) {
                     return
                 }
 
                 val packet = buildPacket(uuids, table)
-
-                if (isInterrupted || needUpdate) {
-                    return
-                }
-
                 hypLookupContext.connectionContext.sendToClient(packet)
                 players = next
 
-                if (canContinue) {
-                    continue
-                }
-
-                try {
-                    continuingSync.take()
-                } catch (exception: InterruptedException) {
-                    interrupt()
+                if (isInterrupted || needUpdate.get()) {
                     return
                 }
+
+                continuingSync.take()
             }
-        } catch (exception: Throwable) {
+        } catch (exception: InterruptedException) {
+            throw exception
+        } catch (exception: Exception) {
             logger.error("An error occurred while updating player list", exception)
         }
-        return
+    }
+
+    private fun continueUpdating() {
+        canContinue.set(true)
+        continuingSync.offer(none)
     }
 
     private fun buildText(uuid: UUID, name: String): Array<String>? {
@@ -154,7 +140,7 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
         return if (playerData is PlayerData) {
             checkNotNull(hypLookupContext.currentGame).buildShortStatsText(playerData, originalText)
         } else {
-            arrayOf("${MCText.DARK_RED}${MCText.BOLD}NICK ${MCText.RESET}$originalText")
+            arrayOf("${McText.DARK_RED}${McText.BOLD}NICK ${McText.RESET}$originalText")
         }
     }
 
@@ -163,11 +149,11 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
         chunk.writeByte(PLAYER_LIST_UPDATE_DISPLAY_NAME)
         PacketUtils.writeVarint(chunk, uuids.size)
 
-        val textTable = MCText.alignTextTable(table, "${MCText.DARK_GRAY} | ")
+        val textTable = McText.alignTextTable(table, "${McText.DARK_GRAY} | ")
         for ((uuid, text) in uuids zip textTable) {
             PacketUtils.writeUuid(chunk, uuid)
             chunk.writeBoolean(true)
-            PacketUtils.writeUtf8String(chunk, MCText.serialize(text))
+            PacketUtils.writeUtf8String(chunk, McText.serialize(text))
         }
 
         val size = chunk.readableBytes() + 1
@@ -178,8 +164,6 @@ class PlayerListUpdater(val hypLookupContext: HypLookupContext) : Thread("HYPL-P
         chunk.release()
         return packet
     }
-
-    companion object {
-        private val logger = LogManager.getLogger(PlayerListUpdater::class.java)
-    }
 }
+
+private val logger = LogManager.getLogger(PlayerListUpdater::class.java)

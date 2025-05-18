@@ -19,20 +19,20 @@ package net.sharedwonder.hyplookup.util
 import java.text.DecimalFormat
 import net.sharedwonder.hyplookup.command.CommandException
 import net.sharedwonder.hyplookup.data.PlayerData
-import net.sharedwonder.hyplookup.util.MCText.AQUA
-import net.sharedwonder.hyplookup.util.MCText.BLACK
-import net.sharedwonder.hyplookup.util.MCText.BLUE
-import net.sharedwonder.hyplookup.util.MCText.DARK_GRAY
-import net.sharedwonder.hyplookup.util.MCText.DARK_RED
-import net.sharedwonder.hyplookup.util.MCText.GOLD
-import net.sharedwonder.hyplookup.util.MCText.GRAY
-import net.sharedwonder.hyplookup.util.MCText.GREEN
-import net.sharedwonder.hyplookup.util.MCText.LIGHT_PURPLE
-import net.sharedwonder.hyplookup.util.MCText.RED
-import net.sharedwonder.hyplookup.util.MCText.WHITE
-import net.sharedwonder.hyplookup.util.MCText.YELLOW
+import net.sharedwonder.hyplookup.util.McText.AQUA
+import net.sharedwonder.hyplookup.util.McText.BLACK
+import net.sharedwonder.hyplookup.util.McText.BLUE
+import net.sharedwonder.hyplookup.util.McText.DARK_GRAY
+import net.sharedwonder.hyplookup.util.McText.DARK_RED
+import net.sharedwonder.hyplookup.util.McText.GOLD
+import net.sharedwonder.hyplookup.util.McText.GRAY
+import net.sharedwonder.hyplookup.util.McText.GREEN
+import net.sharedwonder.hyplookup.util.McText.LIGHT_PURPLE
+import net.sharedwonder.hyplookup.util.McText.RED
+import net.sharedwonder.hyplookup.util.McText.WHITE
+import net.sharedwonder.hyplookup.util.McText.YELLOW
 
-enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: String, aliases: Array<String> = emptyArray()) {
+enum class GameType(val gameId: String, val gameName: String, val scoreboardTitle: String, val aliases: Array<String> = emptyArray()) {
     BED_WARS("bed_wars", "Bed Wars", "BED WARS", arrayOf("bw", "bedwars")) {
         override fun buildStatsText(data: PlayerData, modifier: String?): String = data.stats.bedWars.run {
             line("Level", `formatted-level-without-brackets`) +
@@ -117,11 +117,11 @@ enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: S
 
         override fun buildShortStatsText(data: PlayerData, text: String): Array<String> = data.stats.bedWars.run {
             arrayOf(
-                "$`formatted-level` ${MCText.RESET}$text",
+                "$`formatted-level` ${McText.RESET}$text",
                 `core-modes win-streak`?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(`core-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + MCText.BOLD + decimalFormat1.format(`core-modes final-kdr`),
+                getNumberColor(`core-modes final-kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + McText.BOLD + decimalFormat1.format(`core-modes final-kdr`),
                 getNumberColor(`core-modes final-kills`, 1000, 3500, 7500, 10000, 15000, 20000, 30000) + `core-modes final-kills`,
-                getNumberColor(`core-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + MCText.BOLD + decimalFormat2.format(`core-modes win-rate`),
+                getNumberColor(`core-modes win-rate`, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9) + McText.BOLD + decimalFormat2.format(`core-modes win-rate`),
                 getNumberColor(`core-modes wins`, 250, 500, 1000, 2000, 4000, 8000, 10000) + `core-modes wins`
             )
         }
@@ -183,23 +183,15 @@ enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: S
 
         override fun buildShortStatsText(data: PlayerData, text: String): Array<String> = data.stats.skyWars.run {
             arrayOf(
-                "$`formatted-level` ${MCText.RESET}$text",
+                "$`formatted-level` ${McText.RESET}$text",
                 `core-modes win-streak`?.let { getNumberColor(it, 5, 10, 20, 35, 50, 75, 100) + it } ?: UNKNOWN,
-                getNumberColor(`core-modes kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + MCText.BOLD + decimalFormat1.format(`core-modes kdr`),
+                getNumberColor(`core-modes kdr`, 1.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0) + McText.BOLD + decimalFormat1.format(`core-modes kdr`),
                 getNumberColor(`core-modes kills`, 1000, 3500, 7500, 10000, 25000, 30000, 50000) + `core-modes kills`,
-                getNumberColor(`core-modes win-rate`, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + MCText.BOLD + decimalFormat2.format(`core-modes win-rate`),
+                getNumberColor(`core-modes win-rate`, 0.1, 0.2, 0.3, 0.4, 0.5, 0.65, 0.8) + McText.BOLD + decimalFormat2.format(`core-modes win-rate`),
                 getNumberColor(`core-modes wins`, 100, 500, 1000, 2000, 3000, 6000, 8000) + `core-modes wins`
             )
         }
     };
-
-    init {
-        idMappings[gameId] = this
-        for (alias in aliases) {
-            idMappings[alias] = this
-        }
-        scoreboardTitleMappings[scoreboardTitle] = this
-    }
 
     abstract fun buildStatsText(data: PlayerData, modifier: String?): String
 
@@ -216,9 +208,20 @@ enum class GameType(val gameId: String, val gameName: String, scoreboardTitle: S
 
 private const val UNKNOWN = "$DARK_RED?"
 
-private val idMappings = HashMap<String, GameType>()
+private val idMappings = buildMap {
+    for (gameType in GameType.entries) {
+        put(gameType.gameId, gameType)
+        for (alias in gameType.aliases) {
+            put(alias, gameType)
+        }
+    }
+}
 
-private val scoreboardTitleMappings = HashMap<String, GameType>()
+private val scoreboardTitleMappings = buildMap {
+    for (gameType in GameType.entries) {
+        put(gameType.scoreboardTitle, gameType)
+    }
+}
 
 private val decimalFormat1 = DecimalFormat("0.00")
 

@@ -17,10 +17,10 @@
 package net.sharedwonder.hyplookup.command
 
 import net.sharedwonder.hyplookup.HypLookupContext
-import net.sharedwonder.hyplookup.util.MCText
+import net.sharedwonder.hyplookup.util.McText
 
 object HelpCommand : Command {
-    override val expressions: Array<String> = arrayOf("help", "h")
+    override val keywords: Array<String> = arrayOf("help", "h")
 
     override val description: String = "Shows the help of HypLookup commands"
 
@@ -31,8 +31,8 @@ object HelpCommand : Command {
 
         val table = ArrayList<Array<String>>()
         for (command in CommandParser.commands) {
-            table.add(arrayOf(command.expressions.joinToString("${MCText.GRAY}/${MCText.AQUA}", MCText.AQUA), MCText.YELLOW + command.description))
+            table.add(arrayOf(command.keywords.joinToString("${McText.GRAY}/${McText.AQUA}", McText.AQUA), McText.YELLOW + command.description))
         }
-        return "Help:\n" + MCText.alignTextTable(table, "${MCText.DARK_GRAY} - ").joinToString("\n")
+        return "Help:\n" + McText.alignTextTable(table, "${McText.DARK_GRAY} - ").joinToString("\n")
     }
 }
